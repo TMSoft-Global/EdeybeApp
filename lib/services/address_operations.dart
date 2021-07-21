@@ -9,6 +9,8 @@ class AddressOperations extends ServerOperations{
         method: "POST",
         path: '/account/deliveryaddresses',
         schema:jsonEncode(data),
-        onResponse: ((val){}));
+        onResponse: ((val){
+          print(val);
+        }));
   }
 }
