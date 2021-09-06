@@ -1,0 +1,54 @@
+name: Deploy to TestFlight
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version (e.g. 2.0.2)
+        required: true
+      test_notes:
+        description: Notes to TestFlight testers
+        required: false
+  release:
+    types: [created]
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.7.2
+          bundler-cache: true
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: '10.x'
+      - name: Install packages & Pod
+        run: |
+          bundle install
+          yarn install
+          cd ios && pod deintegrate && rm Podfile.lock && cd ..
+          yarn pods
+      - name: Build & Distribute to Testflight
+        run: |
+          export LC_ALL=en_US.UTF-8
+          export LANG=en_US.UTF-8
+          ./decrypt_secret.sh
+
+          yarn ios:set_release_version
+          yarn ios:prod
+
+        env:
+          MATCH_PASSWORD: noodles
+          RELEASE_VERSION: ${{ github.event.inputs.version || github.event.release.tag_name }}
+          FASTLANE_APPLE_ID_PASSWORD: ${{ secrets.FASTLANE_APPLE_ID_PASSWORD }}
+          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_APPLE_ID_PASSWORD }}
+          FASTLANE_USER: 'fastlane@payswitch.com.gh'
+          APPSTORE_AUTHKEY: ${{ secrets.FASTLANE_APP_STORE_CONNECT_ENCRYPTION_KEY }}
+          TEST_NOTES: ${{ github.event.inputs.test_notes || github.event.release.body }}

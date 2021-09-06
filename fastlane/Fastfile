@@ -1,0 +1,192 @@
+require 'uri'
+require 'net/http'
+
+TEAM_ID = "FMDN3627Q6"
+XCODE_PROJECT_PATH = "ios/Runner.xcodeproj"
+XCODE_WORKSPACE_PATH = "ios/Runner.xcworkspace"
+FASTLANE_USER = "fastlane@payswitch.com.gh"
+CERTS_REPO = "https://vcs.theteller.net/aaddey/edeybe-certs"
+APP_STORE_CONNECT_CREDENTIALS_PATH = "fastlane/app-store-connect-auth.json"
+APP_STORE_IDENTIFIER = "com.payswitch.edeybe.app"
+MATCH_KEYCHAIN_PASSWORD = "noodles"
+
+# file = File.stat 'cached_response'
+
+def saveVersion (**options)
+  uri = URI("https://api.edeybe.com/api/app/m/version")
+  req = Net::HTTP::Put.new(uri)
+  req['Authorization'] = "Basic RWRleWJlTW9iaWxlOnVwNGErZXJNMGIhTDIzJA=="
+  req['Content-Type'] = "application/json"
+  req.body = "{\"#{options[:platform]}\":\"#{options[:version]}\",\"#{options[:build]}\":\"#{options[:build_number]}\"}"
+  res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) {|http|
+    http.request(req)
+  }
+  puts res.body
+  # open 'cached_response', 'w' do |io|
+  #   io.write res.body
+  # end if res.is_a?(Net::HTTPSuccess)
+
+end
+
+default_platform(:ios)
+
+platform :ios do
+  before_all do
+    if is_ci
+      create_keychain(
+        name: "keychain",
+        password: MATCH_KEYCHAIN_PASSWORD,
+        default_keychain: true,
+        unlock: true,
+        add_to_search_list: true,
+        lock_when_sleeps: false
+      )
+    end
+  end
+
+  # fastlane ios certificates
+  #
+  # This lane updates provisioning profiles and certificates in the current environment. Use it to
+  # get our profiles and certificates from the optics-rn-certs repo.
+  desc "Fetch certificates and provisioning profiles"
+  lane :certificates do
+    match(
+      type: "development",
+      readonly: true,
+      git_url: CERTS_REPO,
+      api_key_path: APP_STORE_CONNECT_CREDENTIALS_PATH
+    )
+
+    match(
+      type: "appstore",
+      readonly: true,
+      git_url: CERTS_REPO,
+      api_key_path: APP_STORE_CONNECT_CREDENTIALS_PATH
+    )
+  end
+
+  # fastlane ios beta
+  #
+  # This lane releases a build to TestFlight, prompting for a version number and a note to testers.
+  desc "Ship to Testflight"
+  lane :beta do
+    current_version = get_version_number(xcodeproj: XCODE_PROJECT_PATH)
+
+    version = ENV["RELEASE_VERSION"] || prompt(text: "Version Number (Currently #{current_version}): ")
+    changelog_text = ENV["TEST_NOTES"] || prompt(text: "Note to testers: ")
+
+    build_number = set_release_version(version: version)
+
+    match(
+      type: "development",
+      readonly: is_ci,
+      git_url: CERTS_REPO,
+      app_identifier: APP_STORE_IDENTIFIER,
+      api_key_path: APP_STORE_CONNECT_CREDENTIALS_PATH
+    )
+
+    match(
+      type: "appstore",
+      readonly: is_ci,
+      git_url: CERTS_REPO,
+      app_identifier: APP_STORE_IDENTIFIER,
+      api_key_path: APP_STORE_CONNECT_CREDENTIALS_PATH
+    )
+
+    update_project_provisioning(
+      xcodeproj: XCODE_PROJECT_PATH,
+      target_filter: "Runner",
+      profile: ENV["sigh_com.payswitch.edeybe.app_appstore_profile-path"],
+      build_configuration: "Release"
+    )
+
+    update_code_signing_settings(
+      use_automatic_signing: false,
+      path: XCODE_PROJECT_PATH,
+      team_id: TEAM_ID
+    )
+
+    gym(
+      workspace: XCODE_WORKSPACE_PATH,
+      scheme: "Runner",
+      configuration: "Release",
+      clean: true,
+      export_method: "app-store",
+      output_directory:"build/ios",
+      export_options: {
+        method: "app-store",
+        provisioningProfiles: {
+          "com.payswitch.edeybe.app" => ENV["sigh_com.payswitch.edeybe.app_appstore_profile-path"]
+        }
+      },
+      codesigning_identity:"Apple Distribution: Payswitch Company Limited (#{TEAM_ID})",
+      output_name: "test_prod.ipa"
+    )
+
+    upload_to_testflight(
+      skip_waiting_for_build_processing: true,
+      changelog: changelog_text,
+      app_identifier: APP_STORE_IDENTIFIER,
+      api_key_path: APP_STORE_CONNECT_CREDENTIALS_PATH
+    )
+    saveVersion(platform: "iosVersion", version: version, build: "iosBuild", build_number: build_number + 1 )
+  end
+
+  desc "Sets the version of the bundle"
+  private_lane :set_release_version do |options|
+    # Get current build number from testflight or start from 0
+    latest_testflight_build = latest_testflight_build_number(
+      version: options[:version],
+      api_key_path: APP_STORE_CONNECT_CREDENTIALS_PATH,
+      initial_build_number: 0
+    )
+
+    # Increment the version number if necessary
+    increment_version_number(
+      xcodeproj: XCODE_PROJECT_PATH,
+      version_number: options[:version]
+    )
+
+    # Increment the build number
+    increment_build_number(
+      build_number: latest_testflight_build + 1,
+      xcodeproj: XCODE_PROJECT_PATH
+    )
+
+    # # Commit the version bump to code as well so Xcode has the correct value
+    # commit_version_bump(
+    #   message: "Version bump",
+    #   xcodeproj: XCODE_PROJECT_PATH
+    # )
+  latest_testflight_build
+  end
+end
+
+platform :android do
+
+  desc "Ship to Playstore Beta."
+  lane :beta do
+    # increment_version_code(gradle_file_path: "android/app/build.gradle")
+    gradle(task: "bundle", build_type: "Release", project_dir: "android/")
+    # validate_play_store_json_key( # json_key: "android/keystore/pc-api.json" # )
+    supply(
+      track: 'internal',
+      release_status: 'draft',
+      skip_upload_apk: true,
+      aab: "build/app/outputs/bundle/release/app-release.aab",
+      )
+      saveVersion(platform: "androidVersion", version: '1.0.1', build: "androidBuild", build_number: 9 )
+    # upload_to_play_store(track: "beta", json_key: "android/keystore/pc-api.json", aab: "android/app/build/outputs/bundle/productionrelease/app-productionrelease.aab")
+  end
+
+  lane :gitpush do
+    git_add git_commit(path: "*", message: "Version")
+    push_to_git_remote
+  end
+
+  lane :internal do
+    increment_version_code( gradle_file_path: "android/app/build.gradle" )
+    gradle(task: "bundle", build_type: "Release", project_dir: "android/")
+    upload_to_play_store_internal_app_sharing(package_name: "com.payswitch.edeybe")
+  end
+end

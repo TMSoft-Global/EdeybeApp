@@ -1,0 +1,48 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:android)
+
+platform :android do
+  desc "Runs all the tests"
+  lane :test do
+    gradle(task: "test")
+  end
+
+  desc "Submit a new Beta Build to Crashlytics Beta"
+  lane :beta do
+    gradle(task: "clean assembleRelease")
+    crashlytics
+  
+    # sh "your_script.sh"
+    # You can also use other beta testing services here
+  end
+
+  lane :internal do
+    # increment_version_code(gradle_file_path: "android/app/build.gradle")
+    cert_path = Gem.loaded_specs['google-api-client'].full_gem_path+'/lib/cacerts.pem'
+    ENV['SSL_CERT_FILE'] = cert_path
+    gradle(
+      task: 'bundle', 
+      build_type: 'Release'
+      )
+    supply(
+      track: 'internal', 
+      release_status: 'draft',
+      aab: "/Volumes/Data/McAddy-Dev/EDEYBE.COM/build/app/outputs/bundle/release/app-release.aab", 
+      )
+    # upload_to_play_store_internal_app_sharing(aab: "/Volumes/PS Drive/McAddy-Dev/EDEYBE.COM/build/app/outputs/bundle/release/app-release.aab")
+  end
+end

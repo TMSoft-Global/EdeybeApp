@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "432482231963",
+    "project_id": "edeybe-4c31c",
+    "storage_bucket": "edeybe-4c31c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:432482231963:android:b25b14d680b6bbd4ab883e",
+        "android_client_info": {
+          "package_name": "com.payswitch.edeybe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "432482231963-gc25m9voe2a24dgbrouqhhi5kk0gnhau.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA20nKYfZf6NWOaOYhRCM2jbmEzDRv6Qn8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "432482231963-gc25m9voe2a24dgbrouqhhi5kk0gnhau.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "432482231963-7ge7j68tc6l423jchsukgvedj7lpdsct.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.payswitch.edeybe"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
