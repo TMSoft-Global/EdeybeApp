@@ -19,6 +19,7 @@ class PaymentMethodController extends GetxController {
     });
   }
 
+
   addPaymentMethod(PaymentCard card, {String otp}) {
     var alreadyAdded = cards.firstWhere(
       (element) => element.number == card.number,

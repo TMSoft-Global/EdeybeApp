@@ -239,7 +239,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
                         flex: 2,
                         child: Padding(
                           padding: EdgeInsets.only(
-                              top: 20.w, right: 20.w, left: 10.w, bottom: 10.w),
+                              top: 15.w, right: 20.w, left: 10.w, bottom: 20.w),
                           child: TextFormField(
                             focusNode: _voucherF,
                             autovalidateMode:

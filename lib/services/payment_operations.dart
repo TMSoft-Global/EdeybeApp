@@ -48,6 +48,7 @@ class PayementOperation extends ServerOperations {
       showDialog: true,
       onError: onError,
       onResponse: (res) {
+        // print(res);
         Get.back();
         if (res.containsKey('error')) {
           var message = res['error'] is String ? res['error'] : res['error'][0];
@@ -63,19 +64,24 @@ class PayementOperation extends ServerOperations {
 
   sendVerification(
       String number, void onResponse(), void onError(DioError error)) {
+        print(number);
+
     dynamicRequest(
       path: paymentOTP,
       schema: jsonEncode({"mobileNumber": number}),
       showDialog: true,
       onError: onError,
       onResponse: (res) {
+        print(res);
+
         if (res.containsKey('error')) {
           var message = res['error'] is String ? res['error'] : res['error'][0];
-          Get.dialog(CartDialog(
-            productTitle: message,
-            type: CartItemType.Message,
-            title: S.of(Get.context).paymentMethod,
-          ));
+          print(message);
+          // Get.dialog(CartDialog(
+          //   productTitle: message,
+          //   type: CartItemType.Message,
+          //   title: S.of(Get.context).paymentMethod,
+          // ));
         } else if (res.containsKey("success")) onResponse();
       },
     );

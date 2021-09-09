@@ -32,9 +32,7 @@ class _HomeIndexState extends State<HomeIndex> {
   @override
   void initState() {
     super.initState();
-
     current = widget.indexPage;
-    // children = ;
   }
 
   @override

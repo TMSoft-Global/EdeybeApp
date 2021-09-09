@@ -238,45 +238,45 @@ class _CartScreenTabState extends State<CartScreenTab>
                   BorderSide(width: 1, color: Colors.grey.withOpacity(.2.w)))),
       child: Column(
         children: <Widget>[
-          Container(
-            height: 47.w,
-            margin: EdgeInsets.fromLTRB(10.w, 10.w, 10.w, 5.0.w),
-            decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(
-                    width: 1.w, color: Colors.grey.withOpacity(.2.w))),
-            child: Center(
-              child: TextField(
-                style: TextStyle(fontSize: 14.w),
-                decoration: InputDecoration(
-                    hintText: S.of(context).enterCouponOrGiftCard,
-                    floatingLabelBehavior: FloatingLabelBehavior.never,
-                    border: InputBorder.none,
-                    suffixIcon: Container(
-                      padding: EdgeInsets.symmetric(
-                          vertical: 11.w, horizontal: 10.w),
-                      color: Get.theme.primaryColor.withOpacity(0.2),
-                      child: InkWell(
-                          onTap: _couponCtrl.text.length > 4
-                              ? () {
-                                  _cartController.applyCoupon(_couponCtrl.text);
-                                }
-                              : null,
-                          splashColor: Get.theme.primaryColor.withOpacity(0.2),
-                          child: Text(
-                            S.of(context).apply.toUpperCase(),
-                            textAlign: TextAlign.center,
-                            style: Get.textTheme.bodyText1.copyWith(
-                                color: Get.theme.primaryColor,
-                                fontSize: 14.w,
-                                fontWeight: FontWeight.bold),
-                          )),
-                    ),
-                    contentPadding: EdgeInsets.all(10.w)),
-                controller: _couponCtrl,
-              ),
-            ),
-          ),
+          // Container(
+          //   height: 47.w,
+          //   margin: EdgeInsets.fromLTRB(10.w, 10.w, 10.w, 5.0.w),
+          //   decoration: BoxDecoration(
+          //       color: Colors.white,
+          //       border: Border.all(
+          //           width: 1.w, color: Colors.grey.withOpacity(.2.w))),
+          //   child: Center(
+          //     child: TextField(
+          //       style: TextStyle(fontSize: 14.w),
+          //       decoration: InputDecoration(
+          //           hintText: S.of(context).enterCouponOrGiftCard,
+          //           floatingLabelBehavior: FloatingLabelBehavior.never,
+          //           border: InputBorder.none,
+          //           suffixIcon: Container(
+          //             padding: EdgeInsets.symmetric(
+          //                 vertical: 11.w, horizontal: 10.w),
+          //             color: Get.theme.primaryColor.withOpacity(0.2),
+          //             child: InkWell(
+          //                 onTap: _couponCtrl.text.length > 4
+          //                     ? () {
+          //                         _cartController.applyCoupon(_couponCtrl.text);
+          //                       }
+          //                     : null,
+          //                 splashColor: Get.theme.primaryColor.withOpacity(0.2),
+          //                 child: Text(
+          //                   S.of(context).apply.toUpperCase(),
+          //                   textAlign: TextAlign.center,
+          //                   style: Get.textTheme.bodyText1.copyWith(
+          //                       color: Get.theme.primaryColor,
+          //                       fontSize: 14.w,
+          //                       fontWeight: FontWeight.bold),
+          //                 )),
+          //           ),
+          //           contentPadding: EdgeInsets.all(10.w)),
+          //       controller: _couponCtrl,
+          //     ),
+          //   ),
+          // ),
           Row(
             children: <Widget>[
               Expanded(

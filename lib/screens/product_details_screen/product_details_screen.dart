@@ -96,11 +96,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       ));
             },
           ),
-          IconButton(
-            iconSize: 25.w,
-            icon: Icon(Icons.share),
-            onPressed: () {},
-          ),
+          // IconButton(
+          //   iconSize: 25.w,
+          //   icon: Icon(Icons.share),
+          //   onPressed: () {
+              
+          //   },
+          // ),
         ],
       ),
       bottomNavigationBar: Obx(() => ProductDetailsBottomBar(

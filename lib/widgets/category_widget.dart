@@ -1,4 +1,5 @@
 import 'package:edeybe/screens/checkout_screen/index.dart';
+import 'package:edeybe/services/server_operation.dart';
 import 'package:edeybe/widgets/ShimmerLoader.dart';
 import 'package:flutter/material.dart';
 import 'package:edeybe/index.dart';
@@ -10,9 +11,9 @@ class CategoryWidget extends StatelessWidget {
   final bool isLoading;
   final bool isActive;
   final String catImagePath =
-      "https://api.edeybe.com/api/static/categories/icon/";
+      "$domain/api/static/categories/icon/";
   final String subCatImagePath =
-      "https://api.edeybe.com/api/static/subCategories/imageIcon/";
+      "$domain/api/static/subCategories/imageIcon/";
   CategoryWidget(
       {this.item, this.onTap, this.isLoading = false, this.isActive = false});
   @override

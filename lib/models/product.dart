@@ -1,4 +1,5 @@
 import 'package:edeybe/models/AddressLocation.dart';
+import 'package:edeybe/services/server_operation.dart';
 
 class Product {
   Product(
@@ -243,13 +244,13 @@ class Image {
   factory Image.fromJson(Map<String, dynamic> json) => Image(
         sm: json["sm"] == null
             ? null
-            : "https://api.edeybe.com/api/images/" + json["sm"],
+            : "$domain/api/images/" + json["sm"],
         md: json["md"] == null
             ? null
-            : "https://api.edeybe.com/api/images/" + json["md"],
+            : "$domain/api/images/" + json["md"],
         lg: json["lg"] == null
             ? null
-            : "https://api.edeybe.com/api/images/" + json["lg"],
+            : "$domain/api/images/" + json["lg"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -344,7 +345,7 @@ class Discount {
     this.percentOff,
   });
 
-  int percentOff;
+  dynamic percentOff;
 
   factory Discount.fromJson(Map<String, dynamic> json) => Discount(
         percentOff: json["percent_off"] == null ? null : json["percent_off"],

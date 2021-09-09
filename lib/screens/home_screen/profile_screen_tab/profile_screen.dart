@@ -134,7 +134,7 @@ class ProfileScreen extends StatelessWidget {
         ),
         onTap: () => Get.to(WishlistScreen()),
       ),
-      ListTile(
+    userController.isLoggedIn()?  ListTile(
         dense: true,
         leading: Icon(
           Icons.credit_card,
@@ -151,7 +151,7 @@ class ProfileScreen extends StatelessWidget {
           color: Constants.themeGreyDark,
         ),
         onTap: () => Get.to(PaymentMethodScreen()),
-      ),
+      ): Container(height: 0,width: 0,),
       // ListTile(
       //   dense: true,
       //   leading: Icon(
@@ -211,7 +211,7 @@ class ProfileScreen extends StatelessWidget {
       //   ),
       //   onTap: () => _changeCountry(),
       // ),
-      ListTile(
+    userController.isLoggedIn()?  ListTile(
         dense: true,
         leading: Icon(
           FontAwesomeIcons.mapMarkerAlt,
@@ -228,7 +228,7 @@ class ProfileScreen extends StatelessWidget {
           color: Constants.themeGreyDark,
         ),
         onTap: () => Get.to(AddressScreen()),
-      ),
+      ): Container(height: 0,width: 0,),
     ];
   }
 
@@ -236,7 +236,7 @@ class ProfileScreen extends StatelessWidget {
   List<Widget> get _buildhelpCenterActions {
     return [
       _buildSectionHeader(S.current.hlepCenter),
-      ListTile(
+     userController.isLoggedIn()? ListTile(
         dense: true,
         leading: Icon(
           FontAwesomeIcons.listAlt,
@@ -260,7 +260,7 @@ class ProfileScreen extends StatelessWidget {
                 )
               : Get.to(OrderHistoryScreen());
         },
-      ),
+      ): Container(height: 0,width: 0,),
       // ListTile(
       //   dense: true,
       //   leading: Icon(

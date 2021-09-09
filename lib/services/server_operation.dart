@@ -7,8 +7,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 
+  final String domain = "https://234e-197-251-220-74.ngrok.io";
 abstract class ServerOperations {
-  final String _domain = "api.edeybe.com";
+  final String _domain = "https://234e-197-251-220-74.ngrok.io";
+  // final String _domain = "api.edeybe.com";
   final String _domainLocal = "172.18.72.61:5002";
   final String accessToken =
       r"3KJALFDKLAkjksoem$jis0*j3ji49509u5tojifk95%#lk33#4kjjksfkjd@$$krjkrkkioaseif$2kjs@kj5l4#";
@@ -59,9 +61,10 @@ abstract class ServerOperations {
     };
     if (_cookie != "" && _cookie != null) headers["token"] = _cookie;
 
+print(path);
     _dio
         .request(
-      "https://$_domain/api$path",
+      "$_domain/api$path",
       options: Options(
         method: method,
         headers: headers,

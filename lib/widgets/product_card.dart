@@ -36,7 +36,7 @@ class ProductCard extends StatelessWidget {
   final double width;
   final double padding;
   final int raters;
-  final int discount;
+   var discount;
   final Function onViewDetails;
   final VoidCallback onAddToWishList;
   final formatCurrency = new NumberFormat.simpleCurrency(name: "");
@@ -214,8 +214,9 @@ class ProductCard extends StatelessWidget {
                           child: Text(
                             "$discount % ${S.of(context).off}",
                             overflow: TextOverflow.ellipsis,
+                            
                             style: Get.textTheme.bodyText1.copyWith(
-                                color: Constants.lightGreen, fontSize: 11.w),
+                                color: Constants.lightGreen, fontSize: 10.w),
                           ),
                         ),
                         CapsuleWiget(
@@ -227,7 +228,7 @@ class ProductCard extends StatelessWidget {
                             "${S.of(context).freeShipping}",
                             overflow: TextOverflow.ellipsis,
                             style: Get.textTheme.bodyText1.copyWith(
-                                color: Get.theme.primaryColor, fontSize: 11.w),
+                                color: Get.theme.primaryColor, fontSize: 10.w),
                           ),
                         ),
                       ],

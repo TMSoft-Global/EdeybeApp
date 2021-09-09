@@ -5,6 +5,7 @@ import 'package:edeybe/controllers/search_controller.dart';
 import 'package:edeybe/screens/filter/fillter_widget.dart';
 import 'package:edeybe/screens/home_screen/category_tab/sub_category_screen.dart';
 import 'package:edeybe/screens/products_view/products.dart';
+import 'package:edeybe/services/server_operation.dart';
 import 'package:edeybe/utils/Debouncer.dart';
 import 'package:edeybe/utils/constant.dart';
 import 'package:edeybe/utils/helper.dart';
@@ -38,7 +39,7 @@ class _HomeScreenTabState extends State<HomeScreenTab>
   Animation _animation;
   AnimationController controller;
   Animation<double> animation;
-  final String bannersBaseURL = 'https://api.edeybe.com/api/static/banners/';
+  final String bannersBaseURL = '$domain/api/static/banners/';
   List bannerUrl = [];
   @override
   void initState() {
