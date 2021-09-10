@@ -79,7 +79,7 @@ class PayementOperation extends ServerOperations {
           
         } else if (res.containsKey("success")){
           Get.to(PaymentMethodScreen(
-                              hasContinueButton: true,
+                              hasContinueButton: false,
                               onContinuePressed: (pan) {
                              
         print("========================$pan");

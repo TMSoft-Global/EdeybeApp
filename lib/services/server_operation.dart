@@ -7,9 +7,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 
-  final String domain = "http://e6a4-197-251-220-74.ngrok.io";
+  final String domain = "http://69e7-197-251-220-74.ngrok.io";
 abstract class ServerOperations {
-  final String _domain = "http://e6a4-197-251-220-74.ngrok.io";
+  final String _domain = "http://69e7-197-251-220-74.ngrok.io";
   // final String _domain = "api.edeybe.com";
   final String _domainLocal = "172.18.72.61:5002";
   final String accessToken =

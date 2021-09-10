@@ -19,8 +19,8 @@ class PaymentMethodScreen extends StatefulWidget {
 
 class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
   String _activeIndex;
-  final _paymentMethodController = Get.find<PaymentMethodController>();
-  // final _paymentMethodController = Get.put(PaymentMethodController());
+  // final _paymentMethodControllers = Get.find<PaymentMethodController>();
+  final _paymentMethodController = Get.put(PaymentMethodController());
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +94,9 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                       ),
                       label: Text(S.of(context).addPaymentMethod),
                       onPressed: () {
-                        Get.to(AddCardScreen());
+                        Get.to(AddCardScreen(
+                         
+                        ));
                       },
                     ));
               }

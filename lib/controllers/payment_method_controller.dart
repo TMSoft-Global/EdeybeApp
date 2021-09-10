@@ -29,8 +29,9 @@ class PaymentMethodController extends GetxController {
       var data = card.toMoMoMap();
       if (otp != null) data.putIfAbsent('otp', () => otp);
       payementServer.saveMethod(data, (response) {
+       
         if (otp != null) Get.back();
-                  cards.add(card);
+
         update();
       }, (error) {});
     } else {
@@ -50,13 +51,17 @@ class PaymentMethodController extends GetxController {
             onVerify: (String otp) => addPaymentMethod(card, otp: otp),
             onResend: (Function callBack) => payementServer.sendVerification(
               
-                card.number, (){
-                   callBack();
-                   update();
-                }
+                card.number, ()=>
+                   callBack()
                 
-                , (error) {})));
+                
+                , (error) {}))).whenComplete(() {
+
+                  cards.add(card);
+                   update();
+                });
         },
+
         (error) {});
   }
 
