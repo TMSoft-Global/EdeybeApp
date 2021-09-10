@@ -29,9 +29,9 @@ class PaymentMethodController extends GetxController {
       var data = card.toMoMoMap();
       if (otp != null) data.putIfAbsent('otp', () => otp);
       payementServer.saveMethod(data, (response) {
-        cards.add(card);
         if (otp != null) Get.back();
-
+                  print("==================$card");
+                  cards.add(card);
         update();
       }, (error) {});
     } else {
@@ -45,11 +45,19 @@ class PaymentMethodController extends GetxController {
   verify(PaymentCard card) {
     payementServer.sendVerification(
         card.number,
-        () => Get.to(Otp(
+        ()  {
+          Get.to(Otp(
             data: card.number,
             onVerify: (String otp) => addPaymentMethod(card, otp: otp),
             onResend: (Function callBack) => payementServer.sendVerification(
-                card.number, () => callBack(), (error) {}))),
+              
+                card.number, (){
+                   callBack();
+                   update();
+                }
+                
+                , (error) {})));
+        },
         (error) {});
   }
 
@@ -66,7 +74,28 @@ class PaymentMethodController extends GetxController {
   }
 
   removePaymentMethod(PaymentCard card) {
-    cards.removeWhere((element) => element.number == card.number);
+    if(cards !=null){
+      payementServer.deleteMethod(card.id, (response) {
+        if(response !=null){
+          Get.dialog(CustomDialog(
+        title: S.current.addCard,
+        content: 'Card deleted successfully',
+      ));
+         print(response);
+        }
+         cards.removeWhere((element) {
+    return   element.number == card.number;
+    
+    });
+       }, (error) { 
+       });
+    }else {
+      Get.dialog(CustomDialog(
+        title: S.current.addCard,
+        content: 'No Card Found',
+      ));
+    }
+
     update();
   }
 }

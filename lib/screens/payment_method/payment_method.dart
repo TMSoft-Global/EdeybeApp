@@ -20,6 +20,7 @@ class PaymentMethodScreen extends StatefulWidget {
 class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
   String _activeIndex;
   final _paymentMethodController = Get.find<PaymentMethodController>();
+  // final _paymentMethodController = Get.put(PaymentMethodController());
 
   @override
   Widget build(BuildContext context) {
@@ -64,8 +65,9 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                   ))),
             )
           : null,
-      body: GetBuilder<PaymentMethodController>(
-        builder: (_) => ListView.builder(
+      body: Obx((){
+
+      return ListView.builder(
             itemCount: 1 + _paymentMethodController.cards.length,
             itemBuilder: (_, i) {
               if (i == (_paymentMethodController.cards.length)) {
@@ -105,8 +107,8 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                 onRemovePaymentMethod: () => _removeCard(paymentMethod),
                 isSelected: _activeIndex == paymentMethod.number,
               );
-            }),
-      ),
+            });
+      })
     );
   }
 

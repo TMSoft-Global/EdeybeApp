@@ -35,6 +35,7 @@ class PayementOperation extends ServerOperations {
       method: "DELETE",
       onError: onError,
       onResponse: (res) {
+        print(res);
         onResponse(res['totalPossible'] as int);
       },
     );
@@ -72,17 +73,25 @@ class PayementOperation extends ServerOperations {
       showDialog: true,
       onError: onError,
       onResponse: (res) {
-        print(res);
-
+          print(res['success']);
         if (res.containsKey('error')) {
           var message = res['error'] is String ? res['error'] : res['error'][0];
-          print(message);
-          // Get.dialog(CartDialog(
-          //   productTitle: message,
-          //   type: CartItemType.Message,
-          //   title: S.of(Get.context).paymentMethod,
-          // ));
-        } else if (res.containsKey("success")) onResponse();
+          
+        } else if (res.containsKey("success")){
+          Get.to(PaymentMethodScreen(
+                              hasContinueButton: true,
+                              onContinuePressed: (pan) {
+                             
+        print("========================$pan");
+                              },
+                            ));
+
+        //   Get.dialog(CartDialog(
+        //     productTitle: "Success",
+        //     type: CartItemType.Message,
+        //     title: S.of(Get.context).paymentMethod,
+        //   ));
+        } onResponse();
       },
     );
   }

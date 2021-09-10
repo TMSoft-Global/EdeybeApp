@@ -446,16 +446,16 @@ class _OtpState extends State<Otp> with SingleTickerProviderStateMixin {
                     ),
                   ],
                 ),
-                SizedBox(
-                  height: 20.h,
-                ),
+                // SizedBox(
+                //   height: 10.h,
+                // ),
                 Padding(
                   padding: const EdgeInsets.all(15.0),
                   child: AutoSizeText(
-                    "An SMS with the One Time Password(OTP) has been sent to the mobile number you want to save",
+                    "An (OTP) has been sent to the mobile number you want to save",
                     textAlign: TextAlign.center,
-                    style: Get.textTheme.headline5.copyWith(fontSize: 22),
-                    maxLines: 4,
+                    style: Get.textTheme.headline5.copyWith(fontSize: 16),
+                    maxLines: 2,
                   ),
                 ),
                 AutoSizeText(
@@ -465,7 +465,7 @@ class _OtpState extends State<Otp> with SingleTickerProviderStateMixin {
                   maxLines: 1,
                 ),
                 SizedBox(
-                  height: 12.h,
+                  height: 10.h,
                 ),
                 AutoSizeText(
                   "Enter OTP",
