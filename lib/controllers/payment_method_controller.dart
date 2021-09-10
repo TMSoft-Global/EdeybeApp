@@ -30,7 +30,6 @@ class PaymentMethodController extends GetxController {
       if (otp != null) data.putIfAbsent('otp', () => otp);
       payementServer.saveMethod(data, (response) {
         if (otp != null) Get.back();
-                  print("==================$card");
                   cards.add(card);
         update();
       }, (error) {});
