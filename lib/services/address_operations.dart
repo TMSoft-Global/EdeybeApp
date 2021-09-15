@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:edeybe/services/server_operation.dart';
 
 class AddressOperations extends ServerOperations{
@@ -5,8 +7,8 @@ class AddressOperations extends ServerOperations{
     dynamicRequest(
         showDialog: true,
         method: "POST",
-        path: '/airtime/buy/ot',
-        schema:"data",
+        path: '/account/deliveryaddresses',
+        schema:jsonEncode(data),
         onResponse: ((val){}));
   }
 }
