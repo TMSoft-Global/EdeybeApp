@@ -1,6 +1,7 @@
 import 'package:edeybe/controllers/address_controller.dart';
+import 'package:edeybe/controllers/delivery_coltroller.dart';
 import 'package:edeybe/index.dart';
-import 'package:edeybe/models/AddressLocation.dart';
+import 'package:edeybe/models/deliveryModel.dart';
 import 'package:edeybe/models/shippingAddress.dart';
 import 'package:edeybe/screens/address_screen/address_map/address_map.dart';
 import 'package:edeybe/utils/constant.dart';
@@ -14,6 +15,7 @@ import 'package:keyboard_actions/keyboard_actions.dart';
 class AddorEditScreen extends StatefulWidget {
   AddorEditScreen({Key key, this.address}) : super(key: key);
   final ShippingAddress address;
+  //  DeliveryAddress deliveryAddress;
   @override
   _AddorEditScreenState createState() => _AddorEditScreenState();
 }
@@ -27,6 +29,7 @@ class _AddorEditScreenState extends State<AddorEditScreen> {
   TextEditingController _emailCtrl = TextEditingController();
   TextEditingController _addressCtrl = TextEditingController();
   TextEditingController _addressMoreCtrl = TextEditingController();
+  TextEditingController _placeNameCtrl = TextEditingController();
   Map<String, dynamic> _address;
   final _addressController = Get.put(AddressController());
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -36,6 +39,7 @@ class _AddorEditScreenState extends State<AddorEditScreen> {
   final FocusNode _lastname = FocusNode();
   final FocusNode _email = FocusNode();
   final FocusNode _mobile = FocusNode();
+  final FocusNode _plceNameFocus = FocusNode();
   final FocusNode _ghanaPostAddress = FocusNode();
   // state functions
   void _setAddressType(int val) {
@@ -53,22 +57,19 @@ class _AddorEditScreenState extends State<AddorEditScreen> {
   void saveAddress() {
     final FormState form = _formKey.currentState;
     if (form.validate() && _address != null) {
-      widget.address == null
-          ? _addressController.addAddress(ShippingAddress(
-              location: AddressLocation.fromJson(_address),
-              phone: _mobileCtrl.text,
-              email: _emailCtrl.text,
-              firstName: _firstnameCtrl.text,
-              lastName: _lastnameCtrl.text,
-            ))
-          : _addressController.updateAddress(ShippingAddress(
-              location: AddressLocation.fromJson(_address),
+      // for(int x = 0; x < _address.length; x++){
+      // widget.address == null
+          // ? 
+          _addressController.addAddress(ShippingAddress(
+              location: _address['_id'],
               phone: _mobileCtrl.text,
               email: _emailCtrl.text,
               firstName: _firstnameCtrl.text,
               lastName: _lastnameCtrl.text,
             ));
+          
       Get.back();
+      // }
     } else {
       setState(() {
         autoValidate = true;
@@ -82,7 +83,7 @@ class _AddorEditScreenState extends State<AddorEditScreen> {
       _firstnameCtrl.text = widget.address.firstName;
       _lastnameCtrl.text = widget.address.lastName;
       _mobileCtrl.text = widget.address.phone;
-      _addressCtrl.text = widget.address.location.address;
+      // _addressCtrl.text = widget.address.deliveryAddresses;
       _emailCtrl.text = widget.address.email;
     }
     super.initState();
@@ -354,6 +355,7 @@ class _AddorEditScreenState extends State<AddorEditScreen> {
                                 onPressed: () {
                                   Get.to(
                                       AddressMapWidget(setAddress: (address) {
+                                        print(address);
                                     if (address["GPSName"].startsWith("GA")) {
                                       setState(() {
                                         _address = {
@@ -440,15 +442,16 @@ class _AddorEditScreenState extends State<AddorEditScreen> {
                                                   .getGhanaPostAddress(
                                                       _addressMoreCtrl.text,
                                                       callback: (address) {
+                                                        print("=====$address");
                                                 setState(() {
                                                   _address = {
-                                                    "lat": address["NLat"],
-                                                    "long": address["ELong"],
+                                                    "lat": address["CenterLatitude"],
+                                                    "long": address["CenterLongitude"],
                                                     "displayText":
-                                                        address["Street"],
+                                                        "${address["Area"]} ${address['Street']}",
                                                   };
                                                   _addressCtrl.text =
-                                                      address["Street"];
+                                                      "${address["Area"]} ${address['Street']}";
                                                 });
                                               });
                                             } else {

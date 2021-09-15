@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:edeybe/index.dart';
+import 'package:edeybe/models/deliveryModel.dart';
 import 'package:edeybe/models/order.dart';
 import 'package:edeybe/models/shippingAddress.dart';
 import 'package:edeybe/models/user.dart';

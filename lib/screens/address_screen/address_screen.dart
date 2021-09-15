@@ -1,5 +1,7 @@
 import 'package:edeybe/controllers/address_controller.dart';
+import 'package:edeybe/controllers/delivery_coltroller.dart';
 import 'package:edeybe/index.dart';
+import 'package:edeybe/models/deliveryModel.dart';
 import 'package:edeybe/models/shippingAddress.dart';
 import 'package:edeybe/screens/address_screen/add_edit_address/add_edit_address.dart';
 import 'package:edeybe/utils/constant.dart';
@@ -64,8 +66,8 @@ class AddressScreen extends StatelessWidget {
                         ))),
                   ))
           : null,
-      body: GetBuilder<AddressController>(
-          builder: (_) => ListView.builder(
+      body: Obx(()=>
+             ListView.builder(
               itemCount: 1 + _addressController.addresses.length,
               itemBuilder: (_, i) {
                 if (i == _addressController.addresses.length) {
@@ -97,6 +99,8 @@ class AddressScreen extends StatelessWidget {
                       ));
                 }
                 var address = _addressController.addresses[i];
+                print("${address.location}----------------------------");
+                // var data =address.deliveryAddresses[0];
                 return AddressCard(
                   onCardPressed: hasContinueButton
                       ? () => _addressController.setDeliveryAddress(address)
@@ -107,8 +111,8 @@ class AddressScreen extends StatelessWidget {
                   onRemoveAddress: () => _removeAddress(address),
                   isSelected: _addressController.selectedAddress != null &&
                       _addressController.selectedAddress.location != null &&
-                      _addressController.selectedAddress.location.address ==
-                          address.location.address &&
+                      _addressController.selectedAddress.location ==
+                          address.location &&
                       hasContinueButton,
                 );
               })),
@@ -116,15 +120,15 @@ class AddressScreen extends StatelessWidget {
   }
 
   void _removeAddress(ShippingAddress i) {
-    Get.dialog(CustomDialog(
-      title: S.current.removeAdrress,
-      content: S.current.removeAddressMessage,
-      confrimPressed: () {
-        _addressController.deleteAddress(i);
-        Get.back();
-      },
-      cancelText: S.current.no,
-      confrimText: S.current.yes,
-    ));
+    // Get.dialog(CustomDialog(
+    //   title: S.current.removeAdrress,
+    //   content: S.current.removeAddressMessage,
+    //   confrimPressed: () {
+    //     _addressController.deleteAddress(i);
+    //     Get.back();
+    //   },
+    //   cancelText: S.current.no,
+    //   confrimText: S.current.yes,
+    // ));
   }
 }

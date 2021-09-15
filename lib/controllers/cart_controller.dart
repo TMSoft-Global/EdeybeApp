@@ -17,7 +17,7 @@ class CartController extends GetxController implements HTTPErrorHandler {
   var deliveryCost = DeliveryCost();
   var connectionError = false.obs;
   var serverError = false.obs;
-  var addressCtl = Get.find<AddressController>();
+  // var addressCtl = Get.find<AddressController>();
   var canceled = false.obs;
   @override
   void onInit() {
@@ -115,11 +115,11 @@ class CartController extends GetxController implements HTTPErrorHandler {
   }
 
   void getDeliveryCost() {
-    operations.getDeliveryCost(addressCtl.selectedAddress.location.toJson(),
-        (cost) {
-      deliveryCost = cost;
-      update();
-    }, handleError);
+    // operations.getDeliveryCost(addressCtl.selectedAddress.deliveryAddresses.t,
+    //     (cost) {
+    //   deliveryCost = cost;
+    //   update();
+    // }, handleError);
   }
 
   void checkout(

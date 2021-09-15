@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:edeybe/controllers/cart_controller.dart';
 import 'package:edeybe/index.dart';
 import 'package:edeybe/interface/HTTPErrorHandler.dart';
+import 'package:edeybe/models/deliveryModel.dart';
 import 'package:edeybe/models/shippingAddress.dart';
 import 'package:edeybe/services/cart_operation.dart';
 
@@ -19,22 +20,22 @@ class AddressController extends GetxController implements HTTPErrorHandler {
   }
 
   deleteAddress(ShippingAddress address) {
-    addresses.removeWhere((ad) =>
-        ad.location.lat == address.location.lat &&
-        ad.location.long == address.location.long);
-    if (selectedAddress.location.lat == address.location.lat &&
-        selectedAddress.location.long == address.location.long) {
-      selectedAddress = ShippingAddress();
-    }
+    // addresses.removeWhere((ad) =>
+    //     ad.location.lat == address.location.lat &&
+    //     ad.location.long == address.location.long);
+    // if (selectedAddress.location.lat == address.location.lat &&
+    //     selectedAddress.location.long == address.location.long) {
+    //   selectedAddress = ShippingAddress();
+    // }
     update();
   }
 
   setDeliveryAddress(ShippingAddress address, {getCost: true}) {
-    selectedAddress = addresses.firstWhere(
-        (ad) =>
-            ad.location.lat == address.location.lat &&
-            ad.location.long == address.location.long,
-        orElse: () => ShippingAddress());
+    // selectedAddress = addresses.firstWhere(
+    //     (ad) =>
+    //         ad.location.lat == address.location.lat &&
+    //         ad.location.long == address.location.long,
+    //     orElse: () => ShippingAddress());
     update();
     if (getCost) {
       var _cartController = Get.find<CartController>();
@@ -43,15 +44,15 @@ class AddressController extends GetxController implements HTTPErrorHandler {
   }
 
   updateAddress(ShippingAddress address) {
-    var editableAddress = addresses.indexWhere(
-      (ad) =>
-          ad.location.lat == address.location.lat &&
-          ad.location.long == address.location.long,
-    );
-    if (editableAddress != -1) {
-      addresses[editableAddress] = address;
-      update();
-    }
+    // var editableAddress = addresses.indexWhere(
+    //   (ad) =>
+    //       ad.location.lat == address.location.lat &&
+    //       ad.location.long == address.location.long,
+    // );
+    // if (editableAddress != -1) {
+    //   addresses[editableAddress] = address;
+    //   update();
+    // }
   }
 
   resetErrorState() {

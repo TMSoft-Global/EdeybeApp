@@ -20,13 +20,13 @@ class ShippingAddress {
           lastName: json["lastName"],
           email: json["email"],
           phone: json["phone"],
-          location: AddressLocation.fromJson(json["location"]));
+          location: AddressLocation.fromJson(json["deliveryAddresses"]));
 
   Map<String, dynamic> toJson() => {
         "firstName": firstName,
         "lastName": lastName,
         "email": email,
-        "location": location.toJson(),
+        "deliveryAddresses": location.toJson(),
         "phone": phone
       };
 }

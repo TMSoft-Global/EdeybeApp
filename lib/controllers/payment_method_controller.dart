@@ -55,8 +55,7 @@ class PaymentMethodController extends GetxController {
                    callBack()
                 
                 
-                , (error) {}))).whenComplete(() {
-
+                , (error) {})),).whenComplete(() {
                   cards.add(card);
                    update();
                 });
