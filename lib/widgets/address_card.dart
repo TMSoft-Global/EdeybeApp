@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 class AddressCard extends StatelessWidget {
   final ShippingAddress address;
+  final DeliveryAddress deliveryAddress;
   final VoidCallback onRemoveAddress;
   final VoidCallback onEditAddress;
   final VoidCallback onCardPressed;
@@ -14,6 +15,7 @@ class AddressCard extends StatelessWidget {
       {Key key,
       @required this.onCardPressed,
       @required this.address,
+      @required this.deliveryAddress,
       @required this.onEditAddress,
       this.showChangeButton = false,
       this.onChangeButtonPressed,
@@ -51,7 +53,8 @@ class AddressCard extends StatelessWidget {
                 Expanded(
                   flex: 1,
                   child: Container(
-                    child: Text(S.of(context).shippingAddress,
+                    child: Text(
+                      'Delivery Address',
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                             fontSize: 18.w, fontWeight: FontWeight.w800)),
@@ -128,7 +131,7 @@ class AddressCard extends StatelessWidget {
                 Expanded(
                   flex: 1,
                   child: Container(
-                    child: Text(S.of(context).name,
+                    child: Text("Place Name",
                         style: TextStyle(color: Constants.themeGreyDark)),
                   ),
                 ),
@@ -139,7 +142,9 @@ class AddressCard extends StatelessWidget {
                       left: 10.w,
                     ),
                     child: Text(
-                      "${address.firstName} ${address.lastName}",
+                      deliveryAddress.placeName
+                      // "${address.firstName} ${address.lastName}",
+                      
                     ),
                   ),
                 ),
@@ -163,7 +168,7 @@ class AddressCard extends StatelessWidget {
                       left: 10.w,
                     ),
                     child: Text(
-                      address.location ?? "",
+                      deliveryAddress.displayText ?? "",
                     ),
                   ),
                 ),
@@ -176,7 +181,7 @@ class AddressCard extends StatelessWidget {
                 Expanded(
                   flex: 1,
                   child: Container(
-                    child: Text(S.of(context).email,
+                    child: Text("Longitude",
                         style: TextStyle(color: Constants.themeGreyDark)),
                   ),
                 ),
@@ -187,7 +192,8 @@ class AddressCard extends StatelessWidget {
                       left: 10.w,
                     ),
                     child: Text(
-                      address.email ?? "",
+                      deliveryAddress.long ?? "",
+                      
                     ),
                   ),
                 ),
@@ -200,7 +206,7 @@ class AddressCard extends StatelessWidget {
                 Expanded(
                   flex: 1,
                   child: Container(
-                    child: Text(S.of(context).mobileNo,
+                    child: Text("Latitude",
                         style: TextStyle(color: Constants.themeGreyDark)),
                   ),
                 ),
@@ -211,7 +217,7 @@ class AddressCard extends StatelessWidget {
                       left: 10.w,
                     ),
                     child: Text(
-                      address.phone ?? "",
+                      deliveryAddress.lat ?? "",
                     ),
                   ),
                 ),

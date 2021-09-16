@@ -24,8 +24,8 @@
 //     };
 // }
 
-class ShippingAddresss {
-    ShippingAddresss({
+class ShippingAddress {
+    ShippingAddress({
         this.firstName,
         this.lastName,
         this.phone,
@@ -39,7 +39,7 @@ class ShippingAddresss {
     String email;
     List<DeliveryAddress> deliveryAddresses;
 
-    factory ShippingAddresss.fromJson(Map<String, dynamic> json) => ShippingAddresss(
+    factory ShippingAddress.fromJson(Map<String, dynamic> json) => ShippingAddress(
         firstName: json["firstName"],
         lastName: json["lastName"],
         phone: json["phone"],

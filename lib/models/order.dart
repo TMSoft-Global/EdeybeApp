@@ -1,6 +1,5 @@
 import 'package:edeybe/models/deliveryModel.dart';
 import 'package:edeybe/models/product.dart';
-import 'package:edeybe/models/shippingAddress.dart';
 
 class Order {
   Order({

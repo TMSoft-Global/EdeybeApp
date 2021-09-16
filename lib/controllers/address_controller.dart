@@ -4,18 +4,42 @@ import 'package:edeybe/index.dart';
 import 'package:edeybe/interface/HTTPErrorHandler.dart';
 import 'package:edeybe/models/deliveryModel.dart';
 import 'package:edeybe/models/shippingAddress.dart';
+import 'package:edeybe/services/address_operations.dart';
 import 'package:edeybe/services/cart_operation.dart';
 
 class AddressController extends GetxController implements HTTPErrorHandler {
   var addresses = <ShippingAddress>[].obs;
+  var delivery = <DeliveryAddress>[].obs;
   ShippingAddress selectedAddress;
   var operations = CartOperation();
+  var addressoperations = AddressOperations();
+
   var connectionError = false.obs;
   var serverError = false.obs;
   var canceled = false.obs;
 
+    @override
+  void onInit() {
+    super.onInit();
+    Future.delayed(Duration(seconds: 1), () {
+      addressoperations.getAllAddresses((response) {
+        print(response);
+        delivery.value = response;
+        update();
+      }, (error) {});
+    });
+  }
+
+
   addAddress(ShippingAddress address) {
+addressoperations.addAddressRequest({
+  "type":"currentLocation", 
+	"lat": "5.635281716007276", 
+	"long": "-0.158889406811822",
+	"displayText": "EAST LEGON, Sowah Close", 
+	"placeName": "My home address"}, (address) => print(address.deliveryAddresses));
     addresses.add(address);
+
     update();
   }
 
@@ -28,6 +52,10 @@ class AddressController extends GetxController implements HTTPErrorHandler {
     //   selectedAddress = ShippingAddress();
     // }
     update();
+  }
+
+  getAllDeliveryAddresses(){
+
   }
 
   setDeliveryAddress(ShippingAddress address, {getCost: true}) {

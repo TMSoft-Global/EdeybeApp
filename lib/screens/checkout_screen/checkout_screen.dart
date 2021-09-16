@@ -1,3 +1,4 @@
+import 'package:edeybe/models/deliveryModel.dart';
 import 'package:edeybe/utils/card_enum.dart';
 import 'package:edeybe/utils/helper.dart';
 import 'package:edeybe/widgets/Shimmer.dart';
@@ -51,7 +52,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if (_addressController.selectedAddress != null &&
-          _addressController.selectedAddress.location != null) {
+          _addressController.selectedAddress.deliveryAddresses != null) {
         _cartController.getDeliveryCost();
       }
     });
@@ -59,7 +60,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   bool canPlaceOrder() {
     return (_addressController.selectedAddress != null &&
-            _addressController.selectedAddress.location != null) &&
+            _addressController.selectedAddress.deliveryAddresses != null) &&
         _selectedPaymentMethod != null;
   }
 
@@ -149,7 +150,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   GetBuilder<AddressController>(
                       builder: (_) => _addressController.selectedAddress !=
                                   null &&
-                              _addressController.selectedAddress.location !=
+                              _addressController.selectedAddress.deliveryAddresses !=
                                   null
                           ? AddressCard(
                               onCardPressed: null,

@@ -2,7 +2,6 @@ import 'package:edeybe/controllers/address_controller.dart';
 import 'package:edeybe/controllers/delivery_coltroller.dart';
 import 'package:edeybe/index.dart';
 import 'package:edeybe/models/deliveryModel.dart';
-import 'package:edeybe/models/shippingAddress.dart';
 import 'package:edeybe/screens/address_screen/address_map/address_map.dart';
 import 'package:edeybe/utils/constant.dart';
 import 'package:edeybe/utils/helper.dart';
@@ -61,7 +60,7 @@ class _AddorEditScreenState extends State<AddorEditScreen> {
       // widget.address == null
           // ? 
           _addressController.addAddress(ShippingAddress(
-              location: _address['_id'],
+              // deliveryAddresses: _address,
               phone: _mobileCtrl.text,
               email: _emailCtrl.text,
               firstName: _firstnameCtrl.text,
