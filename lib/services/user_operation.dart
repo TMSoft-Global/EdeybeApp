@@ -70,15 +70,15 @@ class UserOperations extends ServerOperations {
   }
 
   getDefaultAddress(
-      Function(ShippingAddress) callback, void onError(DioError error)) {
+      Function(DeliveryAddress) callback, void onError(DioError error)) {
     dynamicRequest(
       path: "/account/shippingAddress",
       schema: "",
       onError: onError,
       onResponse: (res) {
-        var data = res["firstName"] != null
-            ? ShippingAddress.fromJson(res)
-            : ShippingAddress();
+        var data = res != null
+            ? DeliveryAddress.fromJson(res)
+            : DeliveryAddress();
         callback(data);
       },
     );

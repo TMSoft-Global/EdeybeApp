@@ -1,6 +1,5 @@
 import 'package:edeybe/index.dart';
 import 'package:edeybe/models/deliveryModel.dart';
-import 'package:edeybe/models/shippingAddress.dart';
 import 'package:edeybe/utils/constant.dart';
 import 'package:flutter/material.dart';
 

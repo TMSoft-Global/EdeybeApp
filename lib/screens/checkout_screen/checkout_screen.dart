@@ -52,7 +52,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if (_addressController.selectedAddress != null &&
-          _addressController.selectedAddress.deliveryAddresses != null) {
+          _addressController.selectedAddress.id != null) {
         _cartController.getDeliveryCost();
       }
     });
@@ -60,7 +60,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   bool canPlaceOrder() {
     return (_addressController.selectedAddress != null &&
-            _addressController.selectedAddress.deliveryAddresses != null) &&
+            _addressController.selectedAddress.id != null) &&
         _selectedPaymentMethod != null;
   }
 
@@ -150,7 +150,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   GetBuilder<AddressController>(
                       builder: (_) => _addressController.selectedAddress !=
                                   null &&
-                              _addressController.selectedAddress.deliveryAddresses !=
+                              _addressController.selectedAddress.id !=
                                   null
                           ? AddressCard(
                               onCardPressed: null,
@@ -159,8 +159,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                     hasContinueButton: true,
                                     onContinuePressed: Get.back,
                                   )),
-                              address: _addressController.selectedAddress,
-                              onEditAddress: () => Get.to(AddorEditScreen(
+                              deliveryAddress: _addressController.selectedAddress,
+                              onEditAddress: () => Get.to(
+                                
+                                AddorEditScreen(
                                     address: _addressController.selectedAddress,
                                   )),
                               onRemoveAddress: null)

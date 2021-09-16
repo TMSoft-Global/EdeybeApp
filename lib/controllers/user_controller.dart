@@ -204,9 +204,9 @@ class UserController extends GetxController implements HTTPErrorHandler {
 
   void getDefaultAddress() {
     _userOperations.getDefaultAddress((address) {
-      if (address.firstName != null) {
-        addressCtl.addAddress(address);
-        addressCtl.setDeliveryAddress(address, getCost: false);
+      if (address.id != null) {
+        // addressCtl.addAddress(address);
+        // addressCtl.setDeliveryAddress(address, getCost: false);
         update();
       }
     }, handleError);

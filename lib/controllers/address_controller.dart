@@ -10,7 +10,7 @@ import 'package:edeybe/services/cart_operation.dart';
 class AddressController extends GetxController implements HTTPErrorHandler {
   var addresses = <ShippingAddress>[].obs;
   var delivery = <DeliveryAddress>[].obs;
-  ShippingAddress selectedAddress;
+  DeliveryAddress selectedAddress;
   var operations = CartOperation();
   var addressoperations = AddressOperations();
 
@@ -31,26 +31,19 @@ class AddressController extends GetxController implements HTTPErrorHandler {
   }
 
 
-  addAddress(ShippingAddress address) {
-addressoperations.addAddressRequest({
-  "type":"currentLocation", 
-	"lat": "5.635281716007276", 
-	"long": "-0.158889406811822",
-	"displayText": "EAST LEGON, Sowah Close", 
-	"placeName": "My home address"}, (address) => print(address.deliveryAddresses));
-    addresses.add(address);
+  addAddress(Map<String, dynamic> bodyData) {
+addressoperations.addAddressRequest(bodyData, (address) => print(address.deliveryAddresses));
+    
 
     update();
   }
 
-  deleteAddress(ShippingAddress address) {
-    // addresses.removeWhere((ad) =>
-    //     ad.location.lat == address.location.lat &&
-    //     ad.location.long == address.location.long);
-    // if (selectedAddress.location.lat == address.location.lat &&
-    //     selectedAddress.location.long == address.location.long) {
-    //   selectedAddress = ShippingAddress();
-    // }
+  deleteAddress(DeliveryAddress address) {
+    if(address !=null){
+      delivery.removeWhere((element) => element.id == address.id);
+      update();
+    }
+
     update();
   }
 
@@ -58,12 +51,12 @@ addressoperations.addAddressRequest({
 
   }
 
-  setDeliveryAddress(ShippingAddress address, {getCost: true}) {
-    // selectedAddress = addresses.firstWhere(
-    //     (ad) =>
-    //         ad.location.lat == address.location.lat &&
-    //         ad.location.long == address.location.long,
-    //     orElse: () => ShippingAddress());
+  setDeliveryAddress(DeliveryAddress address, {getCost: true}) {
+    selectedAddress = delivery.firstWhere(
+        (ad) =>
+            ad.lat == address.lat &&
+            ad.long == address.long,
+        orElse: () => DeliveryAddress());
     update();
     if (getCost) {
       var _cartController = Get.find<CartController>();

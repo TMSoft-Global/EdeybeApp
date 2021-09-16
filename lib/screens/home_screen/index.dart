@@ -26,6 +26,7 @@ class _HomeIndexState extends State<HomeIndex> {
   var wishlistController = Get.put(WishlistController());
   var addressController = Get.put(AddressController());
   var paymentMethodController = Get.put(PaymentMethodController());
+  // var addressController = Get.put(PaymentMethodController());
   var categoryContoller = Get.put(CategoryController());
   List<Widget> children = [];
   PageController pageController = PageController();

@@ -12,9 +12,9 @@ import 'package:flutter/material.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 
 class AddorEditScreen extends StatefulWidget {
-  AddorEditScreen({Key key, this.address}) : super(key: key);
-  final ShippingAddress address;
-  //  DeliveryAddress deliveryAddress;
+  AddorEditScreen({Key key, this.address, this.deliveryAddress}) : super(key: key);
+  final DeliveryAddress address;
+   ShippingAddress deliveryAddress;
   @override
   _AddorEditScreenState createState() => _AddorEditScreenState();
 }
@@ -28,7 +28,6 @@ class _AddorEditScreenState extends State<AddorEditScreen> {
   TextEditingController _emailCtrl = TextEditingController();
   TextEditingController _addressCtrl = TextEditingController();
   TextEditingController _addressMoreCtrl = TextEditingController();
-  TextEditingController _placeNameCtrl = TextEditingController();
   Map<String, dynamic> _address;
   final _addressController = Get.put(AddressController());
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -38,8 +37,9 @@ class _AddorEditScreenState extends State<AddorEditScreen> {
   final FocusNode _lastname = FocusNode();
   final FocusNode _email = FocusNode();
   final FocusNode _mobile = FocusNode();
-  final FocusNode _plceNameFocus = FocusNode();
   final FocusNode _ghanaPostAddress = FocusNode();
+
+  String locationAddress,locID, locName,long,lat;
   // state functions
   void _setAddressType(int val) {
     setState(() {
@@ -55,17 +55,14 @@ class _AddorEditScreenState extends State<AddorEditScreen> {
 
   void saveAddress() {
     final FormState form = _formKey.currentState;
-    if (form.validate() && _address != null) {
-      // for(int x = 0; x < _address.length; x++){
-      // widget.address == null
-          // ? 
-          _addressController.addAddress(ShippingAddress(
-              // deliveryAddresses: _address,
-              phone: _mobileCtrl.text,
-              email: _emailCtrl.text,
-              firstName: _firstnameCtrl.text,
-              lastName: _lastnameCtrl.text,
-            ));
+    if (form.validate() && _address != null) { 
+          _addressController.addAddress({
+            "type":_addressType == 1 ?"digitalAddress":"currentLocation", 
+            "lat": lat, 
+            "long": long,
+            "displayText": locationAddress, 
+            "placeName": locName
+          });
           
       Get.back();
       // }
@@ -78,12 +75,18 @@ class _AddorEditScreenState extends State<AddorEditScreen> {
 
   @override
   void initState() {
-    if (widget.address != null) {
-      _firstnameCtrl.text = widget.address.firstName;
-      _lastnameCtrl.text = widget.address.lastName;
-      _mobileCtrl.text = widget.address.phone;
+
+      locationAddress  = widget.address.displayText;
+      locID = widget.address.id;
+      locName = widget.address.placeName;
+      long = widget.address.long;
+      lat = widget.address.lat;
+    if (widget.deliveryAddress != null) {
+      _firstnameCtrl.text = widget.deliveryAddress.firstName;
+      _lastnameCtrl.text = widget.deliveryAddress.lastName;
+      _mobileCtrl.text = widget.deliveryAddress.phone;
       // _addressCtrl.text = widget.address.deliveryAddresses;
-      _emailCtrl.text = widget.address.email;
+      _emailCtrl.text = widget.deliveryAddress.email;
     }
     super.initState();
   }
@@ -170,154 +173,276 @@ class _AddorEditScreenState extends State<AddorEditScreen> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       Container(
-                          width: Get.width,
-                          padding: EdgeInsets.only(left: 8.w, right: 8.w),
-                          child: Text(S.of(context).firstName,
-                              style: TextStyle(fontSize: 17.w))),
-                      Padding(
-                        padding: EdgeInsets.all(8.0.w),
-                        child: SizedBox(
-                          // height: 47.w,
-                          child: TextFormField(
-                            focusNode: _firstname,
-                            validator: (value) {
-                              return value.length > 3 ? null : Strings.fieldReq;
-                            },
-                            style: TextStyle(fontSize: 14.w),
-                            decoration: InputDecoration(
-                              hintText: S.of(context).firstName,
-                              floatingLabelBehavior:
-                                  FloatingLabelBehavior.never,
-                              border: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Constants.themeGreyLight,
-                                      width: 1.0.w),
-                                  borderRadius: BorderRadius.circular(5.0.w)),
-                              contentPadding: EdgeInsets.all(10.0.w),
-                            ),
-                            controller: _firstnameCtrl,
-                          ),
+                        decoration:BoxDecoration(
+                          color: Colors.white,
+                           boxShadow: [
+              BoxShadow(
+                color: Constants.boxShadow,
+                blurRadius: 3.4.w,
+                offset: Offset(0, 3.4.w),
+              )
+            ]
                         ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(8.0.w),
-                        child: SizedBox(
-                          // height: 47.w,
-                          child: TextFormField(
-                            focusNode: _lastname,
-                            validator: (value) {
-                              return value.length > 2 ? null : Strings.fieldReq;
-                            },
-                            style: TextStyle(fontSize: 14.w),
-                            decoration: InputDecoration(
-                              hintText: S.of(context).lastName,
-                              floatingLabelBehavior:
-                                  FloatingLabelBehavior.never,
-                              border: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Constants.themeGreyLight,
-                                      width: 1.0.w),
-                                  borderRadius: BorderRadius.circular(5.0.w)),
-                              contentPadding: EdgeInsets.all(10.0.w),
-                            ),
-                            controller: _lastnameCtrl,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(8.0.w),
-                        child: SizedBox(
-                          // height: 47.w,
-                          child: TextFormField(
-                            focusNode: _email,
-                            validator: Helper.validateEmail,
-                            style: TextStyle(fontSize: 14.w),
-                            decoration: InputDecoration(
-                              hintText: S.of(context).email,
-                              floatingLabelBehavior:
-                                  FloatingLabelBehavior.never,
-                              border: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Constants.themeGreyLight,
-                                      width: 1.0.w),
-                                  borderRadius: BorderRadius.circular(5.0.w)),
-                              contentPadding: EdgeInsets.all(10.0.w),
-                            ),
-                            controller: _emailCtrl,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(8.0.w),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            // Expanded(
-                            //   child: Container(
-                            //     // constraints: BoxConstraints(maxHeight: 47.w),
-                            //     // height: 47.w,
-                            //     decoration: BoxDecoration(
-                            //         border: Border.all(
-                            //             width: 1.w, color: Constants.themeGreyDark),
-                            //         borderRadius: BorderRadius.circular(5.w)),
-                            //     padding: EdgeInsets.all(11.w),
-                            //     child: DropdownButtonHideUnderline(
-                            //       child: DropdownButton<String>(
-                            //         isDense: true,
-                            //         value: _countryCode,
-                            //         onChanged: _setContryCode,
-                            //         items: <DropdownMenuItem<String>>[
-                            //           DropdownMenuItem(
-                            //             value: "+233",
-                            //             child: Text(
-                            //               "+233",
-                            //               textAlign: TextAlign.center,
-                            //               style: Get.textTheme.bodyText1.copyWith(
-                            //                   fontSize: 13,
-                            //                   fontWeight: FontWeight.bold),
-                            //             ),
-                            //           ),
-                            //         ],
-                            //       ),
-                            //     ),
-                            //   ),
-                            // ),
-                            Expanded(
-                              flex: 3,
-                              child: SizedBox(
-                                // height: 47.w,
-                                child: TextFormField(
-                                  focusNode: _mobile,
-                                  validator: Helper.validateMobileNumberStrict,
-                                  style: TextStyle(fontSize: 14.w),
-                                  decoration: InputDecoration(
-                                    hintText:
-                                        S.of(context).mobileNumberPlaceholder,
-                                    floatingLabelBehavior:
-                                        FloatingLabelBehavior.never,
-                                    border: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Constants.themeGreyLight,
-                                            width: 1.0.w),
-                                        borderRadius:
-                                            BorderRadius.circular(5.0.w)),
-                                    contentPadding: EdgeInsets.all(10.0.w),
-                                  ),
-                                  controller: _mobileCtrl,
-                                ),
-                              ),
-                            ),
+
+        margin: EdgeInsets.fromLTRB(10.w, 10.w, 10.w, 10.w),
+        padding: EdgeInsets.fromLTRB(15.w, 5.w, 15.w, 20.w),
+                        child: Column(
+                          children: [
+                               Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    child: Text("Place Name",
+                        style: TextStyle(color: Constants.themeGreyDark)),
+                  ),
+                ),
+                Expanded(
+                  flex: 3,
+                  child: Container(
+                    padding: EdgeInsets.only(
+                      left: 10.w,
+                    ),
+                    child: Text(
+                      locName
+                      // "${address.firstName} ${address.lastName}",
+                      
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    child: Text(S.of(context).address,
+                        style: TextStyle(color: Constants.themeGreyDark)),
+                  ),
+                ),
+                Expanded(
+                  flex: 3,
+                  child: Container(
+                    padding: EdgeInsets.only(
+                      left: 10.w,
+                    ),
+                    child: Text(
+                      locationAddress ?? "",
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    child: Text("Longitude",
+                        style: TextStyle(color: Constants.themeGreyDark)),
+                  ),
+                ),
+                Expanded(
+                  flex: 3,
+                  child: Container(
+                    padding: EdgeInsets.only(
+                      left: 10.w,
+                    ),
+                    child: Text(
+                      long ?? "",
+                      
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    child: Text("Latitude",
+                        style: TextStyle(color: Constants.themeGreyDark)),
+                  ),
+                ),
+                Expanded(
+                  flex: 3,
+                  child: Container(
+                    padding: EdgeInsets.only(
+                      left: 10.w,
+                    ),
+                    child: Text(
+                      lat ?? "",
+                    ),
+                  ),
+                ),
+              ],
+            ),
+       
                           ],
                         ),
-                      ),
-                      SizedBox(width: 10.w),
-                      Container(
+                      )
+
+                      // Container(
+                      //     width: Get.width,
+                      //     padding: EdgeInsets.only(left: 8.w, right: 8.w),
+                      //     child: Text(S.of(context).firstName,
+                      //         style: TextStyle(fontSize: 17.w))),
+                      // Padding(
+                      //   padding: EdgeInsets.all(8.0.w),
+                      //   child: SizedBox(
+                      //     // height: 47.w,
+                      //     child: TextFormField(
+                      //       focusNode: _firstname,
+                      //       validator: (value) {
+                      //         return value.length > 3 ? null : Strings.fieldReq;
+                      //       },
+                      //       style: TextStyle(fontSize: 14.w),
+                      //       decoration: InputDecoration(
+                      //         hintText: S.of(context).firstName,
+                      //         floatingLabelBehavior:
+                      //             FloatingLabelBehavior.never,
+                      //         border: OutlineInputBorder(
+                      //             borderSide: BorderSide(
+                      //                 color: Constants.themeGreyLight,
+                      //                 width: 1.0.w),
+                      //             borderRadius: BorderRadius.circular(5.0.w)),
+                      //         contentPadding: EdgeInsets.all(10.0.w),
+                      //       ),
+                      //       controller: _firstnameCtrl,
+                      //     ),
+                      //   ),
+                      // ),
+                      // Padding(
+                      //   padding: EdgeInsets.all(8.0.w),
+                      //   child: SizedBox(
+                      //     // height: 47.w,
+                      //     child: TextFormField(
+                      //       focusNode: _lastname,
+                      //       validator: (value) {
+                      //         return value.length > 2 ? null : Strings.fieldReq;
+                      //       },
+                      //       style: TextStyle(fontSize: 14.w),
+                      //       decoration: InputDecoration(
+                      //         hintText: S.of(context).lastName,
+                      //         floatingLabelBehavior:
+                      //             FloatingLabelBehavior.never,
+                      //         border: OutlineInputBorder(
+                      //             borderSide: BorderSide(
+                      //                 color: Constants.themeGreyLight,
+                      //                 width: 1.0.w),
+                      //             borderRadius: BorderRadius.circular(5.0.w)),
+                      //         contentPadding: EdgeInsets.all(10.0.w),
+                      //       ),
+                      //       controller: _lastnameCtrl,
+                      //     ),
+                      //   ),
+                      // ),
+                      // Padding(
+                      //   padding: EdgeInsets.all(8.0.w),
+                      //   child: SizedBox(
+                      //     // height: 47.w,
+                      //     child: TextFormField(
+                      //       focusNode: _email,
+                      //       validator: Helper.validateEmail,
+                      //       style: TextStyle(fontSize: 14.w),
+                      //       decoration: InputDecoration(
+                      //         hintText: S.of(context).email,
+                      //         floatingLabelBehavior:
+                      //             FloatingLabelBehavior.never,
+                      //         border: OutlineInputBorder(
+                      //             borderSide: BorderSide(
+                      //                 color: Constants.themeGreyLight,
+                      //                 width: 1.0.w),
+                      //             borderRadius: BorderRadius.circular(5.0.w)),
+                      //         contentPadding: EdgeInsets.all(10.0.w),
+                      //       ),
+                      //       controller: _emailCtrl,
+                      //     ),
+                      //   ),
+                      // ),
+                      // Padding(
+                      //   padding: EdgeInsets.all(8.0.w),
+                      //   child: Row(
+                      //     crossAxisAlignment: CrossAxisAlignment.start,
+                      //     children: <Widget>[
+                      //       // Expanded(
+                      //       //   child: Container(
+                      //       //     // constraints: BoxConstraints(maxHeight: 47.w),
+                      //       //     // height: 47.w,
+                      //       //     decoration: BoxDecoration(
+                      //       //         border: Border.all(
+                      //       //             width: 1.w, color: Constants.themeGreyDark),
+                      //       //         borderRadius: BorderRadius.circular(5.w)),
+                      //       //     padding: EdgeInsets.all(11.w),
+                      //       //     child: DropdownButtonHideUnderline(
+                      //       //       child: DropdownButton<String>(
+                      //       //         isDense: true,
+                      //       //         value: _countryCode,
+                      //       //         onChanged: _setContryCode,
+                      //       //         items: <DropdownMenuItem<String>>[
+                      //       //           DropdownMenuItem(
+                      //       //             value: "+233",
+                      //       //             child: Text(
+                      //       //               "+233",
+                      //       //               textAlign: TextAlign.center,
+                      //       //               style: Get.textTheme.bodyText1.copyWith(
+                      //       //                   fontSize: 13,
+                      //       //                   fontWeight: FontWeight.bold),
+                      //       //             ),
+                      //       //           ),
+                      //       //         ],
+                      //       //       ),
+                      //       //     ),
+                      //       //   ),
+                      //       // ),
+                      //       Expanded(
+                      //         flex: 3,
+                      //         child: SizedBox(
+                      //           // height: 47.w,
+                      //           child: TextFormField(
+                      //             focusNode: _mobile,
+                      //             validator: Helper.validateMobileNumberStrict,
+                      //             style: TextStyle(fontSize: 14.w),
+                      //             decoration: InputDecoration(
+                      //               hintText:
+                      //                   S.of(context).mobileNumberPlaceholder,
+                      //               floatingLabelBehavior:
+                      //                   FloatingLabelBehavior.never,
+                      //               border: OutlineInputBorder(
+                      //                   borderSide: BorderSide(
+                      //                       color: Constants.themeGreyLight,
+                      //                       width: 1.0.w),
+                      //                   borderRadius:
+                      //                       BorderRadius.circular(5.0.w)),
+                      //               contentPadding: EdgeInsets.all(10.0.w),
+                      //             ),
+                      //             controller: _mobileCtrl,
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
+                      // SizedBox(width: 10.w),
+                   ,   Container(
                           width: Get.width,
                           padding: EdgeInsets.only(left: 8.w, right: 8.w),
                           child: Text(
                               "${S.of(context).shipping}  ${S.of(context).address}",
                               style: TextStyle(fontSize: 17.w))),
                       SizedBox(width: 10.w),
+                     
+                     
                       Container(
                         padding: EdgeInsets.only(left: 8.w, right: 8.w),
                         child: Row(
@@ -357,15 +482,20 @@ class _AddorEditScreenState extends State<AddorEditScreen> {
                                         print(address);
                                     if (address["GPSName"].startsWith("GA")) {
                                       setState(() {
-                                        _address = {
-                                          "lat": address["NLat"],
-                                          "long": address["WLong"],
-                                          "displayText": address["Street"],
-                                          "type": _addressType == 1
-                                              ? "currentLocation"
-                                              : "digitalAddress"
-                                        };
-                                        _addressCtrl.text = address["Street"];
+                                        locationAddress = address['Area'];
+                                        locName = address['Street'];
+                                        long = address["WLong"];
+                                        lat = address["NLat"];
+                                        // locID
+                                        // _address = {
+                                        //   "lat": address["NLat"],
+                                        //   "long": address["WLong"],
+                                        //   "displayText": address["Street"],
+                                        //   "type": _addressType == 1
+                                        //       ? "currentLocation"
+                                        //       : "digitalAddress"
+                                        // };
+                                        // _addressCtrl.text = address["Street"];
                                       });
                                     } else {
                                       _address = null;
@@ -441,16 +571,19 @@ class _AddorEditScreenState extends State<AddorEditScreen> {
                                                   .getGhanaPostAddress(
                                                       _addressMoreCtrl.text,
                                                       callback: (address) {
-                                                        print("=====$address");
                                                 setState(() {
-                                                  _address = {
-                                                    "lat": address["CenterLatitude"],
-                                                    "long": address["CenterLongitude"],
-                                                    "displayText":
-                                                        "${address["Area"]} ${address['Street']}",
-                                                  };
-                                                  _addressCtrl.text =
-                                                      "${address["Area"]} ${address['Street']}";
+                                                  locationAddress ="${address["Area"]} ${address['Street']}"; 
+                                                  locName = address['District'];
+                                                  long = address['CenterLongitude'].toString();
+                                                  lat = address['CenterLatitude'].toString();
+                                                  // _address = {
+                                                  //   "lat": address["CenterLatitude"],
+                                                  //   "long": address["CenterLongitude"],
+                                                  //   "displayText":
+                                                  //       "${address["Area"]} ${address['Street']}",
+                                                  // };
+                                                  // _addressCtrl.text =
+                                                  //     "${address["Area"]} ${address['Street']}";
                                                 });
                                               });
                                             } else {
