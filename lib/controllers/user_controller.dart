@@ -203,13 +203,21 @@ class UserController extends GetxController implements HTTPErrorHandler {
   }
 
   void getDefaultAddress() {
-    _userOperations.getDefaultAddress((address) {
-      if (address.id != null) {
-        // addressCtl.addAddress(address);
-        // addressCtl.setDeliveryAddress(address, getCost: false);
+
+      // getAllDeliveryAddresses(){
+      _userOperations.getAllAddresses((response) {
+       addressCtl. delivery.value = response;
         update();
-      }
-    }, handleError);
+      }, handleError);
+  // }
+
+    // _userOperations.getDefaultAddress((address) {
+    //   if (address.id != null) {
+    //     // addressCtl.addAddress(address);
+    //     // addressCtl.setDeliveryAddress(address, getCost: false);
+    //     update();
+    //   }
+    // }, handleError);
   }
 
   handleError(DioError error) {

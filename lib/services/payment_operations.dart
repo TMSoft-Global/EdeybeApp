@@ -63,9 +63,37 @@ class PayementOperation extends ServerOperations {
     );
   }
 
+  verifyCard(Map<String, dynamic> data, void onError(DioError error),
+      Function(dynamic response) onResponse) {
+    dynamicRequest(
+      path: paymentOTP,
+      schema: jsonEncode({"data": data}),
+      showDialog: true,
+      onError: onError,
+      onResponse: (res) {
+        print(res['success']);
+        if (res.containsKey('error')) {
+          var message = res['error'] is String ? res['error'] : res['error'][0];
+        } else if (res.containsKey("success")) {
+          Get.to(PaymentMethodScreen(
+            hasContinueButton: false,
+            onContinuePressed: (pan) {},
+          ));
+
+          //   Get.dialog(CartDialog(
+          //     productTitle: "Success",
+          //     type: CartItemType.Message,
+          //     title: S.of(Get.context).paymentMethod,
+          //   ));
+        }
+        onResponse(res);
+      },
+    );
+  }
+
   sendVerification(
       String number, void onResponse(), void onError(DioError error)) {
-        print(number);
+    print(number);
 
     dynamicRequest(
       path: paymentOTP,
@@ -73,25 +101,24 @@ class PayementOperation extends ServerOperations {
       showDialog: true,
       onError: onError,
       onResponse: (res) {
-          print(res['success']);
+        print(res['success']);
         if (res.containsKey('error')) {
           var message = res['error'] is String ? res['error'] : res['error'][0];
-          
-        } else if (res.containsKey("success")){
+        } else if (res.containsKey("success")) {
           Get.to(PaymentMethodScreen(
-                              hasContinueButton: false,
-                              onContinuePressed: (pan) {
-                             
-        print("========================$pan");
-                              },
-                            ));
+            hasContinueButton: false,
+            onContinuePressed: (pan) {
+              print("========================$pan");
+            },
+          ));
 
-        //   Get.dialog(CartDialog(
-        //     productTitle: "Success",
-        //     type: CartItemType.Message,
-        //     title: S.of(Get.context).paymentMethod,
-        //   ));
-        } onResponse();
+          //   Get.dialog(CartDialog(
+          //     productTitle: "Success",
+          //     type: CartItemType.Message,
+          //     title: S.of(Get.context).paymentMethod,
+          //   ));
+        }
+        onResponse();
       },
     );
   }

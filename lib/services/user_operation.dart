@@ -84,6 +84,25 @@ class UserOperations extends ServerOperations {
     );
   }
 
+      getAllAddresses(void onResponse(List<DeliveryAddress> response),
+      void onError(DioError error)) {
+    dynamicRequest(
+      path: '/account/deliveryaddresses',
+      schema: "",
+      method: "GET",
+      onError: onError,
+      onResponse: (res) {
+        // onResponse(res);
+          var data = (res['success']['shippingAddress']['deliveryAddresses'] as List<dynamic>)
+            .map((dynamic i) => DeliveryAddress.fromJson(i as Map<String, dynamic>))
+            .toList();
+        onResponse(data);
+        // var data = (res['success']['shippingAddress']);
+      },
+    );
+  }
+
+
   getUserOrders(bool completed, int page, Function(List<Order>, int) callback,
       void onError(DioError error)) {
     dynamicRequest(

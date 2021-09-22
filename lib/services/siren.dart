@@ -11,6 +11,7 @@ class Siren {
   PackageInfo packageInfo;
   Future<void> _initPackageInfo() async {
     final PackageInfo info = await PackageInfo.fromPlatform();
+    print(info.version);
     packageInfo = info;
   }
 

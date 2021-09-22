@@ -3,6 +3,7 @@ import 'package:edeybe/models/card.dart';
 import 'package:edeybe/screens/otp/otp.dart';
 import 'package:edeybe/services/payment_operations.dart';
 import 'package:edeybe/widgets/custom_dialog.dart';
+import 'package:edeybe/widgets/custom_web_view.dart';
 
 class PaymentMethodController extends GetxController {
   var cards = <PaymentCard>[].obs;
@@ -11,14 +12,13 @@ class PaymentMethodController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    Future.delayed(Duration(seconds: 1), () {
-      payementServer.getAllSavedMethods((response) {
-        cards.value = response;
-        update();
-      }, (error) {});
-    });
+    // Future.delayed(Duration(seconds: 1), () {
+    payementServer.getAllSavedMethods((response) {
+      cards.value = response;
+      update();
+    }, (error) {});
+    // });
   }
-
 
   addPaymentMethod(PaymentCard card, {String otp}) {
     var alreadyAdded = cards.firstWhere(
@@ -29,7 +29,6 @@ class PaymentMethodController extends GetxController {
       var data = card.toMoMoMap();
       if (otp != null) data.putIfAbsent('otp', () => otp);
       payementServer.saveMethod(data, (response) {
-       
         if (otp != null) Get.back();
 
         update();
@@ -43,25 +42,33 @@ class PaymentMethodController extends GetxController {
   }
 
   verify(PaymentCard card) {
-    payementServer.sendVerification(
-        card.number,
-        ()  {
-          Get.to(Otp(
-            data: card.number,
-            onVerify: (String otp) => addPaymentMethod(card, otp: otp),
-            onResend: (Function callBack) => payementServer.sendVerification(
-              
-                card.number, ()=>
-                   callBack()
-                
-                
-                , (error) {})),).whenComplete(() {
-                  cards.add(card);
-                   update();
-                });
-        },
-
-        (error) {});
+    print(card.paytype.toString());
+    if (card.paytype == 1) {
+      payementServer.verifyCard({"": ""}, (error) {}, (val) {
+        if (val != null) {
+              Get.to(CustomWebView(
+            title: "Term and Conditions",
+            url: val['url'],
+            onLoadFinish: (onREsponse){
+              print(onREsponse);
+            },
+          ));
+        }
+      });
+    } else {
+      payementServer.sendVerification(card.number, () {
+        Get.to(
+          Otp(
+              data: card.number,
+              onVerify: (String otp) => addPaymentMethod(card, otp: otp),
+              onResend: (Function callBack) => payementServer.sendVerification(
+                  card.number, () => callBack(), (error) {})),
+        ).whenComplete(() {
+          cards.add(card);
+          update();
+        });
+      }, (error) {});
+    }
   }
 
   eidtPaymentMethod(PaymentCard card) {
@@ -77,22 +84,20 @@ class PaymentMethodController extends GetxController {
   }
 
   removePaymentMethod(PaymentCard card) {
-    if(cards !=null){
+    if (cards != null) {
       payementServer.deleteMethod(card.id, (response) {
-        if(response !=null){
+        if (response != null) {
           Get.dialog(CustomDialog(
-        title: S.current.addCard,
-        content: 'Card deleted successfully',
-      ));
-         print(response);
+            title: S.current.addCard,
+            content: 'Card deleted successfully',
+          ));
+          print(response);
         }
-         cards.removeWhere((element) {
-    return   element.number == card.number;
-    
-    });
-       }, (error) { 
-       });
-    }else {
+        cards.removeWhere((element) {
+          return element.number == card.number;
+        });
+      }, (error) {});
+    } else {
       Get.dialog(CustomDialog(
         title: S.current.addCard,
         content: 'No Card Found',

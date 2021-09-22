@@ -95,6 +95,7 @@ class _CustomWebViewState extends State<CustomWebView> {
             showLoader = true;
           });
         }
+        // if()
         if (url.path == widget.watch.path) {
           setState(() {
             hideWebView = true;

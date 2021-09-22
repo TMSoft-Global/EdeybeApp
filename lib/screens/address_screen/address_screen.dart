@@ -8,13 +8,20 @@ import 'package:edeybe/widgets/address_card.dart';
 import 'package:edeybe/widgets/custom_dialog.dart';
 import 'package:flutter/material.dart';
 
-class AddressScreen extends StatelessWidget {
+class AddressScreen extends StatefulWidget {
   AddressScreen(
       {Key key, this.hasContinueButton = false, this.onContinuePressed})
       : super(key: key);
   final bool hasContinueButton;
   final VoidCallback onContinuePressed;
-  final _addressController = Get.put(AddressController());
+
+  @override
+  _AddressScreenState createState() => _AddressScreenState();
+}
+
+class _AddressScreenState extends State<AddressScreen> {
+  final _addressController = Get.find<AddressController>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +32,7 @@ class AddressScreen extends StatelessWidget {
         title:
             Text(S.of(context).address, style: TextStyle(color: Colors.white)),
       ),
-      bottomNavigationBar: hasContinueButton
+      bottomNavigationBar: widget.hasContinueButton
           ? GetBuilder<AddressController>(
               builder: (_) => Container(
                     padding: EdgeInsets.all(10.w),
@@ -51,7 +58,7 @@ class AddressScreen extends StatelessWidget {
                                       null &&
                                   _addressController.selectedAddress.id !=
                                       null
-                              ? onContinuePressed
+                              ? widget.onContinuePressed
                               : null,
                         ),
                       ),
@@ -116,8 +123,17 @@ class AddressScreen extends StatelessWidget {
                   //   print("object");
                   // },
                   address: null,
-                  onCardPressed: hasContinueButton
-                      ? () => _addressController.setDeliveryAddress(delivery)
+                  onCardPressed: widget.hasContinueButton
+                      ? () {
+                        setState((){
+                          if(delivery.isSelect == true){
+                            delivery.isSelect = false;
+                          }else{
+                            delivery.isSelect = true;
+                             _addressController.setDeliveryAddress(delivery);
+                          }
+                        });
+ }
                       : null,
                   // address: address,
                   deliveryAddress: delivery,
@@ -127,7 +143,7 @@ class AddressScreen extends StatelessWidget {
                   isSelected: _addressController.selectedAddress != null &&
                       _addressController.selectedAddress.id ==
                           delivery.id &&
-                      hasContinueButton,
+                      widget.hasContinueButton,
                 );
               })),
     );

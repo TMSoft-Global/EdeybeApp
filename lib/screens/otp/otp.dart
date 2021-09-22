@@ -1,10 +1,8 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:edeybe/controllers/payment_method_controller.dart';
 import 'package:edeybe/utils/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:edeybe/index.dart';
-import 'package:crypto/crypto.dart';
 
 class Otp extends StatefulWidget {
   final Function onVerify;

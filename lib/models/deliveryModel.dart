@@ -64,6 +64,7 @@ class DeliveryAddress {
         this.long,
         this.displayText,
         this.placeName,
+        this.isSelect = false
     });
 
     String type;
@@ -72,6 +73,7 @@ class DeliveryAddress {
     String long;
     String displayText;
     String placeName;
+    bool isSelect;
 
     factory DeliveryAddress.fromJson(Map<String, dynamic> json) => DeliveryAddress(
         type: json["type"],
@@ -89,5 +91,6 @@ class DeliveryAddress {
         "long": long,
         "displayText": displayText,
         "placeName": placeName,
+        "isSelect":isSelect
     };
 }

@@ -66,7 +66,6 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
             )
           : null,
       body: Obx((){
-
       return ListView.builder(
             itemCount: 1 + _paymentMethodController.cards.length,
             itemBuilder: (_, i) {
@@ -94,9 +93,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                       ),
                       label: Text(S.of(context).addPaymentMethod),
                       onPressed: () {
-                        Get.to(AddCardScreen(
-                         
-                        ));
+                        Get.to(AddCardScreen());
                       },
                     ));
               }

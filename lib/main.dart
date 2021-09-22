@@ -24,6 +24,7 @@ class _EdeybeAppState extends State<EdeybeApp> {
   final userController = Get.put(UserController());
 
   final cartControler = Get.put(CartController());
+  
 
   @override
   void initState() {

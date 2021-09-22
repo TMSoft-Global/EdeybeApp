@@ -21,41 +21,49 @@ class AddressController extends GetxController implements HTTPErrorHandler {
     @override
   void onInit() {
     super.onInit();
-    Future.delayed(Duration(seconds: 1), () {
-      addressoperations.getAllAddresses((response) {
-        print(response);
-        delivery.value = response;
-        update();
-      }, (error) {});
-    });
+   getAllDeliveryAddresses();
   }
 
 
   addAddress(Map<String, dynamic> bodyData) {
-addressoperations.addAddressRequest(bodyData, (address) => print(address.deliveryAddresses));
-    
-
+    final deliverMap = DeliveryAddress(id:bodyData[''],type: bodyData["type"], 
+    isSelect: false,lat: bodyData["lat"],
+    long: bodyData["long"],
+    placeName: bodyData["placeName"],
+    displayText: bodyData["displayText"] );
+addressoperations.addAddressRequest(bodyData, (address) => delivery.add(deliverMap));
     update();
   }
 
   deleteAddress(DeliveryAddress address) {
     if(address !=null){
-      delivery.removeWhere((element) => element.id == address.id);
-      update();
+      addressoperations.deleteAddress(address.id, (response) {
+
+            if(response['success'] != null){
+              delivery.removeWhere((element) => element.id == address.id);
+
+            }
+
+       },  handleError);
+
+      // update();
     }
 
     update();
   }
 
   getAllDeliveryAddresses(){
-
+      addressoperations.getAllAddresses((response) {
+        delivery.value = response;
+        update();
+      }, handleError);
   }
 
   setDeliveryAddress(DeliveryAddress address, {getCost: true}) {
     selectedAddress = delivery.firstWhere(
         (ad) =>
-            ad.lat == address.lat &&
-            ad.long == address.long,
+            ad.id == address.id &&
+            ad.isSelect==true,
         orElse: () => DeliveryAddress());
     update();
     if (getCost) {

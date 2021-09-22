@@ -39,7 +39,7 @@ class _AddorEditScreenState extends State<AddorEditScreen> {
   final FocusNode _mobile = FocusNode();
   final FocusNode _ghanaPostAddress = FocusNode();
 
-  String locationAddress,locID, locName,long,lat;
+  String locationAddress,locID, locName,long,lat, gpsAddress;
   // state functions
   void _setAddressType(int val) {
     setState(() {
@@ -54,33 +54,47 @@ class _AddorEditScreenState extends State<AddorEditScreen> {
   }
 
   void saveAddress() {
-    final FormState form = _formKey.currentState;
-    if (form.validate() && _address != null) { 
+    // final FormState form = _formKey.currentState;
+    if (lat != null && long != null) { 
           _addressController.addAddress({
-            "type":_addressType == 1 ?"digitalAddress":"currentLocation", 
+            "type":_addressType == 1 
+            ? "currentLocation":"digitalAddress", 
             "lat": lat, 
             "long": long,
             "displayText": locationAddress, 
-            "placeName": locName
+            "placeName": locName,
+            "digitalAddress": gpsAddress, 
           });
-          
-      Get.back();
+    Get.back();
       // }
     } else {
       setState(() {
         autoValidate = true;
       });
+    Get.back();
+
     }
+
   }
 
   @override
   void initState() {
+    print(widget.address);
 
-      locationAddress  = widget.address.displayText;
-      locID = widget.address.id;
+    if(widget.address != null){
+      locationAddress  =  widget.address.displayText;
+      locID =  widget.address.id;
       locName = widget.address.placeName;
-      long = widget.address.long;
+      long =  widget.address.long;
       lat = widget.address.lat;
+    }else{
+       locationAddress  =  "";
+      locID =  "";
+      locName = "";
+      long =  "";
+      lat = "";
+    }
+      
     if (widget.deliveryAddress != null) {
       _firstnameCtrl.text = widget.deliveryAddress.firstName;
       _lastnameCtrl.text = widget.deliveryAddress.lastName;
@@ -172,6 +186,150 @@ class _AddorEditScreenState extends State<AddorEditScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
+
+  // Container(
+  //                         width: Get.width,
+  //                         padding: EdgeInsets.only(left: 8.w, right: 8.w),
+  //                         child: Text(S.of(context).firstName,
+  //                             style: TextStyle(fontSize: 17.w))),
+                      Padding(
+                        padding: EdgeInsets.all(8.0.w),
+                        child: SizedBox(
+                          // height: 47.w,
+                          child: TextFormField(
+                            focusNode: _firstname,
+                            validator: (value) {
+                              return value.length > 3 ? null : Strings.fieldReq;
+                            },
+                            style: TextStyle(fontSize: 14.w),
+                            decoration: InputDecoration(
+                              hintText: S.of(context).firstName,
+                              floatingLabelBehavior:
+                                  FloatingLabelBehavior.never,
+                              border: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Constants.themeGreyLight,
+                                      width: 1.0.w),
+                                  borderRadius: BorderRadius.circular(5.0.w)),
+                              contentPadding: EdgeInsets.all(10.0.w),
+                            ),
+                            controller: _firstnameCtrl,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8.0.w),
+                        child: SizedBox(
+                          // height: 47.w,
+                          child: TextFormField(
+                            focusNode: _lastname,
+                            validator: (value) {
+                              return value.length > 2 ? null : Strings.fieldReq;
+                            },
+                            style: TextStyle(fontSize: 14.w),
+                            decoration: InputDecoration(
+                              hintText: S.of(context).lastName,
+                              floatingLabelBehavior:
+                                  FloatingLabelBehavior.never,
+                              border: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Constants.themeGreyLight,
+                                      width: 1.0.w),
+                                  borderRadius: BorderRadius.circular(5.0.w)),
+                              contentPadding: EdgeInsets.all(10.0.w),
+                            ),
+                            controller: _lastnameCtrl,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8.0.w),
+                        child: SizedBox(
+                          // height: 47.w,
+                          child: TextFormField(
+                            focusNode: _email,
+                            validator: Helper.validateEmail,
+                            style: TextStyle(fontSize: 14.w),
+                            decoration: InputDecoration(
+                              hintText: S.of(context).email,
+                              floatingLabelBehavior:
+                                  FloatingLabelBehavior.never,
+                              border: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Constants.themeGreyLight,
+                                      width: 1.0.w),
+                                  borderRadius: BorderRadius.circular(5.0.w)),
+                              contentPadding: EdgeInsets.all(10.0.w),
+                            ),
+                            controller: _emailCtrl,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8.0.w),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            // Expanded(
+                            //   child: Container(
+                            //     // constraints: BoxConstraints(maxHeight: 47.w),
+                            //     // height: 47.w,
+                            //     decoration: BoxDecoration(
+                            //         border: Border.all(
+                            //             width: 1.w, color: Constants.themeGreyDark),
+                            //         borderRadius: BorderRadius.circular(5.w)),
+                            //     padding: EdgeInsets.all(11.w),
+                            //     child: DropdownButtonHideUnderline(
+                            //       child: DropdownButton<String>(
+                            //         isDense: true,
+                            //         value: _countryCode,
+                            //         onChanged: _setContryCode,
+                            //         items: <DropdownMenuItem<String>>[
+                            //           DropdownMenuItem(
+                            //             value: "+233",
+                            //             child: Text(
+                            //               "+233",
+                            //               textAlign: TextAlign.center,
+                            //               style: Get.textTheme.bodyText1.copyWith(
+                            //                   fontSize: 13,
+                            //                   fontWeight: FontWeight.bold),
+                            //             ),
+                            //           ),
+                            //         ],
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
+                            Expanded(
+                              flex: 3,
+                              child: SizedBox(
+                                // height: 47.w,
+                                child: TextFormField(
+                                  focusNode: _mobile,
+                                  validator: Helper.validateMobileNumberStrict,
+                                  style: TextStyle(fontSize: 14.w),
+                                  decoration: InputDecoration(
+                                    hintText:
+                                        S.of(context).mobileNumberPlaceholder,
+                                    floatingLabelBehavior:
+                                        FloatingLabelBehavior.never,
+                                    border: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Constants.themeGreyLight,
+                                            width: 1.0.w),
+                                        borderRadius:
+                                            BorderRadius.circular(5.0.w)),
+                                    contentPadding: EdgeInsets.all(10.0.w),
+                                  ),
+                                  controller: _mobileCtrl,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(width: 10.w),
+
                       Container(
                         decoration:BoxDecoration(
                           color: Colors.white,
@@ -290,151 +448,10 @@ class _AddorEditScreenState extends State<AddorEditScreen> {
        
                           ],
                         ),
-                      )
+                      ),
 
-                      // Container(
-                      //     width: Get.width,
-                      //     padding: EdgeInsets.only(left: 8.w, right: 8.w),
-                      //     child: Text(S.of(context).firstName,
-                      //         style: TextStyle(fontSize: 17.w))),
-                      // Padding(
-                      //   padding: EdgeInsets.all(8.0.w),
-                      //   child: SizedBox(
-                      //     // height: 47.w,
-                      //     child: TextFormField(
-                      //       focusNode: _firstname,
-                      //       validator: (value) {
-                      //         return value.length > 3 ? null : Strings.fieldReq;
-                      //       },
-                      //       style: TextStyle(fontSize: 14.w),
-                      //       decoration: InputDecoration(
-                      //         hintText: S.of(context).firstName,
-                      //         floatingLabelBehavior:
-                      //             FloatingLabelBehavior.never,
-                      //         border: OutlineInputBorder(
-                      //             borderSide: BorderSide(
-                      //                 color: Constants.themeGreyLight,
-                      //                 width: 1.0.w),
-                      //             borderRadius: BorderRadius.circular(5.0.w)),
-                      //         contentPadding: EdgeInsets.all(10.0.w),
-                      //       ),
-                      //       controller: _firstnameCtrl,
-                      //     ),
-                      //   ),
-                      // ),
-                      // Padding(
-                      //   padding: EdgeInsets.all(8.0.w),
-                      //   child: SizedBox(
-                      //     // height: 47.w,
-                      //     child: TextFormField(
-                      //       focusNode: _lastname,
-                      //       validator: (value) {
-                      //         return value.length > 2 ? null : Strings.fieldReq;
-                      //       },
-                      //       style: TextStyle(fontSize: 14.w),
-                      //       decoration: InputDecoration(
-                      //         hintText: S.of(context).lastName,
-                      //         floatingLabelBehavior:
-                      //             FloatingLabelBehavior.never,
-                      //         border: OutlineInputBorder(
-                      //             borderSide: BorderSide(
-                      //                 color: Constants.themeGreyLight,
-                      //                 width: 1.0.w),
-                      //             borderRadius: BorderRadius.circular(5.0.w)),
-                      //         contentPadding: EdgeInsets.all(10.0.w),
-                      //       ),
-                      //       controller: _lastnameCtrl,
-                      //     ),
-                      //   ),
-                      // ),
-                      // Padding(
-                      //   padding: EdgeInsets.all(8.0.w),
-                      //   child: SizedBox(
-                      //     // height: 47.w,
-                      //     child: TextFormField(
-                      //       focusNode: _email,
-                      //       validator: Helper.validateEmail,
-                      //       style: TextStyle(fontSize: 14.w),
-                      //       decoration: InputDecoration(
-                      //         hintText: S.of(context).email,
-                      //         floatingLabelBehavior:
-                      //             FloatingLabelBehavior.never,
-                      //         border: OutlineInputBorder(
-                      //             borderSide: BorderSide(
-                      //                 color: Constants.themeGreyLight,
-                      //                 width: 1.0.w),
-                      //             borderRadius: BorderRadius.circular(5.0.w)),
-                      //         contentPadding: EdgeInsets.all(10.0.w),
-                      //       ),
-                      //       controller: _emailCtrl,
-                      //     ),
-                      //   ),
-                      // ),
-                      // Padding(
-                      //   padding: EdgeInsets.all(8.0.w),
-                      //   child: Row(
-                      //     crossAxisAlignment: CrossAxisAlignment.start,
-                      //     children: <Widget>[
-                      //       // Expanded(
-                      //       //   child: Container(
-                      //       //     // constraints: BoxConstraints(maxHeight: 47.w),
-                      //       //     // height: 47.w,
-                      //       //     decoration: BoxDecoration(
-                      //       //         border: Border.all(
-                      //       //             width: 1.w, color: Constants.themeGreyDark),
-                      //       //         borderRadius: BorderRadius.circular(5.w)),
-                      //       //     padding: EdgeInsets.all(11.w),
-                      //       //     child: DropdownButtonHideUnderline(
-                      //       //       child: DropdownButton<String>(
-                      //       //         isDense: true,
-                      //       //         value: _countryCode,
-                      //       //         onChanged: _setContryCode,
-                      //       //         items: <DropdownMenuItem<String>>[
-                      //       //           DropdownMenuItem(
-                      //       //             value: "+233",
-                      //       //             child: Text(
-                      //       //               "+233",
-                      //       //               textAlign: TextAlign.center,
-                      //       //               style: Get.textTheme.bodyText1.copyWith(
-                      //       //                   fontSize: 13,
-                      //       //                   fontWeight: FontWeight.bold),
-                      //       //             ),
-                      //       //           ),
-                      //       //         ],
-                      //       //       ),
-                      //       //     ),
-                      //       //   ),
-                      //       // ),
-                      //       Expanded(
-                      //         flex: 3,
-                      //         child: SizedBox(
-                      //           // height: 47.w,
-                      //           child: TextFormField(
-                      //             focusNode: _mobile,
-                      //             validator: Helper.validateMobileNumberStrict,
-                      //             style: TextStyle(fontSize: 14.w),
-                      //             decoration: InputDecoration(
-                      //               hintText:
-                      //                   S.of(context).mobileNumberPlaceholder,
-                      //               floatingLabelBehavior:
-                      //                   FloatingLabelBehavior.never,
-                      //               border: OutlineInputBorder(
-                      //                   borderSide: BorderSide(
-                      //                       color: Constants.themeGreyLight,
-                      //                       width: 1.0.w),
-                      //                   borderRadius:
-                      //                       BorderRadius.circular(5.0.w)),
-                      //               contentPadding: EdgeInsets.all(10.0.w),
-                      //             ),
-                      //             controller: _mobileCtrl,
-                      //           ),
-                      //         ),
-                      //       ),
-                      //     ],
-                      //   ),
-                      // ),
-                      // SizedBox(width: 10.w),
-                   ,   Container(
+                    
+                      Container(
                           width: Get.width,
                           padding: EdgeInsets.only(left: 8.w, right: 8.w),
                           child: Text(
@@ -484,8 +501,9 @@ class _AddorEditScreenState extends State<AddorEditScreen> {
                                       setState(() {
                                         locationAddress = address['Area'];
                                         locName = address['Street'];
-                                        long = address["WLong"];
-                                        lat = address["NLat"];
+                                        long = address["WLong"].toString();
+                                        lat = address["NLat"].toString();
+                                        gpsAddress = address[''];
                                         // locID
                                         // _address = {
                                         //   "lat": address["NLat"],
@@ -571,11 +589,14 @@ class _AddorEditScreenState extends State<AddorEditScreen> {
                                                   .getGhanaPostAddress(
                                                       _addressMoreCtrl.text,
                                                       callback: (address) {
+                                                        print(address);
                                                 setState(() {
                                                   locationAddress ="${address["Area"]} ${address['Street']}"; 
                                                   locName = address['District'];
                                                   long = address['CenterLongitude'].toString();
                                                   lat = address['CenterLatitude'].toString();
+                                                  gpsAddress = address['GPSName'];
+
                                                   // _address = {
                                                   //   "lat": address["CenterLatitude"],
                                                   //   "long": address["CenterLongitude"],
