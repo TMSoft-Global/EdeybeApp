@@ -10,3 +10,8 @@ export 'package:cached_network_image/cached_network_image.dart';
 export 'package:auto_size_text/auto_size_text.dart';
 export 'package:font_awesome_flutter/font_awesome_flutter.dart';
 export 'package:edeybe/widgets/CarouselSlider.dart';
+
+
+
+  import 'package:encrypt/encrypt.dart';
+

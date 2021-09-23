@@ -1,13 +1,17 @@
+import 'dart:convert';
+
 import 'package:edeybe/controllers/search_controller.dart';
 import 'package:edeybe/controllers/user_controller.dart';
 import 'package:edeybe/index.dart';
 import 'package:edeybe/screens/configuration_screen/config_screen.dart';
 import 'package:edeybe/services/firebase_notification.dart';
 import 'package:edeybe/services/siren.dart';
+import 'package:edeybe/utils/encryption.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:keyboard_actions/external/platform_check/platform_check.dart';
+import 'package:encrypt/encrypt.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -22,6 +26,7 @@ class _SplashScreenState extends State<SplashScreen>
 // Set default `_initialized` and `_error` state to false
   bool _initialized = false;
   bool _error = false;
+  String name = "Bismark";
 
   // Define an async function to initialize FlutterFire
   void initializeFlutterFire() async {
@@ -49,6 +54,8 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   void initState() {
+    MyEncryptionDecryption.encryptAES(name);
+    // MyEncryptionDecryption.decryptAES(MyEncryptionDecryption.encryptAES(name));
     _animation = AnimationController(
       vsync: this,
       duration: Duration(seconds: 1),

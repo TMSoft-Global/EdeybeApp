@@ -1,0 +1,50 @@
+<!-- <html>
+
+    <head>
+        <title>My Local HTML File</title>
+    </head>
+
+    <body>
+        <h1 id="title">Hello World!</h1>
+        <script type="text/javascript">
+            function fromFlutter(newTitle) {
+                document.getElementById("title").innerHTML = newTitle;
+                sendBack();
+             }
+
+             function sendBack() {
+                messageHandler.postMessage("Hello from JS");
+             }
+        </script>
+    </body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Button test</title>
+</head>
+
+<body>
+    <button onclick="closing()">click me</button>
+    <button onclick="closing()">click you</button>
+
+    <script>
+
+        // var postSub = document.getElementById('post');
+        // postSub.addEventListener('click', function () {
+        //     Postascript.postMessage('close');
+        // }, false);
+
+        function closing() {
+            Print.postMessage('close');
+        }
+    </script>
+</body>
+
+</html>
