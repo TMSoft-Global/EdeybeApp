@@ -94,6 +94,7 @@ class PaymentMethodCard extends StatelessWidget {
                           ),
                           child: Text(
                             CardUtils.maskCard(paymentMethod.number ?? ""),
+                            style: TextStyle(fontSize: 16.w),
                           ),
                         ),
                       ),

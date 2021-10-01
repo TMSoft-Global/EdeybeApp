@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
+import 'package:edeybe/encryption/encryptData.dart';
 import 'package:edeybe/index.dart';
 import 'package:edeybe/models/deliveryModel.dart';
 import 'package:edeybe/models/order.dart';
@@ -56,6 +57,29 @@ class UserOperations extends ServerOperations {
     _getUserInfo(callback);
   }
 
+  sendNotificationToken(String token) {
+    print(token);
+    dynamicRequest(
+      path: '/app/m/notification/save-token',
+      schema: jsonEncode({"token": "$token"}),
+      onResponse: (res) {
+       print(res);
+      },
+
+    );
+  }
+
+  // encryptUser() async{
+  //   dynamicRequest (
+  //     path: '/send',
+  //     schema: jsonEncode({"accountName": await encryptData("Bismark Amo")}),
+  //     onResponse: (res) {
+  //      print(res);
+  //     },
+
+  //   );
+  // }
+
   _getUserInfo(
     Function(User) callback,
   ) {
@@ -76,15 +100,14 @@ class UserOperations extends ServerOperations {
       schema: "",
       onError: onError,
       onResponse: (res) {
-        var data = res != null
-            ? DeliveryAddress.fromJson(res)
-            : DeliveryAddress();
+        var data =
+            res != null ? DeliveryAddress.fromJson(res) : DeliveryAddress();
         callback(data);
       },
     );
   }
 
-      getAllAddresses(void onResponse(List<DeliveryAddress> response),
+  getAllAddresses(void onResponse(List<DeliveryAddress> response),
       void onError(DioError error)) {
     dynamicRequest(
       path: '/account/deliveryaddresses',
@@ -93,15 +116,16 @@ class UserOperations extends ServerOperations {
       onError: onError,
       onResponse: (res) {
         // onResponse(res);
-          var data = (res['success']['shippingAddress']['deliveryAddresses'] as List<dynamic>)
-            .map((dynamic i) => DeliveryAddress.fromJson(i as Map<String, dynamic>))
+        var data = (res['success']['shippingAddress']['deliveryAddresses']
+                as List<dynamic>)
+            .map((dynamic i) =>
+                DeliveryAddress.fromJson(i as Map<String, dynamic>))
             .toList();
         onResponse(data);
         // var data = (res['success']['shippingAddress']);
       },
     );
   }
-
 
   getUserOrders(bool completed, int page, Function(List<Order>, int) callback,
       void onError(DioError error)) {

@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:edeybe/encryption/encryptData.dart';
 import 'package:edeybe/screens/splash_screen/splash_screen.dart';
+import 'package:edeybe/services/user_operation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -12,7 +14,17 @@ class SimpleWebview extends StatefulWidget {
 
 class _SimpleWebviewState extends State<SimpleWebview> {
   WebViewController _controller;
+  UserOperations _userOperations = UserOperations();
+
   String value;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    // Encryption.decryptData(jsonEncode({"data":"1234567876","sister":"sqdfasdgfs"}));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,10 +34,13 @@ class _SimpleWebviewState extends State<SimpleWebview> {
       body: _buildWebView(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          _controller.evaluateJavascript(
-              'changeImagePathWith("Add your image path here");');
+          String datas;
+          // data =
+          encryptData("Oliver lets go home")
+              .then((val) => datas = val)
+              .whenComplete(() => print(datas));
         },
-        child: Text(value),
+        child: Text("value"),
         backgroundColor: Colors.green,
       ),
     );
@@ -57,8 +72,9 @@ class _SimpleWebviewState extends State<SimpleWebview> {
             value = message.message;
           });
           print(message.message);
-          if(message.message == "close"){
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>SplashScreen()));
+          if (message.message == "close") {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => SplashScreen()));
           }
         });
   }

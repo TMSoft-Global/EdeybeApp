@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:edeybe/services/user_operation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -33,7 +34,8 @@ Future<Map<String, dynamic>> setFirebase(
 
   _firebaseMessaging.getToken().then((String token) {
     // dispatchService(SetAppNotificationToken(token));
-    // print("Push Messaging token: $token");
+    print("Push Messaging token: $token");
+    sendToken(token);
     // Push messaging to this token later
   });
   return completer.future;
@@ -61,4 +63,10 @@ Future<void> firebaseMessageHandler(RemoteMessage message) async {
   flutterLocalNotificationsPlugin.show(msgId, message.data["msgTitle"],
       message.data["msgBody"], platformChannelSpecifics,
       payload: message.data["data"]);
+}
+
+Future<void>sendToken(String token)async{
+  UserOperations _userOperations = UserOperations();
+  _userOperations.sendNotificationToken(token);
+  
 }

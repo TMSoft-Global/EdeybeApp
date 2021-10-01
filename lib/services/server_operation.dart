@@ -7,9 +7,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 
-  final String domain = "http://cf60-197-251-220-74.ngrok.io";
+final String domain = "http://95e9-197-251-220-74.ngrok.io";
+
 abstract class ServerOperations {
-  final String _domain = "http://cf60-197-251-220-74.ngrok.io";
+  final String _domain = "http://95e9-197-251-220-74.ngrok.io";
   // final String _domain = "api.edeybe.com";
   final String _domainLocal = "172.18.72.61:5002";
   final String accessToken =
@@ -32,6 +33,19 @@ abstract class ServerOperations {
     }
     // this._local = GetStorage().read("local") ?? "en";
     // this._currency = GetStorage().read('currency') ?? "GHS";
+  }
+
+  notifyRequest({String path,Map<String, dynamic>schema}) async{
+ var response = await   _dio.post("$path",
+        data: schema,
+        options: Options(method: 'POST', headers: {
+          'apikey': '$accessToken',
+          'Content-Type': 'application/json',
+          'platform': "mobile/${Platform.operatingSystem}",
+          'token':_cookie
+        }));
+
+        print(response.data);
   }
 
   dynamicRequest(
@@ -61,7 +75,7 @@ abstract class ServerOperations {
     };
     if (_cookie != "" && _cookie != null) headers["token"] = _cookie;
 
-print(path);
+    print(path);
     _dio
         .request(
       "$_domain/api$path",
@@ -81,6 +95,7 @@ print(path);
         }
 
         if (onError != null) {
+          print(err);
           onError(err);
         } else {
           var message =

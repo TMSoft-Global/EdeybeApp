@@ -161,7 +161,7 @@ class CardUtils {
     if (input.startsWith(new RegExp(
         r'((5[1-5])|(222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720))'))) {
       cardType = CardType.MasterCard;
-    } else if (input.startsWith(new RegExp(r'[4]'))) {
+    } else if (input.startsWith(new RegExp(r'4[0-9]{12}(?:[0-9]{3})'))) {
       cardType = CardType.Visa;
     }
     // else if (input
@@ -441,7 +441,7 @@ class CardUtils {
     var buffer = new StringBuffer();
     for (int i = 0; i < text.length; i++) {
       if (i < text.length - 4) {
-        buffer.write('*'); // Add double spaces.
+        buffer.write('* '); // Add double spaces.
       } else {
         buffer.write(text[i]);
       }

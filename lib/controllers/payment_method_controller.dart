@@ -1,3 +1,4 @@
+import 'package:edeybe/encryption/encryptData.dart';
 import 'package:edeybe/index.dart';
 import 'package:edeybe/models/card.dart';
 import 'package:edeybe/screens/otp/otp.dart';
@@ -42,19 +43,39 @@ class PaymentMethodController extends GetxController {
   }
 
   verify(PaymentCard card) {
-    print(card.paytype.toString());
+    String pan, cvv, expMonth, expYear;
+
+    encryptData(card.number).then((val) => pan = val);
+    encryptData(card.cvv.toString()).then((val) => cvv = val);
+    encryptData(card.month.toString()).then((val) => expMonth = val);
+    encryptData(card.year.toString()).then((val) => expYear = val);
+    // encryptData(card.cardHolder).then((val) => accName = val);
+    // encryptData(card.type).then((val) => pan = val);
+    // print(card.paytype.toString());
     if (card.paytype == 1) {
-      payementServer.verifyCard({"": ""}, (error) {}, (val) {
-        if (val != null) {
-              Get.to(CustomWebView(
-            title: "Term and Conditions",
-            url: val['url'],
-            onLoadFinish: (onREsponse){
-              print(onREsponse);
-            },
-          ));
-        }
-      });
+      Map<String, dynamic> data = {
+        "pan": pan,
+        "cvv": cvv,
+        "exp_month": expMonth,
+        "exp_year": expYear,
+        "accountName": card.cardHolder,
+        "cardType": card.type,
+        "type": "card",
+      };
+      print(data);
+      // payementServer.verifyCard(data, (error) {}, (val) {
+      //   if (val != null) {
+      //     Get.to(CustomWebView(
+      //       title: "Term and Conditions",
+      //       url: val['url'],
+      //       onLoadFinish: (onREsponse) {
+      //         // cards.add(card);
+
+      //         print(onREsponse);
+      //       },
+      //     ));
+      //   }
+      // });
     } else {
       payementServer.sendVerification(card.number, () {
         Get.to(
