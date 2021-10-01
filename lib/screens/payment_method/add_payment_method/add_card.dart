@@ -129,8 +129,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
     CardType cardType = CardUtils.getCardTypeFrmNumber(input);
     String paymodeC = CardUtils.cardAbreviaton(cardType);
     print(input);
-    encryptData(input)
-        .then((value) => setState(() => encryptedNumber = value));
+    encryptData(input).then((value) => setState(() => encryptedNumber = value));
     setState(() {
       _paymentCard.type = cardType;
       _paymentCard.paymode = paymodeC;
@@ -138,20 +137,14 @@ class _AddCardScreenState extends State<AddCardScreen> {
   }
 
   void savePaymentMethod() {
-      //  if(expiryCtrl.isLowerThan(10)){
-      String dt = (expiryCtrl.text);
-      List<String>dtSplit = dt.split("/");
-      print(dtSplit[0]);
-
-    encryptData(dtSplit[0])
-        .then((value) => setState(() => encryptedMonth = value));
+    //  if(expiryCtrl.isLowerThan(10)){
     // }else{
     // encryptData("${_paymentCard.month}")
     //     .then((value) => setState(() => encryptedMonth = value));
     // }
     // encryptData(_paymentCard.year.toString())
     //     .then((value) => setState(() => encryptedYear = value));
- 
+
     Map<String, dynamic> data = {
       "pan": encryptedNumber,
       "cvv": encryptedCvv,
@@ -165,7 +158,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
               : "",
       "type": "card"
     };
-    print(data);
+    print(encryptedMonth == null ? "Null" : data);
     final FormState form = _formKey.currentState;
     // if (form.validate()) {
     //   print(encryptedNumber);
@@ -384,6 +377,18 @@ class _AddCardScreenState extends State<AddCardScreen> {
                           // onFieldSubmitted: (String text) {
                           //   onDone();
                           // },
+                          onChanged: (val) {
+                            // String dt = (val);
+                            List<String> dtSplit = val.split("/");
+                            print(dtSplit[0]);
+                            print(dtSplit[1]);
+
+                            encryptData(dtSplit[0]).then((value) =>
+                                setState(() => encryptedMonth = value));
+
+                            encryptData(dtSplit[1]).then((value) =>
+                                setState(() => encryptedYear = value));
+                          },
                           onSaved: _setCardExpireDate,
                           validator: CardUtils.validateDate,
                           decoration: InputDecoration(
@@ -428,6 +433,11 @@ class _AddCardScreenState extends State<AddCardScreen> {
                               //   onDone();
                               // },
                               onSaved: _setCardCVV,
+                              onChanged: (val) async{
+                                print(val);
+                                await encryptData(val).then((value) =>
+                                    setState(() => encryptedCvv = value));
+                              },
                               validator: CardUtils.validateCVV,
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(
