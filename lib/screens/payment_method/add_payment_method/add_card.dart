@@ -1,4 +1,5 @@
 import 'package:edeybe/controllers/payment_method_controller.dart';
+import 'package:edeybe/encryption/encryptData.dart';
 import 'package:edeybe/index.dart';
 import 'package:edeybe/models/card.dart';
 import 'package:edeybe/utils/card_enum.dart';
@@ -43,6 +44,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
   int _payMethod = 0;
   bool _autoValidate = false;
   String paymode;
+  String encryptedNumber, encryptedYear, encryptedMonth, encryptedCvv;
   // String _selectedCard;
   var numberController = new TextEditingController();
   var fullnameController = new TextEditingController();
@@ -63,6 +65,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
     {"name": 'Vodafone', "value": 'VDF'},
     {"name": 'G-Money', "value": 'GMY'},
   ];
+
   _setCardNumber(String text) {
     _paymentCard.number = CardUtils.getCleanedNumber(text);
   }
@@ -72,6 +75,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
   }
 
   _setCardExpireDate(String text) {
+    print(text);
     List<int> expiryDate = CardUtils.getExpiryDate(text);
     _paymentCard.month = expiryDate[0];
     _paymentCard.year = expiryDate[1];
@@ -79,6 +83,8 @@ class _AddCardScreenState extends State<AddCardScreen> {
 
   _setCardCVV(String text) {
     _paymentCard.cvv = int.parse(text);
+    encryptData(_paymentCard.cvv.toString())
+        .then((value) => setState(() => encryptedCvv = value));
   }
 
   @override
@@ -122,6 +128,9 @@ class _AddCardScreenState extends State<AddCardScreen> {
     String input = CardUtils.getCleanedNumber(numberController.text);
     CardType cardType = CardUtils.getCardTypeFrmNumber(input);
     String paymodeC = CardUtils.cardAbreviaton(cardType);
+    print(input);
+    encryptData(input)
+        .then((value) => setState(() => encryptedNumber = value));
     setState(() {
       _paymentCard.type = cardType;
       _paymentCard.paymode = paymodeC;
@@ -129,22 +138,52 @@ class _AddCardScreenState extends State<AddCardScreen> {
   }
 
   void savePaymentMethod() {
+      //  if(expiryCtrl.isLowerThan(10)){
+      String dt = (expiryCtrl.text);
+      List<String>dtSplit = dt.split("/");
+      print(dtSplit[0]);
+
+    encryptData(dtSplit[0])
+        .then((value) => setState(() => encryptedMonth = value));
+    // }else{
+    // encryptData("${_paymentCard.month}")
+    //     .then((value) => setState(() => encryptedMonth = value));
+    // }
+    // encryptData(_paymentCard.year.toString())
+    //     .then((value) => setState(() => encryptedYear = value));
+ 
+    Map<String, dynamic> data = {
+      "pan": encryptedNumber,
+      "cvv": encryptedCvv,
+      "exp_month": encryptedMonth,
+      "exp_year": encryptedYear,
+      "accountName": _paymentCard.cardHolder,
+      "cardType": _paymentCard.type == CardType.Visa
+          ? "VIS"
+          : _paymentCard.type == CardType.MasterCard
+              ? "MAS"
+              : "",
+      "type": "card"
+    };
+    print(data);
     final FormState form = _formKey.currentState;
-    if (form.validate()) {
-      form.save();
-      widget.card == null
-          ? _paymentMethodController.verify(_paymentCard)
-          : _paymentMethodController.eidtPaymentMethod(_paymentCard);
-      if (widget.callback != null) {
-        widget.callback();
-      } else {
-        Get.back();
-      }
-    } else {
-      setState(() {
-        _autoValidate = true;
-      });
-    }
+    // if (form.validate()) {
+    //   print(encryptedNumber);
+    //   form.save();
+    //   widget.card == null
+    //       ? _paymentMethodController.verify(
+    //           _paymentCard, _paymentCard.paytype == 1 ? data : null)
+    //       : _paymentMethodController.eidtPaymentMethod(_paymentCard);
+    //   if (widget.callback != null) {
+    //     widget.callback();
+    //   } else {
+    //     Get.back();
+    //   }
+    // } else {
+    //   setState(() {
+    //     _autoValidate = true;
+    //   });
+    // }
   }
 
   _setMode(String text) {

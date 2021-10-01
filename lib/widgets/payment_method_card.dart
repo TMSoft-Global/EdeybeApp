@@ -79,7 +79,10 @@ class PaymentMethodCard extends StatelessWidget {
               children: <TableRow>[
                 TableRow(children: [
                   Container(
-                    child: Text(S.of(context).cardNumber,
+                    child: Text(
+                        paymentMethod.paytype == 1
+                            ? S.of(context).cardNumber
+                            : "Mobile Number",
                         style: TextStyle(color: Constants.themeGreyDark)),
                   ),
                 ]),

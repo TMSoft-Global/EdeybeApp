@@ -32,27 +32,28 @@ class _SimpleWebviewState extends State<SimpleWebview> {
         title: Text("WebView"),
       ),
       body: _buildWebView(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          String datas;
-          // data =
-          encryptData("Oliver lets go home")
-              .then((val) => datas = val)
-              .whenComplete(() => print(datas));
-        },
-        child: Text("value"),
-        backgroundColor: Colors.green,
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     String datas;
+      //     // data =
+      //     encryptData("Oliver lets go home")
+      //         .then((val) => datas = val)
+      //         .whenComplete(() => print(datas));
+      //   },
+      //   child: Text("value"),
+      //   backgroundColor: Colors.green,
+      // ),
     );
   }
 
   Widget _buildWebView() {
     return WebView(
-      initialUrl: "about:blank",
-      onWebViewCreated: (WebViewController controller) {
-        _controller = controller;
-        _loadLocalHtmlFile();
-      },
+      initialUrl: "http://8fb7-197-251-220-74.ngrok.io/payment-methods/card/receive-details?status=Approved&code=000&reason=Approved&transaction_id=845112792821&merchant_id=TTM-00003346&session_id=614c5d3d8ca8342a7234cb39&token=sdfghjkasdfg",
+      // "https://prod.theteller.net/v1.1/3ds/resource/mpgs/pareq/TTM-00003346/797418456382/163397000001",
+      // onWebViewCreated: (WebViewController controller) {
+      //   _controller = controller;
+      //   _loadLocalHtmlFile();
+      // },
       onPageFinished: (String url) {
         print('Page finished loading: $url');
       },
@@ -67,6 +68,7 @@ class _SimpleWebviewState extends State<SimpleWebview> {
   JavascriptChannel _messageJavascriptChannel(BuildContext context) {
     return JavascriptChannel(
         name: 'Print',
+        
         onMessageReceived: (JavascriptMessage message) {
           setState(() {
             value = message.message;
@@ -88,10 +90,10 @@ class _SimpleWebviewState extends State<SimpleWebview> {
         });
   }
 
-  _loadLocalHtmlFile() async {
-    String fileText = await rootBundle.loadString('assets/tester.html');
-    _controller.loadUrl(Uri.dataFromString(fileText,
-            mimeType: 'text/html', encoding: Encoding.getByName('utf-8'))
-        .toString());
-  }
+  // _loadLocalHtmlFile() async {
+  //   String fileText = await rootBundle.loadString('assets/tester.html');
+  //   _controller.loadUrl(Uri.dataFromString(fileText,
+  //           mimeType: 'text/html', encoding: Encoding.getByName('utf-8'))
+  //       .toString());
+  // }
 }

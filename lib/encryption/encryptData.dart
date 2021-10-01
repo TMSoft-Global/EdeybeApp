@@ -1,4 +1,4 @@
-import 'package:encrypt/encrypt_io.dart';
+
 import 'package:flutter/services.dart';
 import 'package:pointycastle/asymmetric/api.dart';
 import 'package:encrypt/encrypt.dart';
@@ -32,6 +32,7 @@ import 'package:pointycastle/export.dart';
 //   }
 // }
 
+
 Future<String> encryptData(String data) async {
   final publicPem = await rootBundle.loadString('assets/public.pem');
   final privPem = await rootBundle.loadString('assets/private.pem');
@@ -47,3 +48,5 @@ Future<String> encryptData(String data) async {
   return encrypted
       .base64; // kO9EbgbrSwiq0EYz0aBdljHSC/rci2854Qa+nugbhKjidlezNplsEqOxR+pr1RtICZGAtv0YGevJBaRaHS17eHuj7GXo1CM3PR6pjGxrorcwR5Q7/bVEePESsimMbhHWF+AkDIX4v0CwKx9lgaTBgC8/yJKiLmQkyDCj64J3JSE=
 }
+
+

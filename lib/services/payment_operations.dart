@@ -11,6 +11,7 @@ import '../index.dart';
 class PayementOperation extends ServerOperations {
   final String paymentPath = '/payment-methods';
   final String paymentOTP = '/payment-methods/otp/send';
+  final String sendCardPath = '/payment-methods/card/send-details';
   getAllSavedMethods(void onResponse(List<PaymentCard> response),
       void onError(DioError error)) {
     dynamicRequest(
@@ -66,25 +67,19 @@ class PayementOperation extends ServerOperations {
   verifyCard(Map<String, dynamic> data, void onError(DioError error),
       Function(dynamic response) onResponse) {
     dynamicRequest(
-      path: paymentOTP,
-      schema: jsonEncode({"data": data}),
+      path: sendCardPath,
+      schema: jsonEncode(data),
       showDialog: true,
       onError: onError,
       onResponse: (res) {
-        print(res['success']);
+        print(res);
         if (res.containsKey('error')) {
           var message = res['error'] is String ? res['error'] : res['error'][0];
         } else if (res.containsKey("success")) {
-          Get.to(PaymentMethodScreen(
-            hasContinueButton: false,
-            onContinuePressed: (pan) {},
-          ));
-
-          //   Get.dialog(CartDialog(
-          //     productTitle: "Success",
-          //     type: CartItemType.Message,
-          //     title: S.of(Get.context).paymentMethod,
-          //   ));
+          // Get.to(PaymentMethodScreen(
+          //   hasContinueButton: false,
+          //   onContinuePressed: (pan) {},
+          // ));
         }
         onResponse(res);
       },
