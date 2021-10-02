@@ -124,12 +124,13 @@ class _AddCardScreenState extends State<AddCardScreen> {
     );
   }
 
-  void _getCardTypeFrmNumber() {
+  void _getCardTypeFrmNumber() async {
     String input = CardUtils.getCleanedNumber(numberController.text);
     CardType cardType = CardUtils.getCardTypeFrmNumber(input);
     String paymodeC = CardUtils.cardAbreviaton(cardType);
     print(input);
-    encryptData(input).then((value) => setState(() => encryptedNumber = value));
+    await encryptData(input)
+        .then((value) => setState(() => encryptedNumber = value));
     setState(() {
       _paymentCard.type = cardType;
       _paymentCard.paymode = paymodeC;
@@ -137,46 +138,22 @@ class _AddCardScreenState extends State<AddCardScreen> {
   }
 
   void savePaymentMethod() {
-    //  if(expiryCtrl.isLowerThan(10)){
-    // }else{
-    // encryptData("${_paymentCard.month}")
-    //     .then((value) => setState(() => encryptedMonth = value));
-    // }
-    // encryptData(_paymentCard.year.toString())
-    //     .then((value) => setState(() => encryptedYear = value));
-
-    Map<String, dynamic> data = {
-      "pan": encryptedNumber,
-      "cvv": encryptedCvv,
-      "exp_month": encryptedMonth,
-      "exp_year": encryptedYear,
-      "accountName": _paymentCard.cardHolder,
-      "cardType": _paymentCard.type == CardType.Visa
-          ? "VIS"
-          : _paymentCard.type == CardType.MasterCard
-              ? "MAS"
-              : "",
-      "type": "card"
-    };
-    print(encryptedMonth == null ? "Null" : data);
     final FormState form = _formKey.currentState;
-    // if (form.validate()) {
-    //   print(encryptedNumber);
-    //   form.save();
-    //   widget.card == null
-    //       ? _paymentMethodController.verify(
-    //           _paymentCard, _paymentCard.paytype == 1 ? data : null)
-    //       : _paymentMethodController.eidtPaymentMethod(_paymentCard);
-    //   if (widget.callback != null) {
-    //     widget.callback();
-    //   } else {
-    //     Get.back();
-    //   }
-    // } else {
-    //   setState(() {
-    //     _autoValidate = true;
-    //   });
-    // }
+    if (form.validate()) {
+      form.save();
+      widget.card == null
+          ? _paymentMethodController.verify(_paymentCard)
+          : _paymentMethodController.eidtPaymentMethod(_paymentCard);
+      if (widget.callback != null) {
+        widget.callback();
+      } else {
+        Get.back();
+      }
+    } else {
+      setState(() {
+        _autoValidate = true;
+      });
+    }
   }
 
   _setMode(String text) {
@@ -377,17 +354,15 @@ class _AddCardScreenState extends State<AddCardScreen> {
                           // onFieldSubmitted: (String text) {
                           //   onDone();
                           // },
-                          onChanged: (val) {
+                          onChanged: (val) async {
                             // String dt = (val);
-                            List<String> dtSplit = val.split("/");
-                            print(dtSplit[0]);
-                            print(dtSplit[1]);
+                            
 
-                            encryptData(dtSplit[0]).then((value) =>
-                                setState(() => encryptedMonth = value));
+                            // await encryptData(dtSplit[0]).then((value) =>
+                            //     setState(() => encryptedMonth = value));
 
-                            encryptData(dtSplit[1]).then((value) =>
-                                setState(() => encryptedYear = value));
+                            // await encryptData(dtSplit[1]).then((value) =>
+                            //     setState(() => encryptedYear = value));
                           },
                           onSaved: _setCardExpireDate,
                           validator: CardUtils.validateDate,
@@ -433,7 +408,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
                               //   onDone();
                               // },
                               onSaved: _setCardCVV,
-                              onChanged: (val) async{
+                              onChanged: (val) async {
                                 print(val);
                                 await encryptData(val).then((value) =>
                                     setState(() => encryptedCvv = value));

@@ -1,8 +1,10 @@
+import 'package:edeybe/encryption/encryptData.dart';
 import 'package:edeybe/index.dart';
 import 'package:edeybe/models/card.dart';
 import 'package:edeybe/screens/otp/otp.dart';
 import 'package:edeybe/services/payment_operations.dart';
 import 'package:edeybe/services/simpleWeb.dart';
+import 'package:edeybe/utils/card_enum.dart';
 import 'package:edeybe/widgets/custom_dialog.dart';
 import 'package:edeybe/widgets/custom_web_view.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +15,7 @@ import 'package:pointycastle/export.dart';
 
 class PaymentMethodController extends GetxController {
   var cards = <PaymentCard>[].obs;
-  var cardNo = "".obs;
+  var cardNo = "", cvv, expMonth, expYear;
   final payementServer = PayementOperation();
 
   @override
@@ -48,29 +50,35 @@ class PaymentMethodController extends GetxController {
     }
   }
 
-  Future<String> encryptData(String data) async {
-    final publicPem = await rootBundle.loadString('assets/public.pem');
-    final privPem = await rootBundle.loadString('assets/private.pem');
-    final publicKey = RSAKeyParser().parse(publicPem) as RSAPublicKey;
-    final privtKey = RSAKeyParser().parse(privPem) as RSAPrivateKey;
-
-    final encrypter =
-        Encrypter(RSA(publicKey: publicKey, privateKey: privtKey));
-    final encrypted = encrypter.encrypt(data);
-    // final decrypted = encrypter.decrypt(encrypted);
-
-    return encrypted.base64;
-  }
-
-  verify(PaymentCard card, Map<String, dynamic> data) {
-    print(data);
+  verify(PaymentCard card) async {
     if (card.paytype == 1) {
-      payementServer.verifyCard(data, (error) {}, (val) {
-        if (val != null) {
-          print(val);
-          Get.to(SimpleWebview());
-        }
-      });
+      await encryptData(card.number).then((value) => cardNo = value);
+      await encryptData(card.cvv.toString()).then((value) => cvv = value);
+      await encryptData(card.month.isLowerThan(10)
+              ? "0${card.month.toString()}"
+              : card.month.toString())
+          .then((value) => expMonth = value);
+      await encryptData(card.year.toString()).then((value) => expYear = value);
+      Map<String, dynamic> data = {
+        "pan": cardNo,
+        "cvv": cvv,
+        "exp_month": expMonth,
+        "exp_year": expYear,
+        "accountName": card.cardHolder,
+        "cardType": card.type == CardType.Visa
+            ? "VIS"
+            : card.type == CardType.MasterCard
+                ? "MAS"
+                : "",
+        "type": "card"
+      };
+      print("..........$data");
+      // payementServer.verifyCard(data, (error) {}, (val) {
+      //   if (val != null) {
+      //     print(val);
+      //     Get.to(SimpleWebview());
+      //   }
+      // });
     } else {
       payementServer.sendVerification(card.number, () {
         Get.to(
