@@ -1,10 +1,6 @@
-import 'dart:convert';
 
-import 'package:edeybe/encryption/encryptData.dart';
 import 'package:edeybe/screens/splash_screen/splash_screen.dart';
-import 'package:edeybe/services/user_operation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class SimpleWebview extends StatefulWidget {
@@ -14,12 +10,10 @@ class SimpleWebview extends StatefulWidget {
 
 class _SimpleWebviewState extends State<SimpleWebview> {
   WebViewController _controller;
-  UserOperations _userOperations = UserOperations();
 
   String value;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     // Encryption.decryptData(jsonEncode({"data":"1234567876","sister":"sqdfasdgfs"}));

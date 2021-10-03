@@ -6,12 +6,7 @@ import 'package:edeybe/services/payment_operations.dart';
 import 'package:edeybe/services/simpleWeb.dart';
 import 'package:edeybe/utils/card_enum.dart';
 import 'package:edeybe/widgets/custom_dialog.dart';
-import 'package:edeybe/widgets/custom_web_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:pointycastle/asymmetric/api.dart';
-import 'package:encrypt/encrypt.dart';
-import 'package:pointycastle/export.dart';
 
 class PaymentMethodController extends GetxController {
   var cards = <PaymentCard>[].obs;
@@ -73,10 +68,13 @@ class PaymentMethodController extends GetxController {
         "type": "card"
       };
       print("..........$data");
+      print("..........${card.type}");
       // payementServer.verifyCard(data, (error) {}, (val) {
       //   if (val != null) {
       //     print(val);
       //     Get.to(SimpleWebview());
+      //   } else {
+      //     // Get.dialog(Text("error.error"));
       //   }
       // });
     } else {
