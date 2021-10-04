@@ -1,12 +1,12 @@
+import 'package:edeybe/encryption/encryptData.dart';
 import 'package:edeybe/models/deliveryModel.dart';
 import 'package:edeybe/utils/card_enum.dart';
 import 'package:edeybe/utils/helper.dart';
 import 'package:edeybe/widgets/Shimmer.dart';
-import 'package:edeybe/widgets/custom_web_view.dart';
+import 'package:edeybe/widgets/alert.dart';
 import 'package:flutter/services.dart';
 import 'index.dart';
 import 'package:edeybe/index.dart';
-import 'package:edeybe/models/address.dart';
 import 'package:edeybe/screens/address_screen/add_edit_address/add_edit_address.dart';
 import 'package:edeybe/screens/review_screen/write_review/write_review.dart';
 import 'package:edeybe/utils/cart_item_type.dart';
@@ -30,12 +30,16 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   final formatCurrency = new NumberFormat.simpleCurrency(name: "");
   DeliveryAddress address;
   PaymentCard _paymentCard = PaymentCard();
+  final TextEditingController controller = TextEditingController();
+  FocusNode cvvFocus = FocusNode();
   String _selectedPaymentMethod;
   var _cartController = Get.find<CartController>();
   var _addressController = Get.find<AddressController>();
   var _paymentController = Get.find<PaymentMethodController>();
-  GlobalKey<FormFieldState> _cvv = new GlobalKey<FormFieldState>();
+  // final name
+  // GlobalKey<FormFieldState> _cvv = new GlobalKey<FormFieldState>();
   TextStyle style = TextStyle(fontSize: 14.w);
+  String cvvNo;
   var cvvCtrl = new TextEditingController();
   _setCardCVV(String text) {
     setState(() {
@@ -98,36 +102,81 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       color: canPlaceOrder() ? Colors.white : Colors.black),
                 ),
                 onPressed: canPlaceOrder()
-                    ? () {
-                        showCheckoutDialog(state: CheckoutStateEnum.Init);
+                    ? () async {
+                        await encryptData(controller.text.trim())
+                            .then((value) => cvvNo = value);
                         var selectedCard = _paymentController.cards.firstWhere(
                             (card) => card.id == _selectedPaymentMethod);
-                        _cartController.checkout({
-                          "paymentMethod":
-                              selectedCard.type == CardType.MasterCard ||
-                                      selectedCard.type == CardType.Visa
-                                  ? selectedCard.toMap()
-                                  : selectedCard.toMoMoMap(),
-                          "shippingAddress":
-                              _addressController.selectedAddress.toJson(),
-                        }, (data) {
-                          if (data.containsKey("success")) {
-                            if (data.containsKey("code") &&
-                                data["code"] != null) {
-                              showCheckoutDialog(
-                                  type: data["code"] == '000'
-                                      ? DialogEnum.Success
-                                      : DialogEnum.Error);
-                            } else {
-                              showCheckoutDialog(type: DialogEnum.Error);
+
+                        if (selectedCard.paytype == 1) {
+                          cvvAlert(context, controller, cvvFocus, onTap: () {
+                            Get.back();
+                            showCheckoutDialog(state: CheckoutStateEnum.Init);
+                            controller.clear();
+                            _cartController.checkout({
+                              "paymentMethodId": selectedCard.id,
+                              "deliveryAddressId":
+                                  _addressController.selectedAddress.id,
+                              "cvv": selectedCard.paytype == 1 ? cvvNo : null,
+                              "shippingAddress": {
+                                "firstName": "Bismark",
+                                "lastName": "Amo",
+                                "phone": "0551956998 ",
+                                "email": "mccamo51@mail.com",
+                              }
+                            }, (data) {
+                              print(data);
+                              if (data.containsKey("success")) {
+                                if (data.containsKey("code") &&
+                                    data["code"] != null) {
+                                  showCheckoutDialog(
+                                      type: data["code"] == '000'
+                                          ? DialogEnum.Success
+                                          : DialogEnum.Error);
+                                } else {
+                                  showCheckoutDialog(type: DialogEnum.Error);
+                                }
+                              } else {
+                                var message = data["error"] is String
+                                    ? data['error']
+                                    : data["error"][0];
+                                Helper.showError(message);
+                              }
+                            });
+                          });
+                        } else {
+                          showCheckoutDialog(state: CheckoutStateEnum.Init);
+                          _cartController.checkout({
+                            "paymentMethodId": selectedCard.id,
+                            "deliveryAddressId":
+                                _addressController.selectedAddress.id,
+                            "cvv": null,
+                            "shippingAddress": {
+                              "firstName": "Bismark",
+                              "lastName": "Amo",
+                              "phone": "0551956998 ",
+                              "email": "mccamo51@mail.com",
                             }
-                          } else {
-                            var message = data["error"] is String
-                                ? data['error']
-                                : data["error"][0];
-                            Helper.showError(message);
-                          }
-                        });
+                          }, (data) {
+                            print(data);
+                            if (data.containsKey("success")) {
+                              if (data.containsKey("code") &&
+                                  data["code"] != null) {
+                                showCheckoutDialog(
+                                    type: data["code"] == '000'
+                                        ? DialogEnum.Success
+                                        : DialogEnum.Error);
+                              } else {
+                                showCheckoutDialog(type: DialogEnum.Error);
+                              }
+                            } else {
+                              var message = data["error"] is String
+                                  ? data['error']
+                                  : data["error"][0];
+                              Helper.showError(message);
+                            }
+                          });
+                        }
                       }
                     : null,
               ),
@@ -150,8 +199,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   GetBuilder<AddressController>(
                       builder: (_) => _addressController.selectedAddress !=
                                   null &&
-                              _addressController.selectedAddress.id !=
-                                  null
+                              _addressController.selectedAddress.id != null
                           ? AddressCard(
                               onCardPressed: null,
                               showChangeButton: true,
@@ -159,10 +207,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                     hasContinueButton: true,
                                     onContinuePressed: Get.back,
                                   )),
-                              deliveryAddress: _addressController.selectedAddress,
-                              onEditAddress: () => Get.to(
-                                
-                                AddorEditScreen(
+                              deliveryAddress:
+                                  _addressController.selectedAddress,
+                              onEditAddress: () => Get.to(AddorEditScreen(
                                     address: _addressController.selectedAddress,
                                   )),
                               onRemoveAddress: null)
@@ -586,7 +633,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     child: TextFormField(
                       autofocus: isSelected,
                       enabled: true,
-                      key: _cvv,
+                      // key: _cvv,
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly,
                         new LengthLimitingTextInputFormatter(4),

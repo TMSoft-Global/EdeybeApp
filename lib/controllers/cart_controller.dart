@@ -123,8 +123,12 @@ class CartController extends GetxController implements HTTPErrorHandler {
   }
 
   void checkout(
-      Map<String, dynamic> data, void callback(Map<String, dynamic> data)) {
-    operations.placeOrder(data, callback, handleError);
+      Map<String, dynamic> data, void callback(dynamic data)) {
+    print(data);
+
+    operations.checkoutRequest(path:"http://fbbf-197-251-220-74.ngrok.io/api/payment/direct",schema: data,onError:  (val){
+      print("...................$val");
+    });
   }
 
   void checkOrderStatus(

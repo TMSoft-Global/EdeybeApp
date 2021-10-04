@@ -44,7 +44,8 @@ class PaymentMethodCard extends StatelessWidget {
             Row(
               children: <Widget>[
                 Container(
-                  child: Text(paymentMethod.cardHolder,
+                  child: Text(
+                    paymentMethod.cardHolder,
                       style: TextStyle(
                           fontSize: 18.w, fontWeight: FontWeight.w800)),
                 ),

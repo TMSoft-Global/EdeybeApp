@@ -354,15 +354,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
                           // onFieldSubmitted: (String text) {
                           //   onDone();
                           // },
-                          onChanged: (val) {
-                            // String dt = (val);
-
-                            // await encryptData(dtSplit[0]).then((value) =>
-                            //     setState(() => encryptedMonth = value));
-
-                            // await encryptData(dtSplit[1]).then((value) =>
-                            //     setState(() => encryptedYear = value));
-                          },
+                          
                           onSaved: _setCardExpireDate,
                           validator: CardUtils.validateDate,
                           decoration: InputDecoration(
@@ -407,11 +399,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
                               //   onDone();
                               // },
                               onSaved: _setCardCVV,
-                              onChanged: (val) {
-                                // print(val);
-                                // await encryptData(val).then((value) =>
-                                //     setState(() => encryptedCvv = value));
-                              },
+                          
                               validator: CardUtils.validateCVV,
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(

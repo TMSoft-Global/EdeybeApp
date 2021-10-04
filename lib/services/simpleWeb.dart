@@ -1,15 +1,21 @@
-
+import 'package:edeybe/controllers/payment_method_controller.dart';
+import 'package:edeybe/screens/payment_method/payment_method.dart';
 import 'package:edeybe/screens/splash_screen/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import '../index.dart';
+
 class SimpleWebview extends StatefulWidget {
+  final String url;
+  SimpleWebview({@required this.url});
   @override
   _SimpleWebviewState createState() => _SimpleWebviewState();
 }
 
 class _SimpleWebviewState extends State<SimpleWebview> {
   WebViewController _controller;
+  var _paymentController = Get.find<PaymentMethodController>();
 
   String value;
   @override
@@ -23,26 +29,16 @@ class _SimpleWebviewState extends State<SimpleWebview> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("WebView"),
+        title: Text("Payment", style: TextStyle(color: Colors.white),),
+        centerTitle: true,
       ),
-      body: _buildWebView(),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     String datas;
-      //     // data =
-      //     encryptData("Oliver lets go home")
-      //         .then((val) => datas = val)
-      //         .whenComplete(() => print(datas));
-      //   },
-      //   child: Text("value"),
-      //   backgroundColor: Colors.green,
-      // ),
+      body: _buildWebView(widget.url),
     );
   }
 
-  Widget _buildWebView() {
+  Widget _buildWebView(String url) {
     return WebView(
-      initialUrl: "http://8fb7-197-251-220-74.ngrok.io/payment-methods/card/receive-details?status=Approved&code=000&reason=Approved&transaction_id=845112792821&merchant_id=TTM-00003346&session_id=614c5d3d8ca8342a7234cb39&token=sdfghjkasdfg",
+      initialUrl: "$url",
       // "https://prod.theteller.net/v1.1/3ds/resource/mpgs/pareq/TTM-00003346/797418456382/163397000001",
       // onWebViewCreated: (WebViewController controller) {
       //   _controller = controller;
@@ -62,15 +58,17 @@ class _SimpleWebviewState extends State<SimpleWebview> {
   JavascriptChannel _messageJavascriptChannel(BuildContext context) {
     return JavascriptChannel(
         name: 'Print',
-        
         onMessageReceived: (JavascriptMessage message) {
           setState(() {
             value = message.message;
           });
           print(message.message);
           if (message.message == "close") {
+            _paymentController.getAllPayment();
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => SplashScreen()));
+                MaterialPageRoute(builder: (context) => PaymentMethodScreen(
+                  hasContinueButton: true,
+                )));
           }
         });
   }
@@ -83,11 +81,4 @@ class _SimpleWebviewState extends State<SimpleWebview> {
           print(message.message);
         });
   }
-
-  // _loadLocalHtmlFile() async {
-  //   String fileText = await rootBundle.loadString('assets/tester.html');
-  //   _controller.loadUrl(Uri.dataFromString(fileText,
-  //           mimeType: 'text/html', encoding: Encoding.getByName('utf-8'))
-  //       .toString());
-  // }
 }

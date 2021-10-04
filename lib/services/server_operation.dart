@@ -7,10 +7,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 
-final String domain = "http://bc9c-197-251-220-74.ngrok.io";
+final String domain = "http://fbbf-197-251-220-74.ngrok.io";
 
 abstract class ServerOperations {
-  final String _domain = "http://bc9c-197-251-220-74.ngrok.io";
+  final String _domain = "http://fbbf-197-251-220-74.ngrok.io";
   // final String _domain = "api.edeybe.com";
   final String _domainLocal = "172.18.72.61:5002";
   final String accessToken =
@@ -35,17 +35,44 @@ abstract class ServerOperations {
     // this._currency = GetStorage().read('currency') ?? "GHS";
   }
 
-  notifyRequest({String path,Map<String, dynamic>schema}) async{
- var response = await   _dio.post("$path",
+  notifyRequest({
+    String path,
+    Map<String, dynamic> schema,
+  }) async {
+    var response = await _dio.post("$path",
         data: schema,
         options: Options(method: 'POST', headers: {
           'apikey': '$accessToken',
           'Content-Type': 'application/json',
           'platform': "mobile/${Platform.operatingSystem}",
-          'token':_cookie
+          'token': _cookie
         }));
 
-        print(response.data);
+    print(response.data);
+  }
+
+  checkoutRequest({
+    String path,
+    Map<String, dynamic> schema,
+    @required void onResponse(dynamic response),
+    void onError(DioError error),
+  }) async {
+    var response = await _dio
+        .post("$path",
+            data: schema,
+            options: Options(method: 'POST', headers: {
+              'apikey': '$accessToken',
+              'Content-Type': 'application/json',
+              'platform': "mobile/${Platform.operatingSystem}",
+              'token': _cookie
+            }))
+        .catchError((onerror) {
+      var err = onerror as DioError;
+      print("=====================${err.response.data}");
+      onError(err);
+    });
+    // print(response.data);
+    onResponse(response.data);
   }
 
   dynamicRequest(
@@ -75,7 +102,6 @@ abstract class ServerOperations {
     };
     if (_cookie != "" && _cookie != null) headers["token"] = _cookie;
 
-    print(path);
     _dio
         .request(
       "$_domain/api$path",
@@ -95,6 +121,8 @@ abstract class ServerOperations {
         }
 
         if (onError != null) {
+          print("rr1111rrrrrrrrrrrrrrrrrrrrr$err rrrrrrrrrrr  $onError");
+
           print(err);
           onError(err);
         } else {
@@ -108,9 +136,13 @@ abstract class ServerOperations {
                 : err.response.data["error"][0];
           }
           Helper.showError(err.response.data ?? message);
+          print(
+              "rr2222rrrrrrrrrrrrrrrrrrrrr$message rrrrrrr${err.response.data}rrrr");
         }
       }
     }).then((response) {
+      print("rr3333rrrrrrrrrrrrrrrrrrrrr$response rrrrrrrrrrr");
+
       if (response != null) {
         // closing loading dialog
         if (showDialog) {

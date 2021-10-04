@@ -40,14 +40,16 @@ class CartOperation extends ServerOperations {
     );
   }
 
-  placeOrder(
+   placeOrder(
       Map<String, dynamic> data,
       void onResponse(Map<String, dynamic> response),
       void onError(DioError error)) {
     dynamicRequest(
       path: "/payment/direct",
       schema: jsonEncode(data),
-      onError: onError,
+      onError: (onError){
+        print(onError.error);
+      },
       showDialog: false,
       onResponse: (res) {
         onResponse(res);
@@ -55,7 +57,7 @@ class CartOperation extends ServerOperations {
     );
   }
 
-  checkOrderStatus(
+   checkOrderStatus(
       Map<String, dynamic> data,
       void onResponse(Map<String, dynamic> response),
       void onError(DioError error)) {
@@ -65,6 +67,7 @@ class CartOperation extends ServerOperations {
       onError: onError,
       showDialog: false,
       onResponse: (res) {
+        print(res);
         onResponse(res);
       },
     );

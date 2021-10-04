@@ -16,14 +16,18 @@ class PaymentMethodController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    getAllPayment();
     // Future.delayed(Duration(seconds: 1), () {
+    
+    // });
+  }
+
+  getAllPayment(){
     payementServer.getAllSavedMethods((response) {
       cards.value = response;
       update();
     }, (error) {});
-    // });
   }
-
   addPaymentMethod(PaymentCard card, {String otp}) {
     var alreadyAdded = cards.firstWhere(
       (element) => element.number == card.number,
@@ -69,14 +73,22 @@ class PaymentMethodController extends GetxController {
       };
       print("..........$data");
       print("..........${card.type}");
-      // payementServer.verifyCard(data, (error) {}, (val) {
-      //   if (val != null) {
-      //     print(val);
-      //     Get.to(SimpleWebview());
-      //   } else {
-      //     // Get.dialog(Text("error.error"));
-      //   }
-      // });
+      payementServer.verifyCard(data, (error) {}, (val) {
+        if (val != null) {
+          print(val);
+          if (val.containsKey('success')) {
+            Get.to(SimpleWebview(
+              url: val['success']['cardVerifyLink'],
+            ));
+          } else {
+            print(val['error']);
+            //    cards.add(card);
+            // update();
+          }
+        } else {
+          Get.dialog(Text("error"));
+        }
+      });
     } else {
       payementServer.sendVerification(card.number, () {
         Get.to(

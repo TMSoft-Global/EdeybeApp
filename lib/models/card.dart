@@ -25,6 +25,7 @@ class PaymentCard {
       this.paytype,
       this.paymode});
   factory PaymentCard.fromJson(Map<String, dynamic> json) {
+    print(json);
     if (json['type'] == 'momo') {
       var type = CardType.values.firstWhere(
           (element) =>
@@ -37,7 +38,20 @@ class PaymentCard {
           number: json['mobileNumber'],
           paymode: json['mobileNetwork'],
           paytype: 0);
-    } else {
+    } else if (json['type'] == 'card') {
+      var type;
+      if (json['cardType'] == 'VIS')
+        type = CardType.Visa;
+      else
+        type = CardType.MasterCard;
+
+      return PaymentCard(
+          id: json['_id'],
+          type: type,
+          cardHolder: json['accountName'],
+          number: json['masked'],
+          paytype: 1);
+    }else{
       return PaymentCard();
     }
   }
