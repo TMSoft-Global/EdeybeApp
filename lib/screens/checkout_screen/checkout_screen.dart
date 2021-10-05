@@ -1,9 +1,13 @@
+import 'package:dio/dio.dart';
 import 'package:edeybe/encryption/encryptData.dart';
 import 'package:edeybe/models/deliveryModel.dart';
+import 'package:edeybe/screens/home_screen/index.dart';
 import 'package:edeybe/utils/card_enum.dart';
 import 'package:edeybe/utils/helper.dart';
+import 'package:edeybe/utils/strings.dart';
 import 'package:edeybe/widgets/Shimmer.dart';
 import 'package:edeybe/widgets/alert.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'index.dart';
 import 'package:edeybe/index.dart';
@@ -29,13 +33,27 @@ class CheckoutScreen extends StatefulWidget {
 class _CheckoutScreenState extends State<CheckoutScreen> {
   final formatCurrency = new NumberFormat.simpleCurrency(name: "");
   DeliveryAddress address;
+  ShippingAddress ship;
   PaymentCard _paymentCard = PaymentCard();
   final TextEditingController controller = TextEditingController();
+  TextEditingController _firstnameCtrl = TextEditingController();
+  TextEditingController _mobileCtrl = TextEditingController();
+  TextEditingController _lastnameCtrl = TextEditingController();
+  TextEditingController _emailCtrl = TextEditingController();
   FocusNode cvvFocus = FocusNode();
   String _selectedPaymentMethod;
   var _cartController = Get.find<CartController>();
   var _addressController = Get.find<AddressController>();
   var _paymentController = Get.find<PaymentMethodController>();
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  final FocusNode _firstname = FocusNode();
+  final FocusNode _lastname = FocusNode();
+  final FocusNode _email = FocusNode();
+  final FocusNode _mobile = FocusNode();
+
+  bool autoValidate = false;
   // final name
   // GlobalKey<FormFieldState> _cvv = new GlobalKey<FormFieldState>();
   TextStyle style = TextStyle(fontSize: 14.w);
@@ -60,6 +78,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         _cartController.getDeliveryCost();
       }
     });
+    if (_addressController.addresses != null &&
+        _addressController.addresses.isNotEmpty) {
+      print(_addressController.addresses);
+      _mobileCtrl.text = _addressController.addresses[0].phone;
+      _firstnameCtrl.text = _addressController.addresses[0].firstName;
+      _lastnameCtrl.text = _addressController.addresses[0].lastName;
+      _emailCtrl.text = _addressController.addresses[0].email;
+    }
   }
 
   bool canPlaceOrder() {
@@ -103,79 +129,101 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 ),
                 onPressed: canPlaceOrder()
                     ? () async {
-                        await encryptData(controller.text.trim())
-                            .then((value) => cvvNo = value);
-                        var selectedCard = _paymentController.cards.firstWhere(
-                            (card) => card.id == _selectedPaymentMethod);
+                        if (_formKey.currentState.validate()) {
+                          await encryptData(controller.text.trim())
+                              .then((value) => cvvNo = value);
+                          var selectedCard = _paymentController.cards
+                              .firstWhere(
+                                  (card) => card.id == _selectedPaymentMethod);
 
-                        if (selectedCard.paytype == 1) {
-                          cvvAlert(context, controller, cvvFocus, onTap: () {
-                            Get.back();
-                            showCheckoutDialog(state: CheckoutStateEnum.Init);
-                            controller.clear();
+                          if (selectedCard.paytype == 1) {
+                            cvvAlert(context, controller, cvvFocus, onTap: () {
+                              Get.back();
+                              // showCheckoutDialog(state: CheckoutStateEnum.Init);
+                              Get.to(HomeIndex(
+                                indexPage: 0,
+                              ));
+
+                              Get.defaultDialog(
+                                title: 'Processing',
+                                content: Text("Transaction is being processed"),
+                              );
+                              controller.clear();
+                              _cartController.checkout({
+                                "paymentMethodId": selectedCard.id,
+                                "deliveryAddressId":
+                                    _addressController.selectedAddress.id,
+                                "cvv": selectedCard.paytype == 1 ? cvvNo : null,
+                                "shippingAddress": {
+                                  "firstName": _firstnameCtrl.text,
+                                  "lastName": _lastnameCtrl.text,
+                                  "phone": _mobileCtrl.text.trim(),
+                                  "email": _emailCtrl.text.trim(),
+                                }
+                              }, (data) {
+                                var err = data as DioError;
+                                String message =
+                                    "${err.response.data['error'][0]}";
+                                print(data);
+                                // String message =
+                                //     "${data.response.data['error'][0]}";
+                                print(message);
+                                // if (data.containsKey("success")) {
+                                //   if (data.containsKey("code") &&
+                                //       data["code"] != null) {
+                                //     showCheckoutDialog(
+                                //         type: data["code"] == '000'
+                                //             ? DialogEnum.Success
+                                //             : DialogEnum.Error);
+                                //   } else {
+                                //     showCheckoutDialog(type: DialogEnum.Error);
+                                //   }
+                                // } else {
+                                //   var message = data["error"] is String
+                                //       ? data['error']
+                                //       : data["error"][0];
+                                //   Helper.showError(message);
+                                // }
+                              });
+                            });
+                          } else {
+                            Get.to(HomeIndex(
+                              indexPage: 0,
+                            ));
+                            Get.defaultDialog(
+                              title: 'Processing',
+                              content: Text("Transaction is being processed"),
+                            );
+                            // showCheckoutDialog(state: CheckoutStateEnum.Init);
                             _cartController.checkout({
                               "paymentMethodId": selectedCard.id,
                               "deliveryAddressId":
                                   _addressController.selectedAddress.id,
-                              "cvv": selectedCard.paytype == 1 ? cvvNo : null,
+                              "cvv": null,
                               "shippingAddress": {
-                                "firstName": "Bismark",
-                                "lastName": "Amo",
-                                "phone": "0551956998 ",
-                                "email": "mccamo51@mail.com",
+                                "firstName": _firstnameCtrl.text,
+                                "lastName": _lastnameCtrl.text,
+                                "phone": _mobileCtrl.text.trim(),
+                                "email": _emailCtrl.text.trim(),
                               }
                             }, (data) {
-                              print(data);
+                              print("------------------------$data");
                               if (data.containsKey("success")) {
-                                if (data.containsKey("code") &&
-                                    data["code"] != null) {
-                                  showCheckoutDialog(
-                                      type: data["code"] == '000'
-                                          ? DialogEnum.Success
-                                          : DialogEnum.Error);
-                                } else {
-                                  showCheckoutDialog(type: DialogEnum.Error);
-                                }
+                                // if (data.containsKey("code") &&
+                                //     data["code"] != null) {
+                                showCheckoutDialog(type: DialogEnum.Success);
+                                _cartController.getCartITems();
+                                // } else {
+                                // }
                               } else {
+                                showCheckoutDialog(type: DialogEnum.Error);
                                 var message = data["error"] is String
                                     ? data['error']
                                     : data["error"][0];
                                 Helper.showError(message);
                               }
                             });
-                          });
-                        } else {
-                          showCheckoutDialog(state: CheckoutStateEnum.Init);
-                          _cartController.checkout({
-                            "paymentMethodId": selectedCard.id,
-                            "deliveryAddressId":
-                                _addressController.selectedAddress.id,
-                            "cvv": null,
-                            "shippingAddress": {
-                              "firstName": "Bismark",
-                              "lastName": "Amo",
-                              "phone": "0551956998 ",
-                              "email": "mccamo51@mail.com",
-                            }
-                          }, (data) {
-                            print(data);
-                            if (data.containsKey("success")) {
-                              if (data.containsKey("code") &&
-                                  data["code"] != null) {
-                                showCheckoutDialog(
-                                    type: data["code"] == '000'
-                                        ? DialogEnum.Success
-                                        : DialogEnum.Error);
-                              } else {
-                                showCheckoutDialog(type: DialogEnum.Error);
-                              }
-                            } else {
-                              var message = data["error"] is String
-                                  ? data['error']
-                                  : data["error"][0];
-                              Helper.showError(message);
-                            }
-                          });
+                          }
                         }
                       }
                     : null,
@@ -196,6 +244,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               child: Column(
                 children: <Widget>[
                   _buildCartSummary,
+                  _shippingTo,
                   GetBuilder<AddressController>(
                       builder: (_) => _addressController.selectedAddress !=
                                   null &&
@@ -281,6 +330,137 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 ],
               ),
             )));
+  }
+
+  Widget get _shippingTo {
+    return Container(
+      margin: EdgeInsets.fromLTRB(10.w, 20.w, 10.w, 10.w),
+      padding: EdgeInsets.all(5.0.w),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8.w),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Constants.boxShadow,
+              blurRadius: 3.4.w,
+              offset: Offset(0, 3.4.w),
+            )
+          ]),
+      child: Form(
+        key: _formKey,
+        // autovalidateMode: AutovalidateMode.onUserInteraction,
+        // autoValidate ? AutovalidateMode.always : AutovalidateMode.disabled,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text("Shipping Address",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                      fontSize: 18.w)),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8.0.w),
+              child: SizedBox(
+                child: TextFormField(
+                  focusNode: _firstname,
+                  validator: (value) {
+                    return value.length > 3 ? null : Strings.fieldReq;
+                  },
+                  style: TextStyle(fontSize: 14.w),
+                  decoration: InputDecoration(
+                    hintText: S.of(context).firstName,
+                    floatingLabelBehavior: FloatingLabelBehavior.never,
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Constants.themeGreyLight, width: 1.0.w),
+                        borderRadius: BorderRadius.circular(5.0.w)),
+                    contentPadding: EdgeInsets.all(10.0.w),
+                  ),
+                  controller: _firstnameCtrl,
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(8.0.w),
+              child: SizedBox(
+                child: TextFormField(
+                  focusNode: _lastname,
+                  validator: (value) {
+                    return value.length > 2 ? null : Strings.fieldReq;
+                  },
+                  style: TextStyle(fontSize: 14.w),
+                  decoration: InputDecoration(
+                    hintText: S.of(context).lastName,
+                    floatingLabelBehavior: FloatingLabelBehavior.never,
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Constants.themeGreyLight, width: 1.0.w),
+                        borderRadius: BorderRadius.circular(5.0.w)),
+                    contentPadding: EdgeInsets.all(10.0.w),
+                  ),
+                  controller: _lastnameCtrl,
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(8.0.w),
+              child: SizedBox(
+                // height: 47.w,
+                child: TextFormField(
+                  focusNode: _email,
+                  validator: Helper.validateEmail,
+                  style: TextStyle(fontSize: 14.w),
+                  decoration: InputDecoration(
+                    hintText: S.of(context).email,
+                    floatingLabelBehavior: FloatingLabelBehavior.never,
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Constants.themeGreyLight, width: 1.0.w),
+                        borderRadius: BorderRadius.circular(5.0.w)),
+                    contentPadding: EdgeInsets.all(10.0.w),
+                  ),
+                  controller: _emailCtrl,
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(8.0.w),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Expanded(
+                    flex: 3,
+                    child: SizedBox(
+                      // height: 47.w,
+                      child: TextFormField(
+                        focusNode: _mobile,
+                        validator: Helper.validateMobileNumberStrict,
+                        style: TextStyle(fontSize: 14.w),
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          hintText: S.of(context).mobileNumberPlaceholder,
+                          floatingLabelBehavior: FloatingLabelBehavior.never,
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Constants.themeGreyLight,
+                                  width: 1.0.w),
+                              borderRadius: BorderRadius.circular(5.0.w)),
+                          contentPadding: EdgeInsets.all(10.0.w),
+                        ),
+                        controller: _mobileCtrl,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   // build card for cart summary
@@ -539,6 +719,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             onTap: () => Get.to(PaymentMethodScreen(
                               hasContinueButton: true,
                               onContinuePressed: (pan) {
+                                print(pan);
                                 _setPaymentMethod(pan);
                                 Get.back();
                               },
@@ -610,7 +791,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               ),
               Container(
                 height: 40.w,
-                child: Text(CardUtils.maskCard(pan),
+                child: Text(pan,
                     style: Get.textTheme.bodyText1.copyWith(
                         fontWeight: FontWeight.w600,
                         fontSize: 17.w,
@@ -732,6 +913,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 style: TextStyle(color: Get.theme.primaryColor),
               ),
               onPressed: () {
+                _cartController.getCartITems();
                 navigator.pop();
               },
             ),

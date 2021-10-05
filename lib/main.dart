@@ -31,6 +31,7 @@ class _EdeybeAppState extends State<EdeybeApp> {
   @override
   void initState() {
     super.initState();
+    cartControler.getCartITems();
   }
 
   @override

@@ -18,16 +18,17 @@ class PaymentMethodController extends GetxController {
     super.onInit();
     getAllPayment();
     // Future.delayed(Duration(seconds: 1), () {
-    
+
     // });
   }
 
-  getAllPayment(){
+  getAllPayment() {
     payementServer.getAllSavedMethods((response) {
       cards.value = response;
       update();
     }, (error) {});
   }
+
   addPaymentMethod(PaymentCard card, {String otp}) {
     var alreadyAdded = cards.firstWhere(
       (element) => element.number == card.number,
@@ -123,15 +124,22 @@ class PaymentMethodController extends GetxController {
     if (cards != null) {
       payementServer.deleteMethod(card.id, (response) {
         if (response != null) {
-          Get.dialog(CustomDialog(
-            title: S.current.addCard,
-            content: 'Card deleted successfully',
-          ));
-          print(response);
+          if (response.containsKey("success")) {
+            Get.dialog(CustomDialog(
+              title: S.current.addCard,
+              content: 'Card deleted successfully',
+            ));
+            print(response);
+            cards.removeWhere((element) {
+              return element.id == card.id;
+            });
+          }else{
+            Get.dialog(CustomDialog(
+              title: S.current.addCard,
+              content: response['error'],
+            ));
+          }
         }
-        cards.removeWhere((element) {
-          return element.number == card.number;
-        });
       }, (error) {});
     } else {
       Get.dialog(CustomDialog(

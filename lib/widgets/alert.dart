@@ -33,11 +33,6 @@ Future<void> cvvAlert(BuildContext context, TextEditingController controller,
                   controller: controller,
                   style: TextStyle(fontSize: 14.w),
                   keyboardType: TextInputType.number,
-                  // onFieldSubmitted: (String text) {
-                  //   onDone();
-                  // },
-                  // onSaved: _setCardCVV,
-
                   validator: CardUtils.validateCVV,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -84,3 +79,7 @@ Future<void> cvvAlert(BuildContext context, TextEditingController controller,
     },
   );
 }
+
+// Widget al(){ return Get.defaultDialog(
+//       title: '',
+//        radius: 10.0);

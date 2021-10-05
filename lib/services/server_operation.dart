@@ -7,10 +7,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 
-final String domain = "http://fbbf-197-251-220-74.ngrok.io";
+final String domain = "https://edeybe.com/api";
 
 abstract class ServerOperations {
-  final String _domain = "http://fbbf-197-251-220-74.ngrok.io";
+  final String _domain = "https://edeybe.com/api";
   // final String _domain = "api.edeybe.com";
   final String _domainLocal = "172.18.72.61:5002";
   final String accessToken =
@@ -58,7 +58,7 @@ abstract class ServerOperations {
     void onError(DioError error),
   }) async {
     var response = await _dio
-        .post("$path",
+        .post("$_domain/api/payment/direct",
             data: schema,
             options: Options(method: 'POST', headers: {
               'apikey': '$accessToken',
@@ -68,11 +68,21 @@ abstract class ServerOperations {
             }))
         .catchError((onerror) {
       var err = onerror as DioError;
-      print("=====================${err.response.data}");
+      String message = "${err.response.data['error'][0]}";
+      Get.back();
+      // Helper.showError(message);
+      Get.defaultDialog(
+        title: 'Error',
+        content: Text(message),
+        radius: 10.0,
+      );
       onError(err);
     });
-    // print(response.data);
-    onResponse(response.data);
+    if (response != null) {
+      Get.back();
+      onResponse(response.data);
+      print(response.data);
+    }
   }
 
   dynamicRequest(
@@ -121,8 +131,6 @@ abstract class ServerOperations {
         }
 
         if (onError != null) {
-          print("rr1111rrrrrrrrrrrrrrrrrrrrr$err rrrrrrrrrrr  $onError");
-
           print(err);
           onError(err);
         } else {
@@ -136,13 +144,9 @@ abstract class ServerOperations {
                 : err.response.data["error"][0];
           }
           Helper.showError(err.response.data ?? message);
-          print(
-              "rr2222rrrrrrrrrrrrrrrrrrrrr$message rrrrrrr${err.response.data}rrrr");
         }
       }
     }).then((response) {
-      print("rr3333rrrrrrrrrrrrrrrrrrrrr$response rrrrrrrrrrr");
-
       if (response != null) {
         // closing loading dialog
         if (showDialog) {

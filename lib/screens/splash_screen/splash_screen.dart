@@ -23,7 +23,7 @@ class _SplashScreenState extends State<SplashScreen>
 // Set default `_initialized` and `_error` state to false
   bool _initialized = false;
   bool _error = false;
-  String name = "Bismark";
+  // String name = "Bismark";
 
   // Define an async function to initialize FlutterFire
   void initializeFlutterFire() async {
@@ -37,6 +37,7 @@ class _SplashScreenState extends State<SplashScreen>
           dispatchService: _userController.setPushNotificationToken);
       var _cookie = GetStorage().read("cookie");
       if (_cookie != null) {
+      // print(_cookie);
         _userController.loginFromBase();
       } else {
         Get.off(ConfigurationScreen());
@@ -51,13 +52,13 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   void initState() {
+    initializeFlutterFire();
     // MyEncryptionDecryption.encryptData();
     // MyEncryptionDecryption.decryptAES(MyEncryptionDecryption.encryptAES(name));
     _animation = AnimationController(
       vsync: this,
       duration: Duration(seconds: 1),
     )..repeat(reverse: true);
-    initializeFlutterFire();
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) async {
       var siren = new Siren();
       var info = await siren.getAppInfo();

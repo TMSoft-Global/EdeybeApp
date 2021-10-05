@@ -29,7 +29,8 @@ class PayementOperation extends ServerOperations {
   }
 
   deleteMethod(
-      String id, void onResponse(int response), void onError(DioError error)) {
+      String id, void onResponse(dynamic), void onError(DioError error)) {
+        print(id);
     dynamicRequest(
       path: "$paymentPath?id=$id",
       schema: "",
@@ -37,7 +38,7 @@ class PayementOperation extends ServerOperations {
       onError: onError,
       onResponse: (res) {
         print(res);
-        onResponse(res['totalPossible'] as int);
+        onResponse(res);
       },
     );
   }

@@ -48,6 +48,7 @@ class ShippingAddress {
         deliveryAddresses: List<DeliveryAddress>.from(
             json["deliveryAddresses"].map((x) => DeliveryAddress.fromJson(x))),
       );
+      
 
   Map<String, dynamic> toJson() => {
         "firstName": firstName,

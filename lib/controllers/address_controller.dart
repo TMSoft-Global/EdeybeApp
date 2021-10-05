@@ -6,6 +6,8 @@ import 'package:edeybe/models/deliveryModel.dart';
 import 'package:edeybe/models/shippingAddress.dart';
 import 'package:edeybe/services/address_operations.dart';
 import 'package:edeybe/services/cart_operation.dart';
+import 'package:edeybe/widgets/custom_dialog.dart';
+import 'package:flutter/material.dart';
 
 class AddressController extends GetxController implements HTTPErrorHandler {
   var addresses = <ShippingAddress>[].obs;
@@ -18,33 +20,56 @@ class AddressController extends GetxController implements HTTPErrorHandler {
   var serverError = false.obs;
   var canceled = false.obs;
 
-    @override
+  @override
   void onInit() {
     super.onInit();
-   getAllDeliveryAddresses();
+    getAllDeliveryAddresses();
   }
 
-
   addAddress(Map<String, dynamic> bodyData) {
-    final deliverMap = DeliveryAddress(id:bodyData[''],type: bodyData["type"], 
-    isSelect: false,lat: bodyData["lat"],
-    long: bodyData["long"],
-    placeName: bodyData["placeName"],
-    displayText: bodyData["displayText"] );
-addressoperations.addAddressRequest(bodyData, (address) => delivery.add(deliverMap));
-    update();
+    final deliverMap = DeliveryAddress(
+        id: bodyData[''],
+        type: bodyData["type"],
+        isSelect: false,
+        lat: bodyData["lat"],
+        long: bodyData["long"],
+        placeName: bodyData["placeName"],
+        displayText: bodyData["displayText"]);
+    addressoperations.addAddressRequest(bodyData, (address) {
+      if (address.containsKey("success")) {
+        // getAllDeliveryAddresses();
+        Get.dialog(CustomDialog(
+          title: 'Success',
+          content: address['success'],
+        ));
+
+        delivery.add(deliverMap);
+        update();
+      } else {
+        Get.dialog(CustomDialog(
+          title: 'Failed',
+          content: address['error'],
+        ));
+      }
+    });
   }
 
   deleteAddress(DeliveryAddress address) {
-    if(address !=null){
+    if (address != null) {
       addressoperations.deleteAddress(address.id, (response) {
-
-            if(response['success'] != null){
-              delivery.removeWhere((element) => element.id == address.id);
-
-            }
-
-       },  handleError);
+        if (response['success'] != null) {
+          delivery.removeWhere((element) => element.id == address.id);
+          Get.dialog(CustomDialog(
+            title: S.current.addCard,
+            content: response['success'],
+          ));
+        }else{
+          Get.dialog(CustomDialog(
+            title: S.current.addCard,
+            content: response['error'],
+          ));
+        }
+      }, handleError);
 
       // update();
     }
@@ -52,18 +77,20 @@ addressoperations.addAddressRequest(bodyData, (address) => delivery.add(deliverM
     update();
   }
 
-  getAllDeliveryAddresses(){
-      addressoperations.getAllAddresses((response) {
-        delivery.value = response;
-        update();
-      }, handleError);
+  getAllDeliveryAddresses() {
+    addressoperations.getAllAddresses((response) {
+      print(response);
+      delivery.value = response;
+      update();
+    }, (data) {
+      addresses.add(data);
+      update();
+    }, handleError);
   }
 
   setDeliveryAddress(DeliveryAddress address, {getCost: true}) {
     selectedAddress = delivery.firstWhere(
-        (ad) =>
-            ad.id == address.id &&
-            ad.isSelect==true,
+        (ad) => ad.id == address.id && ad.isSelect == true,
         orElse: () => DeliveryAddress());
     update();
     if (getCost) {
