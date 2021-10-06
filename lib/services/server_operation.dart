@@ -72,11 +72,11 @@ abstract class ServerOperations {
       String message = "${err.response.data['error'][0]}";
       Get.back();
       // Helper.showError(message);
-      Get.defaultDialog(
-        title: 'Error',
-        content: Text(message),
-        radius: 10.0,
-      );
+      // Get.defaultDialog(
+      //   title: 'Error',
+      //   content: Text(message),
+      //   radius: 10.0,
+      // );
       onError(err);
     });
     if (response != null) {
