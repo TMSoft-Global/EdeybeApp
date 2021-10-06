@@ -92,16 +92,23 @@ class PaymentMethodController extends GetxController {
       });
     } else {
       payementServer.sendVerification(card.number, () {
-        Get.to(
-          Otp(
-              data: card.number,
-              onVerify: (String otp) => addPaymentMethod(card, otp: otp),
-              onResend: (Function callBack) => payementServer.sendVerification(
-                  card.number, () => callBack(), (error) {})),
-        ).whenComplete(() {
-          cards.add(card);
-          update();
-        });
+        // if (val.containsKey('success')) {
+          Get.to(
+            Otp(
+                data: card.number,
+                onVerify: (String otp) => addPaymentMethod(card, otp: otp),
+                onResend: (Function callBack) =>
+                    payementServer.sendVerification(card.number, () {
+                      cards.add(card);
+                      update();
+                      getAllPayment();
+                    }, (error) {})),
+          ).whenComplete(() {
+            cards.add(card);
+            update();
+            getAllPayment();
+          });
+        // }
       }, (error) {
         Get.dialog(Text(error.error));
       });
@@ -133,7 +140,7 @@ class PaymentMethodController extends GetxController {
             cards.removeWhere((element) {
               return element.id == card.id;
             });
-          }else{
+          } else {
             Get.dialog(CustomDialog(
               title: S.current.addCard,
               content: response['error'],

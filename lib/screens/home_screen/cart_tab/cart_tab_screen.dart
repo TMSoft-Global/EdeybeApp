@@ -57,6 +57,7 @@ class _CartScreenTabState extends State<CartScreenTab>
   @override
   void initState() {
     super.initState();
+    // _cartController.getCartITems();
     // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
     //   _cartController.getCartITems();
     //   _wishlistController.getWishlist();

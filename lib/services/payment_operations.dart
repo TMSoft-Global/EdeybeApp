@@ -30,7 +30,7 @@ class PayementOperation extends ServerOperations {
 
   deleteMethod(
       String id, void onResponse(dynamic), void onError(DioError error)) {
-        print(id);
+    print(id);
     dynamicRequest(
       path: "$paymentPath?id=$id",
       schema: "",
@@ -77,10 +77,10 @@ class PayementOperation extends ServerOperations {
         if (res.containsKey('error')) {
           var message = res['error'] is String ? res['error'] : res['error'][0];
         } else if (res.containsKey("success")) {
-          // Get.to(PaymentMethodScreen(
-          //   hasContinueButton: false,
-          //   onContinuePressed: (pan) {},
-          // ));
+          Get.to(PaymentMethodScreen(
+            hasContinueButton: false,
+            onContinuePressed: (pan) {},
+          ));
         }
         onResponse(res);
       },
@@ -101,18 +101,16 @@ class PayementOperation extends ServerOperations {
         if (res.containsKey('error')) {
           var message = res['error'] is String ? res['error'] : res['error'][0];
         } else if (res.containsKey("success")) {
-          Get.to(PaymentMethodScreen(
-            hasContinueButton: false,
-            onContinuePressed: (pan) {
-              print("========================$pan");
-            },
-          ));
-
-          //   Get.dialog(CartDialog(
-          //     productTitle: "Success",
-          //     type: CartItemType.Message,
-          //     title: S.of(Get.context).paymentMethod,
-          //   ));
+          // Get.to(
+          //   PaymentMethodScreen(
+          //     hasContinueButton: false,
+          //     onContinuePressed: (pan) {
+          //       print("========================$pan");
+          //     },
+          //   ),
+          // );
+          Get.back();
+          Get.back();
         }
         onResponse();
       },

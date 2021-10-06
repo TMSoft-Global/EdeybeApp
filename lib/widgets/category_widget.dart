@@ -18,13 +18,15 @@ class CategoryWidget extends StatelessWidget {
       {this.item, this.onTap, this.isLoading = false, this.isActive = false});
   @override
   Widget build(BuildContext context) {
+  final hei =  MediaQuery.of(context).size.height;
+  print(hei);
     return GestureDetector(
       onTap: onTap,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            height: 35.w,
+            height:hei > 700 ? 45.w: 30.w,
             clipBehavior: Clip.antiAliasWithSaveLayer,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),

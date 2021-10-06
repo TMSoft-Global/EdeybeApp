@@ -7,10 +7,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 
-final String domain = "https://edeybe.com/api";
+final String domain = "https://api.edeybe.com";
 
 abstract class ServerOperations {
-  final String _domain = "https://edeybe.com/api";
+  final String _domain = "https://api.edeybe.com";
   // final String _domain = "api.edeybe.com";
   final String _domainLocal = "172.18.72.61:5002";
   final String accessToken =
@@ -68,6 +68,7 @@ abstract class ServerOperations {
             }))
         .catchError((onerror) {
       var err = onerror as DioError;
+      print(err.response.data.toString());
       String message = "${err.response.data['error'][0]}";
       Get.back();
       // Helper.showError(message);

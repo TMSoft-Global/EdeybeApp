@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:edeybe/controllers/address_controller.dart';
 import 'package:edeybe/index.dart';
 import 'package:edeybe/models/deliveryModel.dart';
 import 'package:edeybe/screens/address_screen/address_screen.dart';
@@ -8,6 +9,7 @@ import 'package:edeybe/services/server_operation.dart';
 import 'package:flutter/material.dart';
 
 class AddressOperations extends ServerOperations {
+  // final _addressController = Get.put(AddressController());
   String path = "/account/deliveryaddresses";
   addAddressRequest(Map data, Function(dynamic address) onResponse) {
     print(data);
@@ -18,10 +20,9 @@ class AddressOperations extends ServerOperations {
       schema: jsonEncode(data),
       onResponse: (val) {
         if (val.containsKey("success")) {
+          // _addressController.getAllDeliveryAddresses();
           print(val);
-          Get.to(AddressScreen(
-            hasContinueButton: false,
-          ));
+          Get.back();
           onResponse(val);
         } else {
           Get.defaultDialog(
@@ -74,6 +75,8 @@ class AddressOperations extends ServerOperations {
         onError: onError,
         method: "DELETE",
         onResponse: (val) {
+          // _addressController.getAllDeliveryAddresses();
+
           print(val);
           onResponse(val);
         });

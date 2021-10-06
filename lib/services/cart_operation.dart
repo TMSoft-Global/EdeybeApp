@@ -1,9 +1,11 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:edeybe/index.dart';
 import 'package:edeybe/models/deliveryCost.dart';
 import 'package:edeybe/models/product.dart';
 import 'package:edeybe/services/server_operation.dart';
+import 'package:edeybe/widgets/custom_dialog.dart';
 
 class CartOperation extends ServerOperations {
   getAllCartItems(
@@ -40,14 +42,14 @@ class CartOperation extends ServerOperations {
     );
   }
 
-   placeOrder(
+  placeOrder(
       Map<String, dynamic> data,
       void onResponse(Map<String, dynamic> response),
       void onError(DioError error)) {
     dynamicRequest(
       path: "/payment/direct",
       schema: jsonEncode(data),
-      onError: (onError){
+      onError: (onError) {
         print(onError.error);
       },
       showDialog: false,
@@ -57,7 +59,7 @@ class CartOperation extends ServerOperations {
     );
   }
 
-   checkOrderStatus(
+  checkOrderStatus(
       Map<String, dynamic> data,
       void onResponse(Map<String, dynamic> response),
       void onError(DioError error)) {
@@ -95,7 +97,16 @@ class CartOperation extends ServerOperations {
       showDialog: true,
       onResponse: (res) {
         Map<String, dynamic> location = jsonDecode(res);
-        onResponse(location["Table"][0]);
+        print(location);
+        // onResponse(location["Table"][0]);
+        if (location["Table"] == null) {
+          Get.dialog(CustomDialog(
+            title: 'Timeout error',
+            content: "Cannot get your loction, please try again",
+          ));
+        } else {
+          onResponse(location["Table"][0]);
+        }
       },
     );
   }
@@ -111,7 +122,15 @@ class CartOperation extends ServerOperations {
       showDialog: true,
       onResponse: (res) {
         Map<String, dynamic> location = jsonDecode(res);
-        onResponse(location["Table"][0]);
+        print(location);
+        if (location["Table"] == null) {
+          Get.dialog(CustomDialog(
+            title: 'Timeout error',
+            content: "Cannot get your loction, please try again",
+          ));
+        } else {
+          onResponse(location["Table"][0]);
+        }
       },
     );
   }

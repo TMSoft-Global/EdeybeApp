@@ -56,8 +56,7 @@ class _AddressScreenState extends State<AddressScreen> {
                           ),
                           onPressed: _addressController.selectedAddress !=
                                       null &&
-                                  _addressController.selectedAddress.id !=
-                                      null
+                                  _addressController.selectedAddress.id != null
                               ? widget.onContinuePressed
                               : null,
                         ),
@@ -72,80 +71,71 @@ class _AddressScreenState extends State<AddressScreen> {
                         ))),
                   ))
           : null,
-      body: Obx(()=>
-             ListView.builder(
-              itemCount: 1 + _addressController.delivery.length,
-              itemBuilder: (_, i) {
-                if (i == _addressController.delivery.length) {
-                  return Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8.w),
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              blurRadius: 2.w,
-                              offset: Offset(0, 3.4.w),
-                              color: Constants.boxShadow,
-                            )
-                          ]),
-                      margin: EdgeInsets.all(10.w),
-                      padding: EdgeInsets.all(0.0),
-                      child: TextButton.icon(
-                        style: TextButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.w)),
-                        ),
-                        icon: Icon(
-                          Icons.add,
-                        ),
-                        label: Text(S.of(context).addAddress),
-                        onPressed: () {
-                          Get.to(AddorEditScreen());
-                        },
-                      ));
-                }
-                // var address =_addressController.addresses != null ? _addressController.addresses[0]:null;
-                var delivery = _addressController.delivery[i];
-      
-                // return Text(address.email);
-                // print("${address.email}----------------------------");
-                // var data =address.deliveryAddresses[0];
-                return AddressCard(
-                  // onCardPressed: (){},
-                  onEditAddress: (){
-                          Get.to(AddorEditScreen(
-                            address: delivery,
-                          ));
+      body: Obx(() => ListView.builder(
+          itemCount: 1 + _addressController.delivery.length,
+          itemBuilder: (_, i) {
+            if (i == _addressController.delivery.length) {
+              return Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8.w),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 2.w,
+                          offset: Offset(0, 3.4.w),
+                          color: Constants.boxShadow,
+                        )
+                      ]),
+                  margin: EdgeInsets.all(10.w),
+                  padding: EdgeInsets.all(0.0),
+                  child: TextButton.icon(
+                    style: TextButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.w)),
+                    ),
+                    icon: Icon(
+                      Icons.add,
+                    ),
+                    label: Text(S.of(context).addAddress),
+                    onPressed: () {
+                      Get.to(AddorEditScreen());
+                    },
+                  ));
+            }
+            // var address =_addressController.addresses != null ? _addressController.addresses[0]:null;
+            var delivery = _addressController.delivery[i];
 
-                  },
-                  // onRemoveAddress: (){},
-                  // onChangeButtonPressed: (){
-                  //   print("object");
-                  // },
-                  address: null,
-                  onCardPressed: widget.hasContinueButton
-                      ? () {
-                        setState((){
-                          if(delivery.isSelect == true){
-                            delivery.isSelect = false;
-                          }else{
-                            delivery.isSelect = true;
-                             _addressController.setDeliveryAddress(delivery);
-                          }
-                        });
- }
-                      : null,
-                  // address: address,
-                  deliveryAddress: delivery,
-                  // onEditAddress: () =>
-                  //     Get.to(AddorEditScreen(address: address)),
-                  onRemoveAddress: () => _removeAddress(delivery),
-                  isSelected: _addressController.selectedAddress != null &&
-                      _addressController.selectedAddress.id ==
-                          delivery.id &&
-                      widget.hasContinueButton,
-                );
-              })),
+            return AddressCard(
+              // onCardPressed: (){},
+              onEditAddress: () {
+                Get.to(AddorEditScreen(
+                  address: delivery,
+                ));
+              },
+              address: null,
+              onCardPressed: widget.hasContinueButton
+                  ? () {
+                      setState(() {
+                        if (delivery.isSelect == true) {
+                          print(_addressController.selectedAddress.long);
+                          delivery.isSelect = false;
+                        } else {
+                          delivery.isSelect = true;
+                          _addressController.setDeliveryAddress(delivery);
+                        }
+                      });
+                    }
+                  : null,
+              // address: address,
+              deliveryAddress: delivery,
+              // onEditAddress: () =>
+              //     Get.to(AddorEditScreen(address: address)),
+              onRemoveAddress: () => _removeAddress(delivery),
+              isSelected: _addressController.selectedAddress != null &&
+                  _addressController.selectedAddress.id == delivery.id &&
+                  widget.hasContinueButton,
+            );
+          })),
     );
   }
 

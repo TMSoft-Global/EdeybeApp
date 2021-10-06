@@ -146,7 +146,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
                               Get.defaultDialog(
                                 title: 'Processing',
-                                content: Text("Transaction is being processed"),
+                                content: Text("Transaction Accepted"),
                               );
                               controller.clear();
                               _cartController.checkout({
@@ -187,14 +187,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               });
                             });
                           } else {
-                            Get.to(HomeIndex(
-                              indexPage: 0,
-                            ));
-                            Get.defaultDialog(
-                              title: 'Processing',
-                              content: Text("Transaction is being processed"),
-                            );
-                            // showCheckoutDialog(state: CheckoutStateEnum.Init);
+                            // Get.to(HomeIndex(
+                            //   indexPage: 0,
+                            // ));
+                            // Get.defaultDialog(
+                            //   title: 'Processing',
+                            //   content: Text("Transaction is being processed"),
+                            // );
+                            showCheckoutDialog(state: CheckoutStateEnum.Init);
                             _cartController.checkout({
                               "paymentMethodId": selectedCard.id,
                               "deliveryAddressId":
@@ -284,7 +284,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                       child: InkWell(
                                         onTap: () => Get.to(AddressScreen(
                                           hasContinueButton: true,
-                                          onContinuePressed: Get.back,
+                                          onContinuePressed:Get.back,
                                         )),
                                         child: Row(
                                           crossAxisAlignment:

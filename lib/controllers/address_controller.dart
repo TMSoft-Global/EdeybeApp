@@ -37,12 +37,12 @@ class AddressController extends GetxController implements HTTPErrorHandler {
         displayText: bodyData["displayText"]);
     addressoperations.addAddressRequest(bodyData, (address) {
       if (address.containsKey("success")) {
+        getAllDeliveryAddresses();
         // getAllDeliveryAddresses();
         Get.dialog(CustomDialog(
           title: 'Success',
           content: address['success'],
         ));
-
         delivery.add(deliverMap);
         update();
       } else {
@@ -63,9 +63,9 @@ class AddressController extends GetxController implements HTTPErrorHandler {
             title: S.current.addCard,
             content: response['success'],
           ));
-        }else{
+        } else {
           Get.dialog(CustomDialog(
-            title: S.current.addCard,
+            title: 'Delete Address',
             content: response['error'],
           ));
         }
