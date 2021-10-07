@@ -3,6 +3,7 @@ import 'package:edeybe/controllers/cart_controller.dart';
 import 'package:edeybe/controllers/category_controller.dart';
 import 'package:edeybe/controllers/payment_method_controller.dart';
 import 'package:edeybe/controllers/product_controller.dart';
+import 'package:edeybe/controllers/user_controller.dart';
 import 'package:edeybe/controllers/wishlist_controller.dart';
 import 'package:edeybe/screens/home_screen/cart_tab/cart_tab_screen.dart';
 import 'package:edeybe/screens/home_screen/home_tab/home_tab_screen.dart';
@@ -26,7 +27,7 @@ class _HomeIndexState extends State<HomeIndex> {
   var wishlistController = Get.put(WishlistController());
   var addressController = Get.put(AddressController());
   var paymentMethodController = Get.put(PaymentMethodController());
-  // var addressController = Get.put(PaymentMethodController());
+  var _userCtrl = Get.find<UserController>();
   var categoryContoller = Get.put(CategoryController());
   List<Widget> children = [];
   PageController pageController = PageController();
@@ -42,8 +43,13 @@ class _HomeIndexState extends State<HomeIndex> {
     super.dispose();
   }
 
+  void getCart(){
+    cartController.getCartITems();
+  }
+
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       body: PageView(
         onPageChanged: (i) => setState(() {
@@ -59,6 +65,7 @@ class _HomeIndexState extends State<HomeIndex> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         onTap: (i) {
+          getCart();
           setState(() {
             current = i;
             pageController.jumpToPage(

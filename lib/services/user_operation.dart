@@ -4,6 +4,7 @@ import 'package:edeybe/encryption/encryptData.dart';
 import 'package:edeybe/index.dart';
 import 'package:edeybe/models/deliveryModel.dart';
 import 'package:edeybe/models/order.dart';
+import 'package:edeybe/models/product.dart';
 import 'package:edeybe/models/shippingAddress.dart';
 import 'package:edeybe/models/user.dart';
 import 'package:edeybe/services/server_operation.dart';
@@ -106,6 +107,26 @@ class UserOperations extends ServerOperations {
       },
     );
   }
+
+ getAllCartItems(
+      void onResponse(List<Product> response), void onError(DioError error)) {
+    dynamicRequest(
+      path: "/getcart",
+      schema: "",
+      onError: onError,
+      onResponse: (res) {
+        print(res);
+        if (res.containsKey("items")) {
+          var data = (res["items"] as List<dynamic>)
+              .map((dynamic i) => Product.fromJson(i as Map<String, dynamic>))
+              // .sortedByNum((element) => element.id)
+              .toList();
+          onResponse(data);
+        }
+      },
+    );
+  }
+
 
   getAllAddresses(void onResponse(List<DeliveryAddress> response),
       void onError(DioError error)) {

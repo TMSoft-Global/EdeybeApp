@@ -73,7 +73,6 @@ class AddressController extends GetxController implements HTTPErrorHandler {
 
       // update();
     }
-
     update();
   }
 
@@ -83,6 +82,7 @@ class AddressController extends GetxController implements HTTPErrorHandler {
       delivery.value = response;
       update();
     }, (data) {
+      print(data[0]);
       addresses.add(data);
       update();
     }, handleError);

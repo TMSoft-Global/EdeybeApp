@@ -6,6 +6,7 @@ import 'package:edeybe/screens/payment_method/add_payment_method/add_card.dart';
 import 'package:edeybe/screens/splash_screen/splash_screen.dart';
 import 'package:edeybe/services/simpleWeb.dart';
 import 'package:edeybe/utils/AppTheme.dart';
+import 'package:edeybe/widgets/transLoading.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
@@ -48,7 +49,7 @@ class _EdeybeAppState extends State<EdeybeApp> {
               GlobalWidgetsLocalizations.delegate,
             ],
             home: SplashScreen(),
-            // home: AddCardScreen(),
+            // home: TransLoading(),
             supportedLocales: S.delegate.supportedLocales,
             // locale: DevicePreview.of(context).locale, // <--- Add the locale
             // builder: DevicePreview.appBuilder,

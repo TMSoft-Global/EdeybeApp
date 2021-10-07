@@ -43,6 +43,7 @@ class UserController extends GetxController implements HTTPErrorHandler {
         await GetStorage().remove('anony-cookie');
         update();
         getDefaultAddress();
+        // getDefaultCart();
         Get.offAll(HomeIndex());
       },
       email: username,
@@ -203,14 +204,21 @@ class UserController extends GetxController implements HTTPErrorHandler {
     Get.back();
   }
 
-  void getDefaultAddress() {
-
-      // getAllDeliveryAddresses(){
-      _userOperations.getAllAddresses((response) {
-       addressCtl. delivery.value = response;
-        update();
-      }, handleError);
+  // void getDefaultCart() {
+  //   resetErrorState();
+  //   _userOperations.getAllCartItems((response) {
+  //     cartItem.cartItems = response;
+  //     update();
+  //   }, handleError);
   // }
+
+  void getDefaultAddress() {
+    // getAllDeliveryAddresses(){
+    _userOperations.getAllAddresses((response) {
+      addressCtl.delivery.value = response;
+      update();
+    }, handleError);
+    // }
 
     // _userOperations.getDefaultAddress((address) {
     //   if (address.id != null) {

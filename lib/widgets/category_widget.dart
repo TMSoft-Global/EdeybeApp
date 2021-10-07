@@ -26,7 +26,7 @@ class CategoryWidget extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            height:hei > 700 ? 45.w: 30.w,
+            height:hei > 700 ? 35.w: 30.w,
             clipBehavior: Clip.antiAliasWithSaveLayer,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),

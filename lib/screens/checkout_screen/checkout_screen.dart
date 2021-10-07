@@ -7,6 +7,7 @@ import 'package:edeybe/utils/helper.dart';
 import 'package:edeybe/utils/strings.dart';
 import 'package:edeybe/widgets/Shimmer.dart';
 import 'package:edeybe/widgets/alert.dart';
+import 'package:edeybe/widgets/custom_dialog.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'index.dart';
@@ -35,7 +36,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   DeliveryAddress address;
   ShippingAddress ship;
   PaymentCard _paymentCard = PaymentCard();
-  final TextEditingController controller = TextEditingController();
+  TextEditingController pinController = TextEditingController();
   TextEditingController _firstnameCtrl = TextEditingController();
   TextEditingController _mobileCtrl = TextEditingController();
   TextEditingController _lastnameCtrl = TextEditingController();
@@ -128,63 +129,68 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       color: canPlaceOrder() ? Colors.white : Colors.black),
                 ),
                 onPressed: canPlaceOrder()
-                    ? () async {
+                    ? () {
+                        // "rico@mail.com password!1$"
                         if (_formKey.currentState.validate()) {
-                          await encryptData(controller.text.trim())
-                              .then((value) => cvvNo = value);
                           var selectedCard = _paymentController.cards
                               .firstWhere(
                                   (card) => card.id == _selectedPaymentMethod);
 
-                          if (selectedCard.paytype == 1) {
-                            cvvAlert(context, controller, cvvFocus, onTap: () {
-                              Get.back();
-                              // showCheckoutDialog(state: CheckoutStateEnum.Init);
-                              Get.to(HomeIndex(
-                                indexPage: 0,
-                              ));
+                          //         print("wwwwwwwwwwwwwww$cvvNo");
 
-                              Get.defaultDialog(
-                                title: 'Processing',
-                                content: Text("Transaction Accepted"),
-                              );
-                              controller.clear();
-                              _cartController.checkout({
-                                "paymentMethodId": selectedCard.id,
-                                "deliveryAddressId":
-                                    _addressController.selectedAddress.id,
-                                "cvv": selectedCard.paytype == 1 ? cvvNo : null,
-                                "shippingAddress": {
-                                  "firstName": _firstnameCtrl.text,
-                                  "lastName": _lastnameCtrl.text,
-                                  "phone": _mobileCtrl.text.trim(),
-                                  "email": _emailCtrl.text.trim(),
-                                }
-                              }, (data) {
-                                var err = data as DioError;
-                                String message =
-                                    "${err.response.data['error'][0]}";
-                                print(data);
-                                // String message =
-                                //     "${data.response.data['error'][0]}";
-                                print(message);
-                                // if (data.containsKey("success")) {
-                                //   if (data.containsKey("code") &&
-                                //       data["code"] != null) {
-                                //     showCheckoutDialog(
-                                //         type: data["code"] == '000'
-                                //             ? DialogEnum.Success
-                                //             : DialogEnum.Error);
-                                //   } else {
-                                //     showCheckoutDialog(type: DialogEnum.Error);
-                                //   }
-                                // } else {
-                                //   var message = data["error"] is String
-                                //       ? data['error']
-                                //       : data["error"][0];
-                                //   Helper.showError(message);
-                                // }
-                              });
+                          if (selectedCard.paytype == 1) {
+                            cvvAlert(context, pinController, cvvFocus,
+                                onTap: () async {
+
+                                  print("pppppppppppppppp${pinController.text}");
+                              Get.back();
+                              await encryptData(pinController.text.trim())
+                                  .then((value) => cvvNo = value);
+                              // showCheckoutDialog(state: CheckoutStateEnum.Init);
+                              if (pinController.text.isNotEmpty) {
+                                _cartController.checkout({
+                                  "paymentMethodId": selectedCard.id,
+                                  "deliveryAddressId":
+                                      _addressController.selectedAddress.id,
+                                  "cvv":
+                                      selectedCard.paytype == 1 ? cvvNo : null,
+                                  "shippingAddress": {
+                                    "firstName": _firstnameCtrl.text,
+                                    "lastName": _lastnameCtrl.text,
+                                    "phone": _mobileCtrl.text.trim(),
+                                    "email": _emailCtrl.text.trim(),
+                                  }
+                                }, (data) {
+                                  var err = data as DioError;
+                                  String message =
+                                      "${err.response.data['error'][0]}";
+                                  print(data);
+                                  // String message =
+                                  //     "${data.response.data['error'][0]}";
+                                  print(message);
+                                  // if (data.containsKey("success")) {
+                                  //   if (data.containsKey("code") &&
+                                  //       data["code"] != null) {
+                                  //     showCheckoutDialog(
+                                  //         type: data["code"] == '000'
+                                  //             ? DialogEnum.Success
+                                  //             : DialogEnum.Error);
+                                  //   } else {
+                                  //     showCheckoutDialog(type: DialogEnum.Error);
+                                  //   }
+                                  // } else {
+                                  //   var message = data["error"] is String
+                                  //       ? data['error']
+                                  //       : data["error"][0];
+                                  //   Helper.showError(message);
+                                  // }
+                                });
+                              } else {
+                                Get.dialog(CustomDialog(
+                                  title: 'Required',
+                                  content: 'Pin required',
+                                ));
+                              }
                             });
                           } else {
                             // Get.to(HomeIndex(
@@ -284,7 +290,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                       child: InkWell(
                                         onTap: () => Get.to(AddressScreen(
                                           hasContinueButton: true,
-                                          onContinuePressed:Get.back,
+                                          onContinuePressed: Get.back,
                                         )),
                                         child: Row(
                                           crossAxisAlignment:

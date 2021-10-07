@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:edeybe/index.dart';
 import 'package:edeybe/utils/helper.dart';
 import 'package:edeybe/widgets/loading_widget.dart';
+import 'package:edeybe/widgets/transLoading.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
@@ -57,6 +58,7 @@ abstract class ServerOperations {
     @required void onResponse(dynamic response),
     void onError(DioError error),
   }) async {
+    Get.off(TransLoading());
     var response = await _dio
         .post("$_domain/api/payment/direct",
             data: schema,
@@ -71,17 +73,11 @@ abstract class ServerOperations {
       print(err.response.data.toString());
       String message = "${err.response.data['error'][0]}";
       Get.back();
-      // Helper.showError(message);
-      // Get.defaultDialog(
-      //   title: 'Error',
-      //   content: Text(message),
-      //   radius: 10.0,
-      // );
       onError(err);
     });
     if (response != null) {
-      Get.back();
-      onResponse(response.data);
+      // Get.back();
+      // onResponse(response.data);
       print(response.data);
     }
   }

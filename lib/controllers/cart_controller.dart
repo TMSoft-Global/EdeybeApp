@@ -54,6 +54,7 @@ class CartController extends GetxController implements HTTPErrorHandler {
   getCartITems() {
     resetErrorState();
     operations.getAllCartItems((response) {
+      print(response.length);
       cartItems.value = response;
       update();
     }, handleError);

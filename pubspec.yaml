@@ -48,9 +48,9 @@ dependencies:
   package_info: ^2.0.2
   store_redirect: ^2.0.0
   version: ^2.0.0
-  # crypton: ^2.0.2
   encrypt: ^5.0.1
   pointycastle: ^3.3.4
+  percent_indicator: ^3.4.0
 
 dev_dependencies:
   flutter_test:

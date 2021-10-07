@@ -1,5 +1,6 @@
 import 'package:edeybe/controllers/cart_controller.dart';
 import 'package:edeybe/controllers/search_controller.dart';
+import 'package:edeybe/controllers/user_controller.dart';
 import 'package:edeybe/controllers/wishlist_controller.dart';
 import 'package:edeybe/models/product.dart' as ProductModel;
 import 'package:edeybe/screens/address_screen/address_screen.dart';
@@ -37,6 +38,7 @@ class _CartScreenTabState extends State<CartScreenTab>
   final _wishlistController = Get.put(WishlistController());
   final _cartController = Get.put(CartController());
   final searchController = Get.find<SearchController>();
+  final _userController = Get.find<UserController>();
   final _searchFieldController = TextEditingController();
   String _deliverto;
   List items = [0, 1, 3];
@@ -57,7 +59,7 @@ class _CartScreenTabState extends State<CartScreenTab>
   @override
   void initState() {
     super.initState();
-    // _cartController.getCartITems();
+    // _userController.getDefaultCart();
     // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
     //   _cartController.getCartITems();
     //   _wishlistController.getWishlist();

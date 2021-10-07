@@ -1,4 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:edeybe/controllers/cart_controller.dart';
+import 'package:edeybe/controllers/user_controller.dart';
 import 'package:edeybe/index.dart';
 import 'package:edeybe/interface/HTTPErrorHandler.dart';
 import 'package:edeybe/models/categoryCollection.dart';
@@ -21,6 +23,7 @@ class HomeController extends GetxController implements HTTPErrorHandler {
   var connectionError = false.obs;
   var serverError = false.obs;
   var canceled = false.obs;
+  final _cartCrontroller = Get.put(CartController());
 
   writeReview(double rating, String message) {
     update();

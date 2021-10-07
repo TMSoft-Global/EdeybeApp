@@ -65,10 +65,9 @@ class _SimpleWebviewState extends State<SimpleWebview> {
           print(message.message);
           if (message.message == "close") {
             _paymentController.getAllPayment();
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => PaymentMethodScreen(
-                  hasContinueButton: true,
-                )));
+            Get.to(PaymentMethodScreen(
+                  hasContinueButton: false,
+                ));
           }
         });
   }

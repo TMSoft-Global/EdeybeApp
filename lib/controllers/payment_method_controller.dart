@@ -17,9 +17,6 @@ class PaymentMethodController extends GetxController {
   void onInit() {
     super.onInit();
     getAllPayment();
-    // Future.delayed(Duration(seconds: 1), () {
-
-    // });
   }
 
   getAllPayment() {
