@@ -136,13 +136,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               .firstWhere(
                                   (card) => card.id == _selectedPaymentMethod);
 
-                          //         print("wwwwwwwwwwwwwww$cvvNo");
-
                           if (selectedCard.paytype == 1) {
                             cvvAlert(context, pinController, cvvFocus,
                                 onTap: () async {
-
-                                  print("pppppppppppppppp${pinController.text}");
                               Get.back();
                               await encryptData(pinController.text.trim())
                                   .then((value) => cvvNo = value);

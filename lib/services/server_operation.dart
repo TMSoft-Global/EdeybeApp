@@ -8,15 +8,18 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 
-final String domain = "https://api.edeybe.com";
+final String domain = "http://2c35-197-251-220-74.ngrok.io";
+// final String domain = "https://api.edeybe.com";
 
 abstract class ServerOperations {
-  final String _domain = "https://api.edeybe.com";
+  final String _domain = "http://2c35-197-251-220-74.ngrok.io";
+  // final String _domain = "https://api.edeybe.com";
   // final String _domain = "api.edeybe.com";
   final String _domainLocal = "172.18.72.61:5002";
   final String accessToken =
       r"3KJALFDKLAkjksoem$jis0*j3ji49509u5tojifk95%#lk33#4kjjksfkjd@$$krjkrkkioaseif$2kjs@kj5l4#";
-  // String _store = "";
+  // String _store
+  // = "";
   // String _local = "en";
   // String _currency = 'GHS';
 

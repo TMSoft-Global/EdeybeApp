@@ -60,7 +60,7 @@ class AddressOperations extends ServerOperations {
         );
         onResponse(data);
         onShip(ship);
-        print(ship.firstName);
+        // print(ship.firstName);
 
         // var data = (res['success']['shippingAddress']);
       },
