@@ -196,7 +196,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             //   title: 'Processing',
                             //   content: Text("Transaction is being processed"),
                             // );
-                            showCheckoutDialog(state: CheckoutStateEnum.Init);
+                            // showCheckoutDialog(state: CheckoutStateEnum.Init);
                             _cartController.checkout({
                               "paymentMethodId": selectedCard.id,
                               "deliveryAddressId":
@@ -868,59 +868,60 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       state: state,
       actions: <Widget>[
         if (type == DialogEnum.Success)
+          // Padding(
+          //   padding: EdgeInsets.only(left: 8.0.w, top: 8.0.w),
+          //   child: ButtonTheme(
+          //     minWidth: Get.width,
+          //     height: 40.w,
+          //     child: TextButton(
+          //       style: TextButton.styleFrom(
+          //         shape: RoundedRectangleBorder(
+          //             side: BorderSide(color: Colors.white, width: 1.0.w),
+          //             borderRadius: BorderRadius.circular(8.w)),
+          //         backgroundColor: Get.theme.primaryColor,
+          //         onSurface: Get.theme.primaryColor.withOpacity(0.5.w),
+          //       ),
+          //       child: Text(
+          //         "${S.of(context).writeAReview}",
+          //         maxLines: 1,
+          //         style: TextStyle(color: Colors.white),
+          //         overflow: TextOverflow.ellipsis,
+          //       ),
+          //       onPressed: () {
+          //         if (navigator.canPop()) navigator.pop();
+          //         Get.off(WriteReviewScreen());
+          //       },
+          //     ),
+          //   ),
+          // ),
+
           Padding(
             padding: EdgeInsets.only(left: 8.0.w, top: 8.0.w),
             child: ButtonTheme(
               minWidth: Get.width,
-              height: 40.w,
+              height: 35.w,
               child: TextButton(
                 style: TextButton.styleFrom(
+                  backgroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
-                      side: BorderSide(color: Colors.white, width: 1.0.w),
+                      side: BorderSide(color: Get.theme.primaryColor),
                       borderRadius: BorderRadius.circular(8.w)),
-                  backgroundColor: Get.theme.primaryColor,
-                  onSurface: Get.theme.primaryColor.withOpacity(0.5.w),
                 ),
                 child: Text(
-                  "${S.of(context).writeAReview}",
-                  maxLines: 1,
-                  style: TextStyle(color: Colors.white),
+                  state != null
+                      ? S.of(context).problemWithPayment
+                      : S.of(context).continueShopping,
                   overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  style: TextStyle(color: Get.theme.primaryColor),
                 ),
                 onPressed: () {
-                  if (navigator.canPop()) navigator.pop();
-                  Get.off(WriteReviewScreen());
+                  _cartController.getCartITems();
+                  Get.off(HomeIndex());
                 },
               ),
             ),
           ),
-        Padding(
-          padding: EdgeInsets.only(left: 8.0.w, top: 8.0.w),
-          child: ButtonTheme(
-            minWidth: Get.width,
-            height: 35.w,
-            child: TextButton(
-              style: TextButton.styleFrom(
-                backgroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                    side: BorderSide(color: Get.theme.primaryColor),
-                    borderRadius: BorderRadius.circular(8.w)),
-              ),
-              child: Text(
-                state != null
-                    ? S.of(context).problemWithPayment
-                    : S.of(context).continueShopping,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-                style: TextStyle(color: Get.theme.primaryColor),
-              ),
-              onPressed: () {
-                _cartController.getCartITems();
-                navigator.pop();
-              },
-            ),
-          ),
-        ),
       ],
       message: Text(
           state == CheckoutStateEnum.Init

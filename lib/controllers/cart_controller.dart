@@ -128,6 +128,7 @@ class CartController extends GetxController implements HTTPErrorHandler {
     operations.checkoutRequest(
         schema: data,
         onResponse: callback,
+        
         onError: callback);
   }
 

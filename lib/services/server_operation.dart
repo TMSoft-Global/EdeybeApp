@@ -8,12 +8,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 
-final String domain = "http://2c35-197-251-220-74.ngrok.io";
-// final String domain = "https://api.edeybe.com";
+// final String domain = "http://2c35-197-251-220-74.ngrok.io";
+final String domain = "https://api.edeybe.com";
 
 abstract class ServerOperations {
-  final String _domain = "http://2c35-197-251-220-74.ngrok.io";
-  // final String _domain = "https://api.edeybe.com";
+  // final String _domain = "http://2c35-197-251-220-74.ngrok.io";
+  final String _domain = "https://api.edeybe.com";
   // final String _domain = "api.edeybe.com";
   final String _domainLocal = "172.18.72.61:5002";
   final String accessToken =
@@ -61,7 +61,10 @@ abstract class ServerOperations {
     @required void onResponse(dynamic response),
     void onError(DioError error),
   }) async {
-    Get.off(TransLoading());
+    Get.dialog(
+      LoadingWidget(),
+      barrierDismissible: true,
+    );
     var response = await _dio
         .post("$_domain/api/payment/direct",
             data: schema,
@@ -79,8 +82,7 @@ abstract class ServerOperations {
       onError(err);
     });
     if (response != null) {
-      // Get.back();
-      // onResponse(response.data);
+      onResponse(response.data);
       print(response.data);
     }
   }
