@@ -142,7 +142,7 @@ class AddressCard extends StatelessWidget {
                     ),
                     child: Text(
                       deliveryAddress.placeName
-                      // "${address.firstName} ${address.lastName}",
+                      // "${address.firstName} ${address.lastName}" : "",
                       
                     ),
                   ),

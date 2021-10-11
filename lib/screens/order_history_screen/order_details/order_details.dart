@@ -1,3 +1,4 @@
+import 'package:edeybe/models/deliveryModel.dart';
 import 'package:edeybe/models/order.dart';
 import 'package:edeybe/models/product.dart';
 import 'package:edeybe/screens/checkout_screen/index.dart';
@@ -7,7 +8,8 @@ import 'package:flutter/material.dart';
 
 class OrderDetails extends StatefulWidget {
   final Order order;
-  OrderDetails({Key key, this.order}) : super(key: key);
+  final DeliveryAddress address;
+  OrderDetails({Key key, this.order, this.address}) : super(key: key);
 
   @override
   _OrderDetailsState createState() => _OrderDetailsState();
@@ -15,8 +17,10 @@ class OrderDetails extends StatefulWidget {
 
 class _OrderDetailsState extends State<OrderDetails> {
   final formatCurrency = new NumberFormat.simpleCurrency(name: "");
+  
   @override
   Widget build(BuildContext context) {
+    print(widget.address.id);
     return Scaffold(
         appBar: AppBar(
           title: Text("Order Detials ${widget.order.orderId}"),
@@ -34,7 +38,8 @@ class _OrderDetailsState extends State<OrderDetails> {
                   AddressCard(
                       onCardPressed: null,
                       showChangeButton: false,
-                      address: widget.order.shippingAddress,
+                      // address: widget.order.shippingAddress,
+                      deliveryAddress: widget.order.deliveryAddress,
                       onEditAddress: null,
                       onRemoveAddress: null),
                   SizedBox(

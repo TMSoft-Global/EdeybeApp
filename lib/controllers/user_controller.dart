@@ -8,6 +8,7 @@ import 'package:edeybe/screens/checkout_screen/index.dart';
 import 'package:edeybe/screens/configuration_screen/config_screen.dart';
 import 'package:edeybe/screens/home_screen/index.dart';
 import 'package:edeybe/services/user_operation.dart';
+import 'package:flutter/material.dart';
 
 class UserController extends GetxController implements HTTPErrorHandler {
   User user;
@@ -30,6 +31,10 @@ class UserController extends GetxController implements HTTPErrorHandler {
   var historyHasMore = true.obs;
   var orderHasMore = true.obs;
   var notificationToken = ''.obs;
+
+  ScrollController controller = ScrollController();
+
+  
 
   login({String username, String password}) {
     _userOperations.login(
@@ -73,7 +78,7 @@ class UserController extends GetxController implements HTTPErrorHandler {
   loginFromBase() {
     _userOperations.loginFromBase(
       (user) {
-        // print(user.addresses);
+        print(user.addresses);
         this.user = user;
         Get.snackbar(
           S.current.welcome,
@@ -159,6 +164,32 @@ class UserController extends GetxController implements HTTPErrorHandler {
     if (loadingMore.value) loadingMore.value = false;
     orderLoading.value = false;
   }
+
+addItems({completed = false}) async {
+    controller.addListener(() {
+      if (controller.position.maxScrollExtent == controller.position.pixels) {
+        // for (int i = 1; i < 2; i++) {
+          historyPage++;
+          // listLength++;
+          // list.add(Model(name: (listLength).toString()));
+          print(historyPage);
+           _userOperations
+        .getUserOrders(completed, completed ? historyPage.value : historyPage,
+            (List<Order> data, int count) {
+      if (completed) {
+        setHistory(data, count);
+      } else {
+        setOrders(data, count);
+      }
+      update();
+    }, handleError);
+  
+          update();
+        // }
+      }
+    });
+  }
+
 
   setHistory(List<Order> data, int count) {
     if (historyLoadingMore.value) {

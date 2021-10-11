@@ -24,6 +24,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen>
     with TickerProviderStateMixin {
   List<Order> orders = [];
   UserController _userController = Get.find<UserController>();
+  
   TabController _tabController;
   @override
   void initState() {
@@ -31,6 +32,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen>
     _tabController = TabController(length: 2, vsync: this);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _userController.getUserOrders();
+      _userController.addItems();
       _userController.getUserOrders(completed: true);
     });
   }
@@ -40,6 +42,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen>
       CartItemType type, Map<String, List<Order>> orders, Widget loadMore) {
     return orders.isNotEmpty
         ? SingleChildScrollView(
+          controller: _userController.controller,
             child: Column(
                 children: orders
                     .map((key, value) => MapEntry<String, Widget>(

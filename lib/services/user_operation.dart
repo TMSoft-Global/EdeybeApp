@@ -156,7 +156,7 @@ class UserOperations extends ServerOperations {
       method: "GET",
       onError: onError,
       onResponse: (res) {
-        print(res["results"]);
+        // print(res["results"][0]['deliveryAddresses']);
         var data = (res["results"] as List<dynamic>)
             .map((dynamic i) => Order.fromJson(i as Map<String, dynamic>))
             .toList();

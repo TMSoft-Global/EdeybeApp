@@ -2,20 +2,20 @@ import 'package:edeybe/models/deliveryModel.dart';
 import 'package:edeybe/models/product.dart';
 
 class Order {
-  Order({
-    this.name,
-    this.id,
-    this.image,
-    this.orderId,
-    this.quantity,
-    this.productTotal,
-    this.shippingAddress,
-    this.cartDeliveryCost,
-    this.paymentDate,
-    this.photos,
-    this.deliveryDate,
-    this.transactionId,
-  });
+  Order(
+      {this.name,
+      this.id,
+      this.image,
+      this.orderId,
+      this.quantity,
+      this.productTotal,
+      this.shippingAddress,
+      this.cartDeliveryCost,
+      this.paymentDate,
+      this.photos,
+      this.deliveryDate,
+      this.transactionId,
+      this.deliveryAddress});
 
   String name;
   String id;
@@ -29,13 +29,28 @@ class Order {
   String deliveryDate;
   double cartDeliveryCost;
   ShippingAddress shippingAddress;
+  DeliveryAddress deliveryAddress;
 
   factory Order.fromJson(Map<String, dynamic> json) => Order(
         name: json["productName"],
         id: json["_id"],
         orderId: json["productId"],
         quantity: json["quantity"],
-        shippingAddress: ShippingAddress.fromJson(json["shippingAddress"]),
+        shippingAddress: ShippingAddress(
+          lastName: json['shippingAddress']['lastName'],
+          firstName: json['shippingAddress']['firstName'],
+          email: json['shippingAddress']['email'],
+          phone: json['shippingAddress']['phone'],
+        ),
+        deliveryAddress: DeliveryAddress(
+          type: json['deliveryAddress']['type'],
+          id: json['deliveryAddress']['_id'],
+          lat: json['deliveryAddress']['lat'],
+          long: json['deliveryAddress']['long'],
+          displayText: json['deliveryAddress']['displayText'],
+          placeName: json['deliveryAddress']['placeName'],
+          // digitalAddress: "GA3316235"
+        ),
         productTotal: json["productTotal"],
         cartDeliveryCost: json["cartDeliveryCost"],
         paymentDate: json["paymentDate"],

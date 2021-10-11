@@ -45,8 +45,9 @@ class ShippingAddress {
         lastName: json["lastName"],
         phone: json["phone"],
         email: json["email"],
-        deliveryAddresses: List<DeliveryAddress>.from(
-            json["deliveryAddresses"].map((x) => DeliveryAddress.fromJson(x))),
+        // deliveryAddresses: List<DeliveryAddress>.from(
+        //     json["deliveryAddresses"].map((x) => DeliveryAddress.fromJson(x))),
+            
       );
       
 
@@ -89,9 +90,9 @@ class DeliveryAddress {
   factory DeliveryAddress.fromJson(Map<String, dynamic> json) =>
       DeliveryAddress(
         type: json["type"],
-        id: json["_id"],
-        lat: json["lat"],
-        long: json["long"],
+        id: json["_id"].toString(),
+        lat: json["lat"].toString(),
+        long: json["long"].toString(),
         displayText: json["displayText"],
         placeName: json["placeName"],
       );
