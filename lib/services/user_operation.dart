@@ -7,6 +7,7 @@ import 'package:edeybe/models/order.dart';
 import 'package:edeybe/models/product.dart';
 import 'package:edeybe/models/shippingAddress.dart';
 import 'package:edeybe/models/user.dart';
+import 'package:edeybe/screens/otp/otp.dart';
 import 'package:edeybe/services/server_operation.dart';
 
 class UserOperations extends ServerOperations {
@@ -64,9 +65,8 @@ class UserOperations extends ServerOperations {
       path: '/app/m/notification/save-token',
       schema: jsonEncode({"token": "$token"}),
       onResponse: (res) {
-       print(res);
+        print(res);
       },
-
     );
   }
 
@@ -108,7 +108,7 @@ class UserOperations extends ServerOperations {
     );
   }
 
- getAllCartItems(
+  getAllCartItems(
       void onResponse(List<Product> response), void onError(DioError error)) {
     dynamicRequest(
       path: "/getcart",
@@ -126,7 +126,6 @@ class UserOperations extends ServerOperations {
       },
     );
   }
-
 
   getAllAddresses(void onResponse(List<DeliveryAddress> response),
       void onError(DioError error)) {
@@ -150,13 +149,14 @@ class UserOperations extends ServerOperations {
 
   getUserOrders(bool completed, int page, Function(List<Order>, int) callback,
       void onError(DioError error)) {
+    print(page);
     dynamicRequest(
       path: "/account/orders/get${completed ? "history" : "orders"}?skip=$page",
       schema: "",
       method: "GET",
       onError: onError,
       onResponse: (res) {
-        // print(res["results"][0]['deliveryAddresses']);
+        print(res["results"]);
         var data = (res["results"] as List<dynamic>)
             .map((dynamic i) => Order.fromJson(i as Map<String, dynamic>))
             .toList();
@@ -197,10 +197,20 @@ class UserOperations extends ServerOperations {
     dynamicRequest(
         path: "/register",
         schema:
-            '{ "firstName": "$firstName" ,"lastName": "$lastName", "email": "$email" ,"password": "$password","confirmPassword":"$password"}',
+            '{"firstName": "$firstName" ,"lastName": "$lastName", "email": "$email" ,"password": "$password","confirmPassword":"$password"}',
         onResponse: (res) async {
+          // Get.offAll(Otp(data: "data", onVerify: () {}, onResend: () {}));
           login(callback, email: email, password: password);
         },
         showDialog: true);
+  }
+
+  verifyOtp({String otp,Function (dynamic) onResponse}) {
+    dynamicRequest(
+      path: "",
+      schema: "{}",
+      onResponse: onResponse,
+      showDialog: true,
+    );
   }
 }

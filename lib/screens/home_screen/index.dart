@@ -15,7 +15,7 @@ import 'category_tab/category_tab_screen.dart';
 
 class HomeIndex extends StatefulWidget {
   final int indexPage;
-  HomeIndex({this.indexPage= 0});
+  HomeIndex({this.indexPage = 0});
   @override
   _HomeIndexState createState() => _HomeIndexState();
 }
@@ -43,13 +43,19 @@ class _HomeIndexState extends State<HomeIndex> {
     super.dispose();
   }
 
-  void getCart(){
+  void getCart() {
     cartController.getCartITems();
+  }
+
+  void clearPageNo() {
+    _userCtrl.historyPage.value = 1;
+    _userCtrl.ordersHistory.clear();
+    _userCtrl.ordersHistoryCount = 0;
+    _userCtrl.page.value = 1;
   }
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       body: PageView(
         onPageChanged: (i) => setState(() {
@@ -66,6 +72,7 @@ class _HomeIndexState extends State<HomeIndex> {
       bottomNavigationBar: BottomNavigationBar(
         onTap: (i) {
           getCart();
+          clearPageNo();
           setState(() {
             current = i;
             pageController.jumpToPage(

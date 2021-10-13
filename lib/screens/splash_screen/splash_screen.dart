@@ -31,13 +31,18 @@ class _SplashScreenState extends State<SplashScreen>
       // Wait for Firebase to initialize and set `_initialized` state to true
       await Firebase.initializeApp();
       setFirebase(
-          onPressed: (str) {
-            return null;
-          },
-          dispatchService: _userController.setPushNotificationToken);
+        onPressed: (str) {
+          return null;
+        },
+        dispatchService: _userController.setPushNotificationToken,
+        noti: (val){
+          
+        }
+      );
+
       var _cookie = GetStorage().read("cookie");
       if (_cookie != null) {
-      // print(_cookie);
+        // print(_cookie);
         _userController.loginFromBase();
       } else {
         Get.off(ConfigurationScreen());

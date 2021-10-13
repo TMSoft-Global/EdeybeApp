@@ -832,4 +832,15 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       );
     });
   }
+
+
+Widget _buildVarientProduct(){
+  return Container(
+    child: Column(
+      children: [
+        
+      ],
+    ),
+  );
+}
 }

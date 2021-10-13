@@ -2,17 +2,18 @@ import 'dart:io';
 
 import 'package:edeybe/index.dart';
 import 'package:edeybe/utils/helper.dart';
+import 'package:edeybe/widgets/custom_dialog.dart';
 import 'package:edeybe/widgets/loading_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 
-final String domain = "http://d1c9-197-251-220-74.ngrok.io";
-// final String domain = "https://api.edeybe.com";
+// final String domain = "http://1223-197-251-220-74.ngrok.io";
+final String domain = "https://api.edeybe.com";
 
 abstract class ServerOperations {
-  final String _domain = "http://d1c9-197-251-220-74.ngrok.io";
-  // final String _domain = "https://api.edeybe.com";
+  // final String _domain = "http://1223-197-251-220-74.ngrok.io";
+  final String _domain = "https://api.edeybe.com";
   // final String _domain = "api.edeybe.com";
   final String _domainLocal = "172.18.72.61:5002";
   final String accessToken =
@@ -75,8 +76,12 @@ abstract class ServerOperations {
             }))
         .catchError((onerror) {
       var err = onerror as DioError;
-      print(err.response.data.toString());
-      String message = "${err.response.data['error'][0]}";
+      // print(err.response.data.toString());
+      Get.dialog(CustomDialog(
+        title: 'Timeout',
+        content: 'Request Timeout, please try again',
+      ));
+      // String message = "${err.response.data['error'][0]}";
       Get.back();
       onError(err);
     });

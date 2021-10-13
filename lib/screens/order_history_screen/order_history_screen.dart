@@ -117,7 +117,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen>
             titleSpacing: 0.0,
             elevation: 1,
             brightness: Brightness.dark,
-            title: Text(S.of(context).orderHistory,
+            title: Text("Orders",
                 textAlign: TextAlign.center,
                 style: Get.textTheme.bodyText1.copyWith(
                     color: Colors.white,
@@ -131,7 +131,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen>
                     tabs: <Widget>[
                       Tab(
                           child: Text(
-                        S.of(context).upComing,
+                        "New",
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                             color: Colors.white,

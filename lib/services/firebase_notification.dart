@@ -23,6 +23,7 @@ class NotifyHome extends StatelessWidget {
 var flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
 Future<Map<String, dynamic>> setFirebase(
     {@required Future<dynamic> Function(String) onPressed,
+    Function(String token) noti,
     Function dispatchService}) async {
   var initializationSettingsAndroid =
       new AndroidInitializationSettings('icon_notif');
@@ -49,8 +50,9 @@ Future<Map<String, dynamic>> setFirebase(
   });
 
   _firebaseMessaging.getToken().then((String token) {
-    // dispatchService(SetAppNotificationToken(token));
-    print("Push Messaging token: $token");
+    dispatchService(token);
+    noti(token);
+    // print("Push Messaging token: $token");
     sendToken(token);
     // Push messaging to this token later
   });

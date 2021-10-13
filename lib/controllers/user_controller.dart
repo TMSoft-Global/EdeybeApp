@@ -7,6 +7,7 @@ import 'package:edeybe/models/user.dart';
 import 'package:edeybe/screens/checkout_screen/index.dart';
 import 'package:edeybe/screens/configuration_screen/config_screen.dart';
 import 'package:edeybe/screens/home_screen/index.dart';
+import 'package:edeybe/screens/otp/otp.dart';
 import 'package:edeybe/services/user_operation.dart';
 import 'package:flutter/material.dart';
 
@@ -34,8 +35,6 @@ class UserController extends GetxController implements HTTPErrorHandler {
 
   ScrollController controller = ScrollController();
 
-  
-
   login({String username, String password}) {
     _userOperations.login(
       (user) async {
@@ -48,6 +47,7 @@ class UserController extends GetxController implements HTTPErrorHandler {
         await GetStorage().remove('anony-cookie');
         update();
         getDefaultAddress();
+        _userOperations.sendNotificationToken(notificationToken.value);
         // getDefaultCart();
         Get.offAll(HomeIndex());
       },
@@ -85,6 +85,7 @@ class UserController extends GetxController implements HTTPErrorHandler {
           "${user.firstname} ${user.lastname}",
           snackPosition: SnackPosition.BOTTOM,
         );
+
         getDefaultAddress();
         Get.offAll(HomeIndex());
         update();
@@ -102,6 +103,7 @@ class UserController extends GetxController implements HTTPErrorHandler {
         this.user = user;
         update();
         Get.offAll(HomeIndex());
+        // Get.offAll(Otp(data: "data", onVerify: (){}, onResend: (){}));
       },
     );
   }
@@ -165,31 +167,37 @@ class UserController extends GetxController implements HTTPErrorHandler {
     orderLoading.value = false;
   }
 
-addItems({completed = false}) async {
+  addItems({completed = false}) async {
     controller.addListener(() {
       if (controller.position.maxScrollExtent == controller.position.pixels) {
         // for (int i = 1; i < 2; i++) {
-          historyPage++;
-          // listLength++;
-          // list.add(Model(name: (listLength).toString()));
-          print(historyPage);
-           _userOperations
-        .getUserOrders(completed, completed ? historyPage.value : historyPage,
+        historyPage++;
+        loadingMore.value = true;
+        // listLength++;
+        // list.add(Model(name: (listLength).toString()));
+        // print(historyPage);
+        _userOperations.getUserOrders(
+            completed, completed ? historyPage.value : historyPage.value,
             (List<Order> data, int count) {
-      if (completed) {
-        setHistory(data, count);
-      } else {
-        setOrders(data, count);
-      }
-      update();
-    }, handleError);
-  
+          if (completed) {
+            setHistory(data, count);
+          } else {
+            if (data.isEmpty) {
+              // historyPage.value = 0;
+              loadingMore.value = false;
+            } else {
+              setOrders(data, count);
+              print(count);
+            }
+          }
           update();
+        }, handleError);
+
+        update();
         // }
       }
     });
   }
-
 
   setHistory(List<Order> data, int count) {
     if (historyLoadingMore.value) {
