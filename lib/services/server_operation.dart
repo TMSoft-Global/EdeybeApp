@@ -8,12 +8,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 
-// final String domain = "http://1223-197-251-220-74.ngrok.io";
-final String domain = "https://api.edeybe.com";
+final String domain = "https://1e9c-197-251-220-74.ngrok.io";
+// final String domain = "https://api.edeybe.com";
 
 abstract class ServerOperations {
-  // final String _domain = "http://1223-197-251-220-74.ngrok.io";
-  final String _domain = "https://api.edeybe.com";
+  final String _domain = "https://1e9c-197-251-220-74.ngrok.io";
+  // final String _domain = "https://api.edeybe.com";
   // final String _domain = "api.edeybe.com";
   final String _domainLocal = "172.18.72.61:5002";
   final String accessToken =
@@ -108,6 +108,7 @@ abstract class ServerOperations {
         );
       }
     }
+    
     // get store config
     await _getStore();
 

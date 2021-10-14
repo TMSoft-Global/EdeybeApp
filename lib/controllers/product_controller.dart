@@ -3,6 +3,7 @@ import 'package:edeybe/controllers/user_controller.dart';
 import 'package:edeybe/index.dart';
 import 'package:edeybe/interface/HTTPErrorHandler.dart';
 import 'package:edeybe/models/product.dart';
+import 'package:edeybe/models/productModel.dart';
 import 'package:edeybe/models/user.dart';
 import 'package:edeybe/services/product_operations.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ class ProductController extends GetxController implements HTTPErrorHandler {
   var operations = ProductOperation();
   var product = Product().obs;
   var products = <Product>[].obs;
+  var productDetail = ProductModel().obs;
   var merchantProducts = <Product>[].obs;
   var loading = false.obs;
   var loadingMore = false.obs;
@@ -161,6 +163,15 @@ class ProductController extends GetxController implements HTTPErrorHandler {
       if (loadingMore.value) loadingMore.value = false;
       update();
     }, handleError);
+  }
+
+  void getProductVariantByID(String id){
+    operations.getProductByID(id, (val){
+      print(val);
+      productDetail.value = val;
+      update();
+
+    },handleError);
   }
 
   void getProductsBySubcategoryId(Map<String, String> cat) {

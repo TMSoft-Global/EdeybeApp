@@ -48,8 +48,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) =>
-        _productController
-            .getProductbyId(_productController.product.value.sku));
+        // _productController
+        //     .getProductbyId(_productController.product.value.sku));
+    _productController
+        .getProductVariantByID(_productController.product.value.sku));
     super.initState();
   }
 
@@ -100,7 +102,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           //   iconSize: 25.w,
           //   icon: Icon(Icons.share),
           //   onPressed: () {
-              
+
           //   },
           // ),
         ],
@@ -475,6 +477,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     color: Colors.grey[200],
                   ),
                   _buildDeliveryWidget(),
+                   CustomDivider(
+                    height: 60.h,
+                    thickness: 60.h,
+                    color: Colors.grey[200],
+                  ),
+                  _buildVarientProduct(),
                   CustomDivider(
                     height: 5.h,
                     thickness: 5.h,
@@ -833,14 +841,16 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     });
   }
 
-
-Widget _buildVarientProduct(){
-  return Container(
-    child: Column(
-      children: [
-        
-      ],
-    ),
-  );
-}
+  Widget _buildVarientProduct() {
+    return GetBuilder<ProductController>(builder: (_p) {
+      return Container(
+        child: Column(
+          children: [
+            Text("Variant Widget"),
+            Text(_p.productDetail.value.price.toString())
+          ],
+        ),
+      );
+    });
+  }
 }

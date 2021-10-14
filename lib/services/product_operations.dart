@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:edeybe/models/product.dart';
+import 'package:edeybe/models/productModel.dart';
 import 'package:edeybe/services/server_operation.dart';
 import 'package:edeybe/utils/helper.dart';
 
@@ -77,6 +78,25 @@ class ProductOperation extends ServerOperations {
         onResponse(data, seller);
       },
     );
+  }
+
+  getProductByID(String id, void onResponse(ProductModel product),
+      void onError(DioError error)) {
+    print(id);
+    dynamicRequest(
+        path: "/product/v/$id",
+        schema: "",
+        onError: onError,
+        showDialog: true,
+        onResponse: (res) {
+          if (res != null) {
+            Map<String, dynamic> jsonData = res;
+            print(jsonData);
+            ProductModel data = ProductModel.fromJson(jsonData);
+            onResponse(data);
+            // print(res['_id']);
+          }
+        });
   }
 
   increaseProductCount(String id, void onResponse(Product response),

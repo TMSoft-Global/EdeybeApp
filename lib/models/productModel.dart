@@ -192,8 +192,8 @@ class Status {
 class MerchantLocation {
   String type;
   String displayText;
-  double lat;
-  double long;
+  String lat;
+  String long;
   String digitalAddress;
 
   MerchantLocation(
@@ -202,8 +202,8 @@ class MerchantLocation {
   MerchantLocation.fromJson(Map<String, dynamic> json) {
     type = json['type'];
     displayText = json['displayText'];
-    lat = json['lat'];
-    long = json['long'];
+    lat = json['lat'].toString();
+    long = json['long'].toString();
     digitalAddress = json['digitalAddress'];
   }
 
@@ -223,7 +223,7 @@ class Variants {
   List<VariantAttributes> variantAttributes;
   bool isDefaultPrice;
   int price;
-  Null images;
+  dynamic images;
   bool hasDiscount;
   String discountPrice;
   String variantId;
