@@ -8,6 +8,7 @@ import 'package:edeybe/models/product.dart';
 import 'package:edeybe/models/shippingAddress.dart';
 import 'package:edeybe/models/user.dart';
 import 'package:edeybe/screens/otp/otp.dart';
+import 'package:edeybe/screens/otp/userVerify.dart';
 import 'package:edeybe/services/server_operation.dart';
 
 class UserOperations extends ServerOperations {
@@ -192,24 +193,42 @@ class UserOperations extends ServerOperations {
       {String firstName,
       String lastName,
       String email,
-      String password,
-      Function(User) callback}) {
+      String password,}) {
     dynamicRequest(
         path: "/register",
         schema:
             '{"firstName": "$firstName" ,"lastName": "$lastName", "email": "$email" ,"password": "$password","confirmPassword":"$password"}',
         onResponse: (res) async {
-          // Get.offAll(Otp(data: "data", onVerify: () {}, onResend: () {}));
-          login(callback, email: email, password: password);
+          print(res);
+          if (res.containsKey("success")) {
+            Get.offAll(
+              OtpVerification(
+                phone: email,
+                timer: res['otpExpiresIn'],
+                id: res['id'],
+              ),
+            );
+            // onResponse(res);
+          }
         },
         showDialog: true);
   }
 
-  verifyOtp({String otp,Function (dynamic) onResponse}) {
+  verifyOtp(
+      {String otp,
+      String registerID,
+      String email,
+      String password,
+      Function(dynamic) onResponse,
+      Function(User) callback}) {
     dynamicRequest(
-      path: "",
-      schema: "{}",
-      onResponse: onResponse,
+      path: "/complete-registration",
+      schema: jsonEncode({"otp": "$otp", "registrationId": "$registerID"}),
+      onResponse: (res) {
+        print(res);
+        // onResponse(res);
+        // login(callback, email: email, password: password);
+      },
       showDialog: true,
     );
   }

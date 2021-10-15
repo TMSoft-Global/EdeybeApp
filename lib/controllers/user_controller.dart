@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:edeybe/controllers/address_controller.dart';
 import 'package:edeybe/index.dart';
@@ -99,11 +101,30 @@ class UserController extends GetxController implements HTTPErrorHandler {
       lastName: lastName,
       email: email,
       password: password,
+
+      // callback: (user) {
+      //   this.user = user;
+      //   update();
+      //   // Get.offAll(HomeIndex());
+      //   // Get.offAll(Otp(data: jsonEncode({"":""}), onVerify: (){}, onResend: (){}));
+      // },
+    );
+  }
+
+  verifyUser({String otp, String regId, String email, String password}) {
+    print(regId);
+    _userOperations.verifyOtp(
+      onResponse: (v) {
+        print(regId);
+      },
+      otp: otp,
+      registerID: regId,
+      email: email,
+      password: password,
       callback: (user) {
-        this.user = user;
-        update();
-        Get.offAll(HomeIndex());
-        // Get.offAll(Otp(data: "data", onVerify: (){}, onResend: (){}));
+        // this.user = user;
+        // update();
+        // Get.offAll(HomeIndex());
       },
     );
   }

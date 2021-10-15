@@ -2,6 +2,7 @@ import 'package:edeybe/controllers/address_controller.dart';
 import 'package:edeybe/controllers/cart_controller.dart';
 import 'package:edeybe/controllers/user_controller.dart';
 import 'package:edeybe/index.dart';
+import 'package:edeybe/screens/otp/userVerify.dart';
 import 'package:edeybe/screens/payment_method/add_payment_method/add_card.dart';
 import 'package:edeybe/screens/splash_screen/splash_screen.dart';
 import 'package:edeybe/services/simpleWeb.dart';
@@ -49,7 +50,7 @@ class _EdeybeAppState extends State<EdeybeApp> {
               GlobalWidgetsLocalizations.delegate,
             ],
             home: SplashScreen(),
-            // home: TransLoading(),
+            // home: OtpVerification(phone: "mccamo51@gmail.com", timer: 20,),
             supportedLocales: S.delegate.supportedLocales,
             // locale: DevicePreview.of(context).locale, // <--- Add the locale
             // builder: DevicePreview.appBuilder,
