@@ -122,9 +122,9 @@ class UserController extends GetxController implements HTTPErrorHandler {
       email: email,
       password: password,
       callback: (user) {
-        // this.user = user;
-        // update();
-        // Get.offAll(HomeIndex());
+        this.user = user;
+        update();
+        Get.offAll(HomeIndex());
       },
     );
   }

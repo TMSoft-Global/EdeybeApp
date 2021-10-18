@@ -204,8 +204,9 @@ class UserOperations extends ServerOperations {
             Get.offAll(
               OtpVerification(
                 phone: email,
-                timer: res['otpExpiresIn'],
-                id: res['id'],
+                timer: res['success']['otpExpiresIn'],
+                id: res['success']['id'],
+                password: password,
               ),
             );
             // onResponse(res);
@@ -224,11 +225,12 @@ class UserOperations extends ServerOperations {
     dynamicRequest(
       path: "/complete-registration",
       schema: jsonEncode({"otp": "$otp", "registrationId": "$registerID"}),
+      
       onResponse: (res) {
         print(res);
-        // onResponse(res);
-        // login(callback, email: email, password: password);
+        login(callback, email: email, password: password);
       },
+      
       showDialog: true,
     );
   }

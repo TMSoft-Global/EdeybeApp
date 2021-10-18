@@ -14,11 +14,13 @@ class OtpVerification extends StatefulWidget {
   final int timer;
   final String phone;
   final String id;
+  final String password;
 
   OtpVerification({
     @required this.timer,
     @required this.phone,
     @required this.id,
+    @required this.password,
   });
 
   @override
@@ -107,13 +109,13 @@ class _OtpVerificationState extends State<OtpVerification> {
     } else {
       print(verificationCodeController.text);
       print(widget.id);
-      print(widget.phone);
-      // _userController.verifyUser(
-      //   otp: verificationCodeController.text,
-      //   regId: widget.id,
-      //   email: widget.phone,
-      //   password: ""
-      // );
+      // print(widget.password);
+      _userController.verifyUser(
+        otp: verificationCodeController.text,
+        regId: widget.id,
+        email: widget.phone,
+        password:widget.password
+      );
       // _onOPTVerification(verificationCodeController.text);
     }
   }
