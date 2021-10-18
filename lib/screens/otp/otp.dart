@@ -23,7 +23,7 @@ class _OtpState extends State<Otp> with SingleTickerProviderStateMixin {
   // Constants
   final String data;
   _OtpState({this.data});
-  final int time = 60;
+  final int time = 300000;
   AnimationController _controller;
 
   var paymentMethodController = Get.find<PaymentMethodController>();

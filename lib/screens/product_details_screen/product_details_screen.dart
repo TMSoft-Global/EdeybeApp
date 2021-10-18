@@ -50,8 +50,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) =>
         // _productController
         //     .getProductbyId(_productController.product.value.sku));
-    _productController
-        .getProductVariantByID(_productController.product.value.sku));
+        _productController
+            .getProductVariantByID(_productController.product.value.sku));
     super.initState();
   }
 
@@ -477,7 +477,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     color: Colors.grey[200],
                   ),
                   _buildDeliveryWidget(),
-                   CustomDivider(
+                  CustomDivider(
                     height: 60.h,
                     thickness: 60.h,
                     color: Colors.grey[200],
@@ -844,13 +844,72 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   Widget _buildVarientProduct() {
     return GetBuilder<ProductController>(builder: (_p) {
       return Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          // color: Colors.white
+        ),
         child: Column(
           children: [
-            Text("Variant Widget"),
-            Text(_p.productDetail.value.price.toString())
+            Text("Available Variant", style: Get.theme.textTheme.subtitle1),
+            Wrap(
+              children: [
+                // for(var x in _p.productDetail.value.variants)
+                // varientButton(p: _p,onTap: (){
+                //   setState(() {
+                    
+                //   });
+                // })
+              ],
+            )
           ],
         ),
       );
     });
   }
+}
+
+Widget varientButton({var p,VoidCallback onTap,}){
+  return     GestureDetector(
+    onTap: onTap,
+    child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 7),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              height: 100.h,
+                              width: 100.w,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  image: DecorationImage(
+                                    image: NetworkImage(
+                                        "https://media.istockphoto.com/photos/running-shoes-picture-id1249496770?s=612x612"),
+                                  )),
+                            ),
+                            SizedBox(
+                              width: 15,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Type: " +
+                                    p.productDetail.value.variants[0]
+                                        .variantName),
+                                Text("Size: " +
+                                    p.productDetail.value.variants[0]
+                                        .variantAttributes[0].value),
+                                Text("Color: " +
+                                    p.productDetail.value.variants[0]
+                                        .variantAttributes[1].value),
+                              ],
+                            ),
+                          ],
+                        ),
+                        Checkbox(value: false, onChanged: (v) {})
+                      ],
+                    ),
+                  ),
+  );
 }

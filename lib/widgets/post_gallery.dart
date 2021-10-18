@@ -101,6 +101,7 @@ class _PostGalleryState extends State<PostGallery> {
   }
 
   Widget _buildGalleryItem(String url) {
+    print(url);
     return Center(
       child: PinchZoom(
         maxScale: 5.0,
