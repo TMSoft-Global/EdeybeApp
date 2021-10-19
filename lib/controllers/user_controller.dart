@@ -9,8 +9,8 @@ import 'package:edeybe/models/user.dart';
 import 'package:edeybe/screens/checkout_screen/index.dart';
 import 'package:edeybe/screens/configuration_screen/config_screen.dart';
 import 'package:edeybe/screens/home_screen/index.dart';
-import 'package:edeybe/screens/otp/otp.dart';
 import 'package:edeybe/services/user_operation.dart';
+import 'package:edeybe/utils/helper.dart';
 import 'package:flutter/material.dart';
 
 class UserController extends GetxController implements HTTPErrorHandler {
@@ -95,20 +95,30 @@ class UserController extends GetxController implements HTTPErrorHandler {
     );
   }
 
-  register({String firstName, String lastName, String email, String password}) {
-    _userOperations.createUser(
-      firstName: firstName,
-      lastName: lastName,
-      email: email,
-      password: password,
+  register(
+      {String firstName,
+      String lastName,
+      String email,
+      String password,
+      String confirmPass}) {
+    if (password != confirmPass) {
+      Helper.showError("Password Mis-match");
+    } else {
+      _userOperations.createUser(
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          password: password,
+          confirmpass: confirmPass
 
-      // callback: (user) {
-      //   this.user = user;
-      //   update();
-      //   // Get.offAll(HomeIndex());
-      //   // Get.offAll(Otp(data: jsonEncode({"":""}), onVerify: (){}, onResend: (){}));
-      // },
-    );
+          // callback: (user) {
+          //   this.user = user;
+          //   update();
+          //   // Get.offAll(HomeIndex());
+          //   // Get.offAll(Otp(data: jsonEncode({"":""}), onVerify: (){}, onResend: (){}));
+          // },
+          );
+    }
   }
 
   verifyUser({String otp, String regId, String email, String password}) {
@@ -127,6 +137,10 @@ class UserController extends GetxController implements HTTPErrorHandler {
         Get.offAll(HomeIndex());
       },
     );
+  }
+
+  resendRegisterOTP(String id) {
+    _userOperations.resendOTP(id);
   }
 
   logout() async {

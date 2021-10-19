@@ -33,7 +33,7 @@ class SubCategoryScreen extends StatelessWidget {
               children: [
                 Expanded(
                     flex: 2,
-                     child: Obx(() => SingleChildScrollView(
+                    child: Obx(() => SingleChildScrollView(
                           child: Wrap(
                             children: controller.categories
                                 .map((e) => GestureDetector(
@@ -156,7 +156,7 @@ class SubCategoryScreen extends StatelessWidget {
                                                             controller
                                                                 .selectedParent)
                                                   ])
-                                                : Get.off(
+                                                : Get.to(
                                                     ProductsView(type: item));
                                           },
                                         ),

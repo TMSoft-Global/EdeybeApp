@@ -71,7 +71,7 @@ class _HomeIndexState extends State<HomeIndex> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         onTap: (i) {
-          getCart();
+         getCart();
           clearPageNo();
           setState(() {
             current = i;

@@ -4,6 +4,7 @@ import 'package:edeybe/controllers/user_controller.dart';
 import 'package:edeybe/controllers/wishlist_controller.dart';
 import 'package:edeybe/models/product.dart' as ProductModel;
 import 'package:edeybe/screens/address_screen/address_screen.dart';
+import 'package:edeybe/screens/auth_screen/login_screen.dart';
 import 'package:edeybe/screens/checkout_screen/checkout_screen.dart';
 import 'package:edeybe/screens/home_screen/cart_tab/cart_tab_bottom_bar/bottom_bar.dart';
 import 'package:edeybe/screens/home_screen/index.dart';
@@ -509,11 +510,12 @@ class _CartScreenTabState extends State<CartScreenTab>
                                           (element.quantity ?? 1.00))),
                           quantity: _cartController.cartItems.length,
                           onGoToCheckout: () {
+                          _userController.isLoggedIn()?
                             Get.to(AddressScreen(
                               hasContinueButton: true,
                               onContinuePressed: () =>
                                   Get.off(CheckoutScreen()),
-                            ));
+                            )):Get.off(LoginScreen());
                           },
                         )
                       : null,

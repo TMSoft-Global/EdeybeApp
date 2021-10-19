@@ -590,7 +590,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
                                   ),
                                   borderRadius: BorderRadius.circular(5.w)),
                               contentPadding: EdgeInsets.all(10.w),
-                              hintText: S.of(context).cardHolderName,
+                              hintText: _payMethod==1 ? S.of(context).cardHolderName : "Name",
                               floatingLabelBehavior:
                                   FloatingLabelBehavior.never,
                               hintStyle: TextStyle(fontSize: 14.w),

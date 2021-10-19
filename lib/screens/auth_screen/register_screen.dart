@@ -13,13 +13,16 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  String _email, _password, _firstName, _lastName;
+  String _email, _password, _firstName, _lastName, _confirmPass;
   GlobalKey<FormState> _key = GlobalKey<FormState>();
   var userController = Get.find<UserController>();
   final FocusNode _firstname = FocusNode();
   final FocusNode _lastname = FocusNode();
   final FocusNode _emailF = FocusNode();
   final FocusNode _pass = FocusNode();
+  final FocusNode _confirmpass = FocusNode();
+  bool _obscureText = true;
+  bool _obscureText1 = true;
 
   KeyboardActionsConfig _buildConfig(BuildContext context) {
     return KeyboardActionsConfig(
@@ -33,6 +36,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         KeyboardActionsItem(focusNode: _lastname, toolbarButtons: [action]),
         KeyboardActionsItem(focusNode: _emailF, toolbarButtons: [action]),
         KeyboardActionsItem(focusNode: _pass, toolbarButtons: [action]),
+        KeyboardActionsItem(focusNode: _confirmpass, toolbarButtons: [action]),
       ],
     );
   }
@@ -160,17 +164,68 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             focusNode: _pass,
                             maxLines: 1,
                             enableSuggestions: true,
-                            obscureText: true,
+                            obscureText: _obscureText1,
                             keyboardType: TextInputType.visiblePassword,
                             validator: (value) => value.length >= 8
                                 ? null
                                 : S.of(context).password,
-                            onSaved: (newValue) => _password = newValue,
+                            onSaved: (newValue1) => _password = newValue1,
                             style: TextStyle(fontSize: 14.w),
                             decoration: InputDecoration(
+                              suffixIcon: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _obscureText1 = !_obscureText1;
+                                  });
+                                },
+                                child: Icon(
+                                  _obscureText1
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                  color: Colors.black,
+                                ),
+                              ),
                               contentPadding: EdgeInsets.symmetric(
                                   vertical: 2.w, horizontal: 10.w),
                               labelText: S.of(context).password,
+                              hintStyle: TextStyle(fontSize: 14.w),
+                              alignLabelWithHint: true,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 12.h,
+                          ),
+                          TextFormField(
+                            focusNode: _confirmpass,
+                            maxLines: 1,
+                            enableSuggestions: true,
+                            obscureText: _obscureText,
+                            keyboardType: TextInputType.visiblePassword,
+                            validator: (value) => value.length >= 8
+                                ? null
+                                : S.of(context).password,
+                            onSaved: (newValue) => _confirmPass = newValue,
+                            style: TextStyle(fontSize: 14.w),
+                            decoration: InputDecoration(
+                              suffixIcon: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _obscureText = !_obscureText;
+                                  });
+                                },
+                                child: Icon(
+                                  _obscureText
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: 2.w, horizontal: 10.w),
+                              labelText: "Confirm Password",
                               hintStyle: TextStyle(fontSize: 14.w),
                               alignLabelWithHint: true,
                               border: OutlineInputBorder(
@@ -193,6 +248,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   lastName: _lastName,
                                   email: _email,
                                   password: _password,
+                                  confirmPass: _confirmPass
                                 );
                               }
                             },

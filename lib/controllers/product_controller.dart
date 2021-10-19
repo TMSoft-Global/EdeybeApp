@@ -165,13 +165,12 @@ class ProductController extends GetxController implements HTTPErrorHandler {
     }, handleError);
   }
 
-  void getProductVariantByID(String id){
-    operations.getProductByID(id, (val){
+  void getProductVariantByID(String id) {
+    operations.getProductByID(id, (val) {
       print(val);
       productDetail.value = val;
       update();
-
-    },handleError);
+    }, handleError);
   }
 
   void getProductsBySubcategoryId(Map<String, String> cat) {

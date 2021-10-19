@@ -1,13 +1,12 @@
 import 'package:edeybe/controllers/cart_controller.dart';
 import 'package:edeybe/controllers/product_controller.dart';
-import 'package:edeybe/controllers/user_controller.dart';
 import 'package:edeybe/controllers/wishlist_controller.dart';
-import 'package:edeybe/screens/auth_screen/login_screen.dart';
 import 'package:edeybe/screens/checkout_screen/checkout_screen.dart';
 import 'package:edeybe/screens/product_details_screen/product_details_bottom_bar/bottom_bar.dart';
 import 'package:edeybe/screens/products_view/products.dart';
 // import 'package:edeybe/screens/review_screen/review_screen.dart';
 import 'package:edeybe/screens/wishlist_screen/wishlist_screen.dart';
+import 'package:edeybe/services/server_operation.dart';
 import 'package:edeybe/utils/cart_item_type.dart';
 import 'package:edeybe/utils/constant.dart';
 import 'package:edeybe/utils/helper.dart';
@@ -38,7 +37,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   final _productController = Get.find<ProductController>();
   final _cartController = Get.find<CartController>();
   final _wishlistController = Get.find<WishlistController>();
-  final _userCtrler = Get.find<UserController>();
   String _deliverto;
 
 // state functions
@@ -127,9 +125,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         CartDialog(
                             title: title,
                             type: CartItemType.Cart,
-                            onGoForward: () => _userCtrler.isLoggedIn()
-                                ? Get.off(CheckoutScreen())
-                                : Get.offAll(LoginScreen()),
+                            onGoForward: () => Get.off(CheckoutScreen()),
                             productTitle: _productController.product.value.name,
                             cartTotal: formatCurrency.format(
                                 _cartController.cartItems.fold(
@@ -160,11 +156,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     height: 260.h,
                     width: Get.width.w,
                     color: Constants.themeGreyLight,
-                    child: _productStl.product.value.mediaGallery != null
+                    child: _productStl.productDetail.value.photos != null
                         ? CarouselSlider(
                             showDots: false,
                             itemCount: _productController
-                                .product.value.mediaGallery?.length,
+                                .productDetail.value.photos?.length,
                             itemBuilder: (context, ind) => Container(
                               padding: EdgeInsets.all(10.w),
                               margin: EdgeInsets.only(right: 10.w),
@@ -179,12 +175,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                   currentImage: ind,
                                 )),
                                 child: Image(
-                                  image: CachedNetworkImageProvider(
-                                    _productStl.product.value.mediaGallery[ind]
-                                            .sm ??
+                                  image: NetworkImage(
+                                    "$domain/api/images/" +
+                                            _productStl.productDetail.value
+                                                .photos[ind].sm ??
                                         "",
                                   ),
-                                  // alignment: Alignment.center,
+                                  alignment: Alignment.center,
                                   fit: BoxFit.contain,
                                 ),
                               ),
@@ -196,7 +193,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     padding: EdgeInsets.only(left: 20.w, right: 40.w, top: 5.w),
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      _productStl.product.value.name ?? "".tr,
+                      _productStl.productDetail.value.productName ?? "".tr,
                       maxLines: 2,
                       style: TextStyle(
                           fontSize: 15.w, fontWeight: FontWeight.w600),
@@ -214,7 +211,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Text(
-                                "${S.of(context).brand} : ${_productStl.product.value.brand}"
+                                "${S.of(context).brand} : ${_productStl.productDetail.value.brand}"
                                     .tr,
                                 maxLines: 2,
                                 style: TextStyle(
@@ -856,58 +853,20 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         child: Column(
           children: [
             Text("Available Variant", style: Get.theme.textTheme.subtitle1),
-            // Wrap(
-            //   children: [
-            //     // for(var x in _p.productDetail.value.variants)
-            //     // varientButton(p: _p,onTap: (){
-            //     //   setState(() {
-
-            //     //   });
-            //     // })
-            //   ],
-            // )
-            //    ListView.builder(
-            // itemCount: 1 + _p.productDetail.value.variants.length,
-            // itemBuilder: (_, i) {
-            //   if (i == (_p.productDetail.value.variants.length)) {
-            //     return Container(
-            //         decoration: BoxDecoration(
-            //             borderRadius: BorderRadius.circular(8.w),
-            //             color: Colors.white,
-            //             boxShadow: [
-            //               BoxShadow(
-            //                 color: Constants.boxShadow,
-            //                 blurRadius: 2.w,
-            //                 offset: Offset(0, 3.4.w),
-            //               )
-            //             ]),
-            //         margin: EdgeInsets.all(10.w),
-            //         padding: EdgeInsets.all(0.0),
-            //         child: TextButton.icon(
-            //           style: TextButton.styleFrom(
-            //             shape: RoundedRectangleBorder(
-            //                 borderRadius: BorderRadius.circular(8.w)),
-            //           ),
-            //           icon: Icon(
-            //             Icons.add,
-            //           ),
-            //           label: Text(S.of(context).addPaymentMethod),
-            //           onPressed: () {
-            //             // Get.to(AddCardScreen());
-            //           },
-            //         ));
-            //   }
-            //   // PaymentCard paymentMethod = _paymentMethodController.cards[i];
-            //   // return PaymentMethodCard(
-            //   //   onCardPressed: widget.hasContinueButton
-            //   //       ? () => setState(() => _activeIndex = paymentMethod.number)
-            //   //       : null,
-            //   //   paymentMethod: paymentMethod,
-            //   //   onRemovePaymentMethod: () => _removeCard(paymentMethod),
-            //   //   isSelected: _activeIndex == paymentMethod.number,
-            //   // );
-            // })
-     
+            Wrap(
+              children: [
+                for (int x = 0; x < _p.productDetail.value.variants.length; x++)
+                  varientButton(
+                      p: _p,
+                      index: x,
+                      onTap: () {
+                        setState(() {
+                          print(
+                              "Has Variant ${_p.productDetail.value.variants[x].discountPrice == null ? _p.productDetail.value.price : _p.productDetail.value.variants[x].price}");
+                        });
+                      })
+              ],
+            )
           ],
         ),
       );
@@ -915,10 +874,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   }
 }
 
-Widget varientButton({
-  var p,
-  VoidCallback onTap,
-}) {
+Widget varientButton({var p, VoidCallback onTap, int index}) {
   return GestureDetector(
     onTap: onTap,
     child: Padding(
@@ -934,8 +890,8 @@ Widget varientButton({
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     image: DecorationImage(
-                      image: NetworkImage(
-                          "https://media.istockphoto.com/photos/running-shoes-picture-id1249496770?s=612x612"),
+                      image: NetworkImage("$domain/api/images/" +
+                          p.productDetail.value.photos[index].sm),
                     )),
               ),
               SizedBox(
@@ -944,13 +900,13 @@ Widget varientButton({
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                      "Type: " + p.productDetail.value.variants[0].variantName),
+                  Text("Type: " +
+                      p.productDetail.value.variants[index].variantName),
                   Text("Size: " +
-                      p.productDetail.value.variants[0].variantAttributes[0]
+                      p.productDetail.value.variants[index].variantAttributes[0]
                           .value),
                   Text("Color: " +
-                      p.productDetail.value.variants[0].variantAttributes[1]
+                      p.productDetail.value.variants[index].variantAttributes[1]
                           .value),
                 ],
               ),

@@ -498,27 +498,27 @@ class _AirtimeWigetState extends State<AirtimeWiget> {
                         "Mobile Money",
                         style: TextStyle(color: Constants.themeBlueLight),
                       ),
-                      Radio(
-                        value: 2,
-                        activeColor: Get.theme.primaryColor,
-                        groupValue: _payMethod,
-                        onChanged: (value) {
-                          numberController.clear();
-                          cvvCtrl.clear();
-                          expiryCtrl.clear();
-                          mobileCtrl.clear();
-                          voucherCtrl.clear();
-                          setState(() {
-                            _selectedCard = "";
-                            _paymentCard.paytype = value;
-                            _payMethod = value;
-                          });
-                        },
-                      ),
-                      Text(
-                        'Card',
-                        style: TextStyle(color: Constants.themeBlueLight),
-                      ),
+                      // Radio(
+                      //   value: 2,
+                      //   activeColor: Get.theme.primaryColor,
+                      //   groupValue: _payMethod,
+                      //   onChanged: (value) {
+                      //     numberController.clear();
+                      //     cvvCtrl.clear();
+                      //     expiryCtrl.clear();
+                      //     mobileCtrl.clear();
+                      //     voucherCtrl.clear();
+                      //     setState(() {
+                      //       _selectedCard = "";
+                      //       _paymentCard.paytype = value;
+                      //       _payMethod = value;
+                      //     });
+                      //   },
+                      // ),
+                      // Text(
+                      //   'Card',
+                      //   style: TextStyle(color: Constants.themeBlueLight),
+                      // ),
                     ],
                   ),
                   Visibility(

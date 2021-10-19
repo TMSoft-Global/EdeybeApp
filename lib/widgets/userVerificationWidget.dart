@@ -18,6 +18,7 @@ Widget OptVerifyWidget({
   @required void Function(String value) onChange,
   @required Future<bool> Function() onWillPop,
   @required Key scaffoldKey,
+  @required Widget timerWidget,
 }) {
   final size = MediaQuery.of(context).size;
   return WillPopScope(
@@ -185,10 +186,7 @@ Widget OptVerifyWidget({
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        "OTP expires in $timer",
-                        style: TextStyle(color: Colors.black54, fontSize: 15),
-                      ),
+                     timerWidget,
                       int.parse(timer) == 0
                           ? TextButton(
                               onPressed: onResend,

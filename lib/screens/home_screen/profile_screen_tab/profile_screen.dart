@@ -367,27 +367,28 @@ class ProfileScreen extends StatelessWidget {
           url: 'https://edeybe.com/m/faqs',
         )),
       ),
-      ListTile(
-        dense: true,
-        leading: Icon(
-          FontAwesomeIcons.questionCircle,
-          size: 20.w,
-          color: Constants.themeGreyDark,
-        ),
-        title: Text(
-          S.current.gotquestion,
-          style: TextStyle(fontSize: 14.w),
-        ),
-        trailing: Icon(
-          Icons.arrow_forward_ios,
-          size: 16.w,
-          color: Constants.themeGreyDark,
-        ),
-        onTap: () => Get.to(CustomWebView(
-          title: "Help",
-          url: 'https://edeybe.com/m/faqs',
-        )),
-      ),
+      // ListTile(
+      //   dense: true,
+      //   leading: Icon(
+      //     FontAwesomeIcons.questionCircle,
+      //     size: 20.w,
+      //     color: Constants.themeGreyDark,
+      //   ),
+      //   title: Text(
+      //     S.current.gotquestion,
+      //     style: TextStyle(fontSize: 14.w),
+      //   ),
+      //   trailing: Icon(
+      //     Icons.arrow_forward_ios,
+      //     size: 16.w,
+      //     color: Constants.themeGreyDark,
+      //   ),
+      //   onTap: () => Get.to(CustomWebView(
+      //     title: "Help",
+      //     url: 'https://edeybe.com/m/faqs',
+      //   )),
+      // ),
+     
       if (userController.isLoggedIn())
         ListTile(
           dense: true,

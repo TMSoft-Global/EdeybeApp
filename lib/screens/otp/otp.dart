@@ -23,7 +23,6 @@ class _OtpState extends State<Otp> with SingleTickerProviderStateMixin {
   // Constants
   final String data;
   _OtpState({this.data});
-  final int time = 300000;
   AnimationController _controller;
 
   var paymentMethodController = Get.find<PaymentMethodController>();
@@ -37,6 +36,7 @@ class _OtpState extends State<Otp> with SingleTickerProviderStateMixin {
   int _fifthDigit;
   int _sixthDigit;
 
+  final int time = 300;
   Timer timer;
   Timer resetStateTimer;
   int resendCount = 1;
