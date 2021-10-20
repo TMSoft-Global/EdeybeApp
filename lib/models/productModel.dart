@@ -27,6 +27,7 @@ class ProductModel {
   bool hasVariants;
   MerchantDetails merchantDetails;
   List<RelatedItems> relatedItems;
+  int quantity;
 
   ProductModel(
       {this.sId,
@@ -34,7 +35,7 @@ class ProductModel {
       this.subCategoryId,
       this.productName,
       this.brand,
-      this.price,
+      this.price = 0,
       this.description,
       this.photos,
       this.status,
@@ -50,13 +51,14 @@ class ProductModel {
       this.viewCount,
       this.purchaseCount,
       this.moderatorId,
-      this.discountPrice,
+      this.discountPrice = 0,
       this.percentageDiscount,
       this.updatedAt,
       this.variants,
       this.hasVariants,
       this.merchantDetails,
-      this.relatedItems});
+      this.relatedItems,
+      this.quantity = 1});
 
   ProductModel.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -106,6 +108,39 @@ class ProductModel {
       json['relatedItems'].forEach((v) {
         relatedItems.add(new RelatedItems.fromJson(v));
       });
+    }
+
+    ProductModel setQuantity(int quantity) {
+      return ProductModel(
+          sId: sId,
+          brand: brand,
+          categoryId: categoryId,
+          subCategoryId: subCategoryId,
+          subCategoryName: subCategoryName,
+          price: price,
+          productId: productId,
+          productName: productName,
+          percentageDiscount: percentageDiscount,
+          photos: photos,
+          purchaseCount: purchaseCount,
+          discountPrice: discountPrice,
+          merchantPhone: merchantPhone,
+          merchantDetails: merchantDetails,
+          merchantId: merchantId,
+          merchantLocation: merchantLocation,
+          moderatorId: moderatorId,
+          relatedItems: relatedItems,
+          hasDiscount: hasDiscount,
+          hasVariants: hasVariants,
+          status: status,
+          updatedAt: updatedAt,
+          weight: weight,
+          categoryName: categoryName,
+          viewCount: viewCount,
+          time: time,
+          description: description,
+          variants: variants,
+          quantity: quantity);
     }
   }
 
@@ -178,7 +213,7 @@ class Photos {
 }
 
 class Status {
-  bool instock;
+  bool instock = false;
 
   Status({this.instock});
 
@@ -295,7 +330,7 @@ class VariantAttributes {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
+    data['_id'] = sId;
     data['value'] = this.value;
     return data;
   }
@@ -332,9 +367,9 @@ class Images {
 }
 
 class MerchantDetails {
-  String companyName;
+  String companyName ;
 
-  MerchantDetails({this.companyName});
+  MerchantDetails({this.companyName });
 
   MerchantDetails.fromJson(Map<String, dynamic> json) {
     companyName = json['companyName'];
@@ -342,7 +377,7 @@ class MerchantDetails {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['companyName'] = this.companyName;
+    data['companyName'] = companyName;
     return data;
   }
 }

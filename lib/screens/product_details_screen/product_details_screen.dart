@@ -40,6 +40,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   final _wishlistController = Get.find<WishlistController>();
   final _userCtrler = Get.find<UserController>();
   String _deliverto;
+  String productAmount;
 
 // state functions
   void _setDeliveryLocation(text) {
@@ -50,11 +51,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) =>
-        // _productController
-        //     .getProductbyId(_productController.product.value.sku));
-        _productController
-            .getProductVariantByID(_productController.product.value.sku));
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _productController
+          .getProductVariantByID(_productController.product.value.sku);
+    });
+    // _productController
+    //     .getProductbyId(_productController.product.value.sku));
     super.initState();
   }
 
@@ -196,7 +198,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     padding: EdgeInsets.only(left: 20.w, right: 40.w, top: 5.w),
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      _productStl.product.value.name ?? "".tr,
+                      _productStl.productDetail.value.productName ?? "".tr,
                       maxLines: 2,
                       style: TextStyle(
                           fontSize: 15.w, fontWeight: FontWeight.w600),
@@ -214,7 +216,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Text(
-                                "${S.of(context).brand} : ${_productStl.product.value.brand}"
+                                "${S.of(context).brand} : ${_productStl.productDetail.value.brand}"
                                     .tr,
                                 maxLines: 2,
                                 style: TextStyle(
@@ -229,13 +231,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 children: [
                                   TextSpan(
                                     text: formatCurrency.format(
-                                        _productController
-                                            .product
-                                            .value
-                                            .priceRange
-                                            .minimumPrice
-                                            .finalPrice
-                                            .value),
+                                      _productController
+                                          .productDetail.value.discountPrice,
+                                    ),
                                     style: TextStyle(
                                         fontSize: 17.w,
                                         fontWeight: FontWeight.w800,
@@ -255,12 +253,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                       TextSpan(
                                         text: formatCurrency.format(
                                             _productController
-                                                .product
-                                                .value
-                                                .priceRange
-                                                .minimumPrice
-                                                .regularPrice
-                                                .value),
+                                                .productDetail.value.price),
                                         style: TextStyle(
                                             decoration:
                                                 TextDecoration.lineThrough,
@@ -417,13 +410,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 ),
                                 Text(
                                   _productController
-                                              .product.value.stockStatus !=
+                                              .productDetail.value.status ==
                                           null
-                                      ? _productStl.product.value
-                                              .stockStatus["instock"]
+                                      ? "_"
+                                      : _productController.productDetail.value
+                                              .status.instock
                                           ? "In stock"
-                                          : "Sold out"
-                                      : "_",
+                                          : "Sold out",
                                   style: TextStyle(
                                       fontSize: 12,
                                       fontWeight: FontWeight.normal),
@@ -465,7 +458,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                       fontWeight: FontWeight.normal),
                                 ),
                                 Text(
-                                  _productStl.product.value.sku ?? "",
+                                  _productStl.productDetail.value.productId ??
+                                      "",
                                   style: TextStyle(
                                       fontSize: 12,
                                       fontWeight: FontWeight.normal),
@@ -506,11 +500,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             ),
                           ],
                         ),
-                        if (_productStl.product.value.seller != null)
+                        // _productStl.productDetail.value.merchantDetails
+                        //             .companyName !=
+                        //         null?
                           ListTile(
                             tileColor: Colors.white,
                             title: Text(
-                              "${_productStl.product.value.seller.name}".tr,
+                              "${_productStl.productDetail.value.merchantDetails.companyName}"
+                                  .tr,
                               maxLines: 2,
                               style: TextStyle(
                                   fontSize: 13.w, fontWeight: FontWeight.w600),
@@ -521,7 +518,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               size: 15.w,
                             ),
                             onTap: () => Get.to(ProductsView(
-                                type: _productStl.product.value.seller)),
+                                type: _productStl.productDetail.value
+                                            .merchantDetails.companyName ==
+                                        null
+                                    ? "_"
+                                    : _productStl.productDetail.value
+                                        .merchantDetails.companyName)),
                           )
                       ],
                     ),
@@ -849,116 +851,99 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   Widget _buildVarientProduct() {
     return GetBuilder<ProductController>(builder: (_p) {
       return Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          // color: Colors.white
-        ),
-        child: Column(
-          children: [
-            Text("Available Variant", style: Get.theme.textTheme.subtitle1),
-            // Wrap(
-            //   children: [
-            //     // for(var x in _p.productDetail.value.variants)
-            //     // varientButton(p: _p,onTap: (){
-            //     //   setState(() {
-
-            //     //   });
-            //     // })
-            //   ],
-            // )
-            //    ListView.builder(
-            // itemCount: 1 + _p.productDetail.value.variants.length,
-            // itemBuilder: (_, i) {
-            //   if (i == (_p.productDetail.value.variants.length)) {
-            //     return Container(
-            //         decoration: BoxDecoration(
-            //             borderRadius: BorderRadius.circular(8.w),
-            //             color: Colors.white,
-            //             boxShadow: [
-            //               BoxShadow(
-            //                 color: Constants.boxShadow,
-            //                 blurRadius: 2.w,
-            //                 offset: Offset(0, 3.4.w),
-            //               )
-            //             ]),
-            //         margin: EdgeInsets.all(10.w),
-            //         padding: EdgeInsets.all(0.0),
-            //         child: TextButton.icon(
-            //           style: TextButton.styleFrom(
-            //             shape: RoundedRectangleBorder(
-            //                 borderRadius: BorderRadius.circular(8.w)),
-            //           ),
-            //           icon: Icon(
-            //             Icons.add,
-            //           ),
-            //           label: Text(S.of(context).addPaymentMethod),
-            //           onPressed: () {
-            //             // Get.to(AddCardScreen());
-            //           },
-            //         ));
-            //   }
-            //   // PaymentCard paymentMethod = _paymentMethodController.cards[i];
-            //   // return PaymentMethodCard(
-            //   //   onCardPressed: widget.hasContinueButton
-            //   //       ? () => setState(() => _activeIndex = paymentMethod.number)
-            //   //       : null,
-            //   //   paymentMethod: paymentMethod,
-            //   //   onRemovePaymentMethod: () => _removeCard(paymentMethod),
-            //   //   isSelected: _activeIndex == paymentMethod.number,
-            //   // );
-            // })
-     
-          ],
-        ),
-      );
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8.w),
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Constants.boxShadow,
+                  blurRadius: 3.4.w,
+                  offset: Offset(0, 3.4.w),
+                )
+              ]),
+          child: Table(
+            children: <TableRow>[
+              TableRow(
+                children: [
+                  Container(
+                    padding: EdgeInsets.only(bottom: 8.w, left: 15),
+                    child: Text("Variants",
+                        style: Get.textTheme.bodyText1.copyWith(
+                            fontWeight: FontWeight.bold, fontSize: 18.w)),
+                  ),
+                ],
+              ),
+              TableRow(
+                children: [
+                  Table(
+                    children: _productController.productDetail.value.variants
+                        .map<TableRow>((e) => TableRow(children: [
+                              varientButton(
+                                  type: e.variantName,
+                                  color: e.variantAttributes[0].value,
+                                  size: e.variantAttributes[1].value,
+                                  onTap: () {}),
+                            ]))
+                        .toList(),
+                  ),
+                ],
+              ),
+            ],
+          ));
     });
   }
 }
 
 Widget varientButton({
-  var p,
+  String type,
+  String size,
+  String color,
   VoidCallback onTap,
 }) {
   return GestureDetector(
     onTap: onTap,
-    child: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 7),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
+    child: Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 7),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                height: 100.h,
-                width: 100.w,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    image: DecorationImage(
-                      image: NetworkImage(
-                          "https://media.istockphoto.com/photos/running-shoes-picture-id1249496770?s=612x612"),
-                    )),
-              ),
-              SizedBox(
-                width: 15,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              Row(
                 children: [
-                  Text(
-                      "Type: " + p.productDetail.value.variants[0].variantName),
-                  Text("Size: " +
-                      p.productDetail.value.variants[0].variantAttributes[0]
-                          .value),
-                  Text("Color: " +
-                      p.productDetail.value.variants[0].variantAttributes[1]
-                          .value),
+                  Container(
+                    height: 100.h,
+                    width: 100.w,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        image: DecorationImage(
+                          image: NetworkImage(
+                              "https://media.istockphoto.com/photos/running-shoes-picture-id1249496770?s=612x612"),
+                        )),
+                  ),
+                  SizedBox(
+                    width: 15,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Type: $type"),
+                      Text("Size: " + size),
+                      Text("Color: " + color),
+                    ],
+                  ),
                 ],
               ),
+              Checkbox(
+                  value: false,
+                  onChanged: (v) {
+                    print(v);
+                  })
             ],
           ),
-          Checkbox(value: false, onChanged: (v) {})
-        ],
-      ),
+        ),
+        CustomDivider()
+      ],
     ),
   );
 }
