@@ -28,6 +28,7 @@ class ProductModel {
   MerchantDetails merchantDetails;
   List<RelatedItems> relatedItems;
   int quantity;
+  
 
   ProductModel(
       {this.sId,
@@ -266,6 +267,7 @@ class Variants {
   bool hasDiscount;
   String discountPrice;
   String variantId;
+  bool variantSelected = false;
 
   Variants(
       {this.variantName,
@@ -275,7 +277,8 @@ class Variants {
       this.images,
       this.hasDiscount,
       this.discountPrice,
-      this.variantId});
+      this.variantId,
+      bool variantSelected});
 
   Variants.fromJson(Map<String, dynamic> json) {
     variantName = json['variantName'];

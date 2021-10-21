@@ -1,12 +1,13 @@
 // import 'package:edeybe/controllers/cart_controller.dart';
 // import 'package:edeybe/controllers/product_controller.dart';
+// import 'package:edeybe/controllers/user_controller.dart';
 // import 'package:edeybe/controllers/wishlist_controller.dart';
+// import 'package:edeybe/screens/auth_screen/login_screen.dart';
 // import 'package:edeybe/screens/checkout_screen/checkout_screen.dart';
 // import 'package:edeybe/screens/product_details_screen/product_details_bottom_bar/bottom_bar.dart';
 // import 'package:edeybe/screens/products_view/products.dart';
 // // import 'package:edeybe/screens/review_screen/review_screen.dart';
 // import 'package:edeybe/screens/wishlist_screen/wishlist_screen.dart';
-// import 'package:edeybe/services/server_operation.dart';
 // import 'package:edeybe/utils/cart_item_type.dart';
 // import 'package:edeybe/utils/constant.dart';
 // import 'package:edeybe/utils/helper.dart';
@@ -37,7 +38,9 @@
 //   final _productController = Get.find<ProductController>();
 //   final _cartController = Get.find<CartController>();
 //   final _wishlistController = Get.find<WishlistController>();
+//   final _userCtrler = Get.find<UserController>();
 //   String _deliverto;
+//   String productAmount;
 
 // // state functions
 //   void _setDeliveryLocation(text) {
@@ -48,11 +51,12 @@
 
 //   @override
 //   void initState() {
-//     WidgetsBinding.instance.addPostFrameCallback((timeStamp) =>
-//         // _productController
-//         //     .getProductbyId(_productController.product.value.sku));
-//         _productController
-//             .getProductVariantByID(_productController.product.value.sku));
+//     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+//       _productController
+//           .getProductVariantByID(_productController.product.value.sku);
+//     });
+//     // _productController
+//     //     .getProductbyId(_productController.product.value.sku));
 //     super.initState();
 //   }
 
@@ -125,7 +129,9 @@
 //                         CartDialog(
 //                             title: title,
 //                             type: CartItemType.Cart,
-//                             onGoForward: () => Get.off(CheckoutScreen()),
+//                             onGoForward: () => _userCtrler.isLoggedIn()
+//                                 ? Get.off(CheckoutScreen())
+//                                 : Get.offAll(LoginScreen()),
 //                             productTitle: _productController.product.value.name,
 //                             cartTotal: formatCurrency.format(
 //                                 _cartController.cartItems.fold(
@@ -156,11 +162,11 @@
 //                     height: 260.h,
 //                     width: Get.width.w,
 //                     color: Constants.themeGreyLight,
-//                     child: _productStl.productDetail.value.photos != null
+//                     child: _productStl.product.value.mediaGallery != null
 //                         ? CarouselSlider(
 //                             showDots: false,
 //                             itemCount: _productController
-//                                 .productDetail.value.photos?.length,
+//                                 .product.value.mediaGallery?.length,
 //                             itemBuilder: (context, ind) => Container(
 //                               padding: EdgeInsets.all(10.w),
 //                               margin: EdgeInsets.only(right: 10.w),
@@ -175,13 +181,12 @@
 //                                   currentImage: ind,
 //                                 )),
 //                                 child: Image(
-//                                   image: NetworkImage(
-//                                     "$domain/api/images/" +
-//                                             _productStl.productDetail.value
-//                                                 .photos[ind].sm ??
+//                                   image: CachedNetworkImageProvider(
+//                                     _productStl.product.value.mediaGallery[ind]
+//                                             .sm ??
 //                                         "",
 //                                   ),
-//                                   alignment: Alignment.center,
+//                                   // alignment: Alignment.center,
 //                                   fit: BoxFit.contain,
 //                                 ),
 //                               ),
@@ -226,13 +231,9 @@
 //                                 children: [
 //                                   TextSpan(
 //                                     text: formatCurrency.format(
-//                                         _productController
-//                                             .product
-//                                             .value
-//                                             .priceRange
-//                                             .minimumPrice
-//                                             .finalPrice
-//                                             .value),
+//                                       _productController
+//                                           .productDetail.value.discountPrice,
+//                                     ),
 //                                     style: TextStyle(
 //                                         fontSize: 17.w,
 //                                         fontWeight: FontWeight.w800,
@@ -252,12 +253,7 @@
 //                                       TextSpan(
 //                                         text: formatCurrency.format(
 //                                             _productController
-//                                                 .product
-//                                                 .value
-//                                                 .priceRange
-//                                                 .minimumPrice
-//                                                 .regularPrice
-//                                                 .value),
+//                                                 .productDetail.value.price),
 //                                         style: TextStyle(
 //                                             decoration:
 //                                                 TextDecoration.lineThrough,
@@ -414,13 +410,13 @@
 //                                 ),
 //                                 Text(
 //                                   _productController
-//                                               .product.value.stockStatus !=
+//                                               .productDetail.value.status ==
 //                                           null
-//                                       ? _productStl.product.value
-//                                               .stockStatus["instock"]
+//                                       ? "_"
+//                                       : _productController.productDetail.value
+//                                               .status.instock
 //                                           ? "In stock"
-//                                           : "Sold out"
-//                                       : "_",
+//                                           : "Sold out",
 //                                   style: TextStyle(
 //                                       fontSize: 12,
 //                                       fontWeight: FontWeight.normal),
@@ -462,7 +458,8 @@
 //                                       fontWeight: FontWeight.normal),
 //                                 ),
 //                                 Text(
-//                                   _productStl.product.value.sku ?? "",
+//                                   _productStl.productDetail.value.productId ??
+//                                       "",
 //                                   style: TextStyle(
 //                                       fontSize: 12,
 //                                       fontWeight: FontWeight.normal),
@@ -503,11 +500,12 @@
 //                             ),
 //                           ],
 //                         ),
-//                         if (_productStl.product.value.seller != null)
+//                         if (_productStl.product.value.seller.name != null)
 //                           ListTile(
 //                             tileColor: Colors.white,
 //                             title: Text(
-//                               "${_productStl.product.value.seller.name}".tr,
+//                               "${_productStl.productDetail.value.merchantDetails.companyName}"
+//                                   .tr,
 //                               maxLines: 2,
 //                               style: TextStyle(
 //                                   fontSize: 13.w, fontWeight: FontWeight.w600),
@@ -518,7 +516,12 @@
 //                               size: 15.w,
 //                             ),
 //                             onTap: () => Get.to(ProductsView(
-//                                 type: _productStl.product.value.seller)),
+//                                 type: _productStl.productDetail.value
+//                                             .merchantDetails.companyName ==
+//                                         null
+//                                     ? "_"
+//                                     : _productStl.productDetail.value
+//                                         .merchantDetails.companyName)),
 //                           )
 //                       ],
 //                     ),
@@ -846,178 +849,99 @@
 //   Widget _buildVarientProduct() {
 //     return GetBuilder<ProductController>(builder: (_p) {
 //       return Container(
-//         decoration: BoxDecoration(
-//           borderRadius: BorderRadius.circular(20),
-//           // color: Colors.white
-//         ),
-//         child: Column(
-//           children: [
-//             Text("Available Variant", style: Get.theme.textTheme.subtitle1),
-//             Wrap(
-//               children: [
-//                 for (int x = 0; x < _p.productDetail.value.variants.length; x++)
-//                   varientButton(
-//                       p: _p,
-//                       index: x,
-//                       onTap: () {
-//                         setState(() {
-//                           print(
-//                               "Has Variant ${_p.productDetail.value.variants[x].discountPrice == null ? _p.productDetail.value.price : _p.productDetail.value.variants[x].price}");
-//                         });
-//                       })
-//               ],
-//             )
-//           ],
-//         ),
-//       );
+//           decoration: BoxDecoration(
+//               borderRadius: BorderRadius.circular(8.w),
+//               color: Colors.white,
+//               boxShadow: [
+//                 BoxShadow(
+//                   color: Constants.boxShadow,
+//                   blurRadius: 3.4.w,
+//                   offset: Offset(0, 3.4.w),
+//                 )
+//               ]),
+//           child: Table(
+//             children: <TableRow>[
+//               TableRow(
+//                 children: [
+//                   Container(
+//                     padding: EdgeInsets.only(bottom: 8.w, left: 15),
+//                     child: Text("Variants",
+//                         style: Get.textTheme.bodyText1.copyWith(
+//                             fontWeight: FontWeight.bold, fontSize: 18.w)),
+//                   ),
+//                 ],
+//               ),
+//               TableRow(
+//                 children: [
+//                   Table(
+//                     children: _productController.productDetail.value.variants
+//                         .map<TableRow>((e) => TableRow(children: [
+//                               varientButton(
+//                                   type: e.variantName,
+//                                   color: e.variantAttributes[0].value,
+//                                   size: e.variantAttributes[1].value,
+//                                   onTap: () {}),
+//                             ]))
+//                         .toList(),
+//                   ),
+//                 ],
+//               ),
+//             ],
+//           ));
 //     });
 //   }
 // }
 
-// Widget varientButton({var p, VoidCallback onTap, int index}) {
+// Widget varientButton({
+//   String type,
+//   String size,
+//   String color,
+//   VoidCallback onTap,
+// }) {
 //   return GestureDetector(
 //     onTap: onTap,
-//     child: Padding(
-//       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 7),
-//       child: Row(
-//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//         children: [
-//           Row(
+//     child: Column(
+//       children: [
+//         Padding(
+//           padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 7),
+//           child: Row(
+//             mainAxisAlignment: MainAxisAlignment.spaceBetween,
 //             children: [
-//               Container(
-//                 height: 100.h,
-//                 width: 100.w,
-//                 decoration: BoxDecoration(
-//                     borderRadius: BorderRadius.circular(10),
-//                     image: DecorationImage(
-//                       image: NetworkImage("$domain/api/images/" +
-//                           p.productDetail.value.photos[index].sm),
-//                     )),
-//               ),
-//               SizedBox(
-//                 width: 15,
-//               ),
-//               Column(
-//                 crossAxisAlignment: CrossAxisAlignment.start,
+//               Row(
 //                 children: [
-//                   Text("Type: " +
-//                       p.productDetail.value.variants[index].variantName),
-//                   Text("Size: " +
-//                       p.productDetail.value.variants[index].variantAttributes[0]
-//                           .value),
-//                   Text("Color: " +
-//                       p.productDetail.value.variants[index].variantAttributes[1]
-//                           .value),
+//                   Container(
+//                     height: 100.h,
+//                     width: 100.w,
+//                     decoration: BoxDecoration(
+//                         borderRadius: BorderRadius.circular(10),
+//                         image: DecorationImage(
+//                           image: NetworkImage(
+//                               "https://media.istockphoto.com/photos/running-shoes-picture-id1249496770?s=612x612"),
+//                         )),
+//                   ),
+//                   SizedBox(
+//                     width: 15,
+//                   ),
+//                   Column(
+//                     crossAxisAlignment: CrossAxisAlignment.start,
+//                     children: [
+//                       Text("Type: $type"),
+//                       Text("Size: " + size),
+//                       Text("Color: " + color),
+//                     ],
+//                   ),
 //                 ],
 //               ),
+//               Checkbox(
+//                   value: false,
+//                   onChanged: (v) {
+//                     print(v);
+//                   })
 //             ],
 //           ),
-//           Checkbox(value: false, onChanged: (v) {})
-//         ],
-//       ),
+//         ),
+//         CustomDivider()
+//       ],
 //     ),
 //   );
 // }
-
-
-
-
-//   // biuld payment method card
-//   Widget get _biuldPaymentMethod {
-//     return GetBuilder<PaymentMethodController>(
-//         builder: (_) => Container(
-//             // height: 30.w,
-//             margin: EdgeInsets.all(10.w),
-//             padding: EdgeInsets.all(10.0.w),
-//             decoration: BoxDecoration(
-//                 borderRadius: BorderRadius.circular(8.w),
-//                 color: Colors.white,
-//                 boxShadow: [
-//                   BoxShadow(
-//                     color: Constants.boxShadow,
-//                     blurRadius: 3.4.w,
-//                     offset: Offset(0, 3.4.w),
-//                   )
-//                 ]),
-//             child: Table(
-//               children: <TableRow>[
-//                 TableRow(
-//                   children: [
-//                     Container(
-//                       padding: EdgeInsets.only(bottom: 8.w),
-//                       child: Text(S.of(context).paymentMethod,
-//                           style: Get.textTheme.bodyText1.copyWith(
-//                               fontWeight: FontWeight.bold, fontSize: 18.w)),
-//                     ),
-//                   ],
-//                 ),
-//                 TableRow(
-//                   children: [
-//                     Table(
-//                       children: _paymentController.cards
-//                           .map<TableRow>((e) => TableRow(children: [
-//                                 _paymentMethodItem(
-//                                     e.type,
-//                                     e.number,
-//                                     e.id,
-//                                     CardUtils.getCardIcon(e.type),
-//                                     _selectedPaymentMethod == e.number,
-//                                     () => _setPaymentMethod)
-//                               ]))
-//                           .toList(),
-//                     ),
-//                   ],
-//                 ),
-//                 TableRow(children: [
-//                   Container(
-//                     child: Row(
-//                       crossAxisAlignment: CrossAxisAlignment.center,
-//                       children: <Widget>[
-//                         Expanded(
-//                           child: InkWell(
-//                             onTap: () => Get.to(PaymentMethodScreen(
-//                               hasContinueButton: true,
-//                               onContinuePressed: (pan) {
-//                                 print(pan);
-//                                 _setPaymentMethod(pan);
-//                                 Get.back();
-//                               },
-//                             )),
-//                             child: Row(
-//                               crossAxisAlignment: CrossAxisAlignment.center,
-//                               children: <Widget>[
-//                                 Container(
-//                                   margin:
-//                                       EdgeInsets.only(right: 10.w, bottom: 8.w),
-//                                   width: 60.w,
-//                                   height: 40.w,
-//                                   decoration: BoxDecoration(
-//                                     borderRadius: BorderRadius.circular(8.w),
-//                                     color: Colors.white,
-//                                     border: Border.symmetric(
-//                                         vertical: BorderSide(
-//                                             color: Constants.themeGreyDark),
-//                                         horizontal: BorderSide(
-//                                             color: Constants.themeGreyDark)),
-//                                   ),
-//                                   child: Icon(Icons.add, size: 25.w),
-//                                 ),
-//                                 Container(
-//                                   height: 40.w,
-//                                   child: Text(S.of(context).addCard,
-//                                       style: Get.textTheme.bodyText1
-//                                           .copyWith(fontSize: 16.w)),
-//                                 ),
-//                               ],
-//                             ),
-//                           ),
-//                         ),
-//                       ],
-//                     ),
-//                   ),
-//                 ]),
-//               ],
-//             )));
-//   }
-
-  

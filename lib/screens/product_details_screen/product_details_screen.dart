@@ -5,6 +5,7 @@ import 'package:edeybe/controllers/wishlist_controller.dart';
 import 'package:edeybe/screens/auth_screen/login_screen.dart';
 import 'package:edeybe/screens/checkout_screen/checkout_screen.dart';
 import 'package:edeybe/screens/product_details_screen/product_details_bottom_bar/bottom_bar.dart';
+import 'package:edeybe/screens/product_details_screen/variantWidget.dart';
 import 'package:edeybe/screens/products_view/products.dart';
 // import 'package:edeybe/screens/review_screen/review_screen.dart';
 import 'package:edeybe/screens/wishlist_screen/wishlist_screen.dart';
@@ -41,6 +42,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   final _userCtrler = Get.find<UserController>();
   String _deliverto;
   String productAmount;
+  bool variantSelected = false;
 
 // state functions
   void _setDeliveryLocation(text) {
@@ -500,9 +502,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             ),
                           ],
                         ),
-                        // _productStl.productDetail.value.merchantDetails
-                        //             .companyName !=
-                        //         null?
+                        if (_productStl.product.value.seller.name != null)
                           ListTile(
                             tileColor: Colors.white,
                             title: Text(
@@ -878,11 +878,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   Table(
                     children: _productController.productDetail.value.variants
                         .map<TableRow>((e) => TableRow(children: [
-                              varientButton(
-                                  type: e.variantName,
-                                  color: e.variantAttributes[0].value,
-                                  size: e.variantAttributes[1].value,
-                                  onTap: () {}),
+                              VariantWidget(
+                                productVariant: e,
+                              ),
                             ]))
                         .toList(),
                   ),
@@ -892,58 +890,55 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           ));
     });
   }
-}
 
-Widget varientButton({
-  String type,
-  String size,
-  String color,
-  VoidCallback onTap,
-}) {
-  return GestureDetector(
-    onTap: onTap,
-    child: Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 7),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    height: 100.h,
-                    width: 100.w,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        image: DecorationImage(
-                          image: NetworkImage(
-                              "https://media.istockphoto.com/photos/running-shoes-picture-id1249496770?s=612x612"),
-                        )),
-                  ),
-                  SizedBox(
-                    width: 15,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Type: $type"),
-                      Text("Size: " + size),
-                      Text("Color: " + color),
-                    ],
-                  ),
-                ],
-              ),
-              Checkbox(
-                  value: false,
-                  onChanged: (v) {
-                    print(v);
-                  })
-            ],
+  Widget varientButton({
+    String type,
+    String size,
+    String color,
+    bool isSelect = false,
+    VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 7),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      height: 100.h,
+                      width: 100.w,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          image: DecorationImage(
+                            image: NetworkImage(
+                                "https://media.istockphoto.com/photos/running-shoes-picture-id1249496770?s=612x612"),
+                          )),
+                    ),
+                    SizedBox(
+                      width: 15,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Type: $type"),
+                        Text("Size: " + size),
+                        Text("Color: " + color),
+                      ],
+                    ),
+                  ],
+                ),
+                Checkbox(value: isSelect, onChanged: (v) {})
+              ],
+            ),
           ),
-        ),
-        CustomDivider()
-      ],
-    ),
-  );
+          CustomDivider()
+        ],
+      ),
+    );
+  }
 }
