@@ -9,6 +9,7 @@ import 'package:edeybe/screens/product_details_screen/variantWidget.dart';
 import 'package:edeybe/screens/products_view/products.dart';
 // import 'package:edeybe/screens/review_screen/review_screen.dart';
 import 'package:edeybe/screens/wishlist_screen/wishlist_screen.dart';
+import 'package:edeybe/services/server_operation.dart';
 import 'package:edeybe/utils/cart_item_type.dart';
 import 'package:edeybe/utils/constant.dart';
 import 'package:edeybe/utils/helper.dart';
@@ -41,8 +42,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   final _wishlistController = Get.find<WishlistController>();
   final _userCtrler = Get.find<UserController>();
   String _deliverto;
-  String productAmount;
-  bool variantSelected = false;
+  int variantAmount = 0;
+  int discountedVarianAmount = 0;
+  String variantSelected;
 
 // state functions
   void _setDeliveryLocation(text) {
@@ -233,8 +235,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 children: [
                                   TextSpan(
                                     text: formatCurrency.format(
-                                      _productController
-                                          .productDetail.value.discountPrice,
+                                      variantAmount== 0
+                                          ? _productController
+                                              .productDetail.value.discountPrice
+                                          : variantAmount,
                                     ),
                                     style: TextStyle(
                                         fontSize: 17.w,
@@ -851,51 +855,111 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   Widget _buildVarientProduct() {
     return GetBuilder<ProductController>(builder: (_p) {
       return Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8.w),
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Constants.boxShadow,
-                  blurRadius: 3.4.w,
-                  offset: Offset(0, 3.4.w),
-                )
-              ]),
-          child: Table(
-            children: <TableRow>[
-              TableRow(
-                children: [
-                  Container(
-                    padding: EdgeInsets.only(bottom: 8.w, left: 15),
-                    child: Text("Variants",
-                        style: Get.textTheme.bodyText1.copyWith(
-                            fontWeight: FontWeight.bold, fontSize: 18.w)),
-                  ),
-                ],
-              ),
-              TableRow(
-                children: [
-                  Table(
-                    children: _productController.productDetail.value.variants
-                        .map<TableRow>((e) => TableRow(children: [
-                              VariantWidget(
-                                productVariant: e,
-                              ),
-                            ]))
-                        .toList(),
-                  ),
-                ],
-              ),
-            ],
-          ));
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8.w),
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Constants.boxShadow,
+                blurRadius: 3.4.w,
+                offset: Offset(0, 3.4.w),
+              )
+            ]),
+        child: Wrap(
+          children: [
+            for (int x = 0;
+                x < _productController.productDetail.value.variants.length;
+                x++)
+              varientButton(
+                  onTap: () {
+                    _setPrice(_productController
+                        .productDetail.value.variants[x].price);
+                  },
+                  index: x,
+                  id: _productController
+                      .productDetail.value.variants[x].variantId,
+                  size: _productController.productDetail.value.variants[x]
+                          .variantAttributes[0].sId +
+                      ": " +
+                      _productController.productDetail.value.variants[x]
+                          .variantAttributes[0].value,
+                  color: _productController.productDetail.value.variants[x]
+                          .variantAttributes[1].sId +
+                      ": " +
+                      _productController.productDetail.value.variants[x]
+                          .variantAttributes[1].value,
+                  type: _productController
+                      .productDetail.value.variants[x].variantName,
+                  image:
+                      "$domain/api/images/${_productController.productDetail.value.photos[x].sm}")
+          ],
+        ),
+      );
+
+      // child: Table(
+      //   children: <TableRow>[
+      //     TableRow(
+      //       children: [
+      //         Container(
+      //           padding: EdgeInsets.only(bottom: 8.w, left: 15),
+      //           child: Text("Variants",
+      //               style: Get.textTheme.bodyText1.copyWith(
+      //                   fontWeight: FontWeight.bold, fontSize: 18.w)),
+      //         ),
+      //       ],
+      //     ),
+      //     TableRow(
+      //       children: [
+      //         Table(
+      //           children: _productController.productDetail.value.variants
+      //               .map<TableRow>((e) => TableRow(children: [
+
+      //                     varientButton(
+      //                       id: e.variantId,
+      //                       size: e.variantAttributes[0].sId + ": "+ e.variantAttributes[0].value,
+      //                       color: e.variantAttributes[1].sId + ": "+ e.variantAttributes[1].value,
+      //                       type: e.variantName,
+      //                       image: "$domain/api/images/${_productController.productDetail.value.photos[0].sm}"
+      //                       // "https://media.istockphoto.com/photos/running-shoes-picture-id1249496770?s=612x612"
+      //                     )
+      //                   ]))
+      //               .toList(),
+      //         ),
+      //       ],
+      //     ),
+      //   ],
+      // ));
     });
+  }
+
+  void _setVariant(value) {
+    setState(() => variantSelected = value);
+  }
+
+  void _setPrice(value) {
+    if (value == null || value == "null") {
+      if(_productController.productDetail.value.hasDiscount){
+        
+      }
+      setState(() {
+        variantAmount = _productController.productDetail.value.price;
+        print(variantAmount);
+      });
+    } else {
+      setState(() {
+        variantAmount = value;
+        print(variantAmount);
+      });
+    }
   }
 
   Widget varientButton({
     String type,
     String size,
     String color,
-    bool isSelect = false,
+    String id,
+    int index,
+    String image,
     VoidCallback onTap,
   }) {
     return GestureDetector(
@@ -915,8 +979,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           image: DecorationImage(
-                            image: NetworkImage(
-                                "https://media.istockphoto.com/photos/running-shoes-picture-id1249496770?s=612x612"),
+                            image: NetworkImage("$image"),
                           )),
                     ),
                     SizedBox(
@@ -926,13 +989,26 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text("Type: $type"),
-                        Text("Size: " + size),
-                        Text("Color: " + color),
+                        Text("$color"),
+                        Text("$size"),
                       ],
                     ),
                   ],
                 ),
-                Checkbox(value: isSelect, onChanged: (v) {})
+                Container(
+                    alignment: Alignment.centerRight,
+                    child: Radio(
+                      toggleable: true,
+                      activeColor: Get.theme.primaryColor,
+                      groupValue: variantSelected,
+                      onChanged: (val){
+                        _setVariant(val);
+
+                    _setPrice(_productController
+                        .productDetail.value.variants[index].price);
+                      },
+                      value: id,
+                    ))
               ],
             ),
           ),

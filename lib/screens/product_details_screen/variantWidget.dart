@@ -4,19 +4,27 @@ import 'package:edeybe/index.dart';
 
 class VariantWidget extends StatefulWidget {
   final productVariant;
-  VariantWidget({this.productVariant});
+   bool isSelected;
+   Function onChange;
+
+  VariantWidget({this.productVariant, this.isSelected,this.onChange});
 
   @override
   _VariantWidgetState createState() => _VariantWidgetState();
 }
 
 class _VariantWidgetState extends State<VariantWidget> {
-  bool isSelected = false;
+  // bool isSelected = false;
+  // int selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
-    print(widget.productVariant);
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        // print(widget.index);
+        // setState(() {
+        //   isSelected = !isSelected;
+        // });
+      },
       child: Column(
         children: [
           Padding(
@@ -42,21 +50,21 @@ class _VariantWidgetState extends State<VariantWidget> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Type: ${widget.productVariant.variantAttributes[0].value}"),
-                        Text("Size: " + size),
-                        Text("Color: " + color),
+                        Text("Type: ${widget.productVariant.variantName}"),
+                        Text("${widget.productVariant.variantAttributes[0].value}".length >1 ? "Color:  ${widget.productVariant.variantAttributes[0].value}": "Size: " + "${widget.productVariant.variantAttributes[0].value}"),
+                        Text("${widget.productVariant.variantAttributes[1].value}".length >1 ? "Color:  ${widget.productVariant.variantAttributes[1].value}": "Size: " + "${widget.productVariant.variantAttributes[1].value}"),
                       ],
                     ),
                   ],
                 ),
                 Radio(
-                    value: isSelected,
-                    groupValue: widget.productVariant,
+                    value: widget.isSelected,
+                    groupValue:widget.productVariant.variantSelected ,
                     onChanged: (val) {
                       // setState(() {
-                      //   isSelected = val.variantSelected;
+                      //   selectedIndex = val;
                       // });
-                      print(val);
+                      // print(val);
                     })
               ],
             ),
@@ -65,6 +73,6 @@ class _VariantWidgetState extends State<VariantWidget> {
         ],
       ),
     );
-    ;
+    
   }
 }

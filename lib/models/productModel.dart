@@ -327,13 +327,13 @@ class VariantAttributes {
   VariantAttributes({this.sId, this.value});
 
   VariantAttributes.fromJson(Map<String, dynamic> json) {
-    sId = json['_id'];
+    sId = json['variantType'];
     value = json['value'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = sId;
+    data['variantType'] = sId;
     data['value'] = this.value;
     return data;
   }
