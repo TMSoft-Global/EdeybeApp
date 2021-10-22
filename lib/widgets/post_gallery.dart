@@ -2,13 +2,15 @@ import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:edeybe/index.dart';
-import 'package:edeybe/models/product.dart' as ProductModel;
+import 'package:edeybe/models/productModel.dart' as Pro;
+import 'package:edeybe/services/server_operation.dart';
+// import 'package:edeybe/models/product.dart' as ProductModel;
 import 'package:flutter/material.dart';
 import 'package:pinch_zoom/pinch_zoom.dart';
 import 'package:edeybe/widgets/loading_widget.dart';
 
 class PostGallery extends StatefulWidget {
-  final List<ProductModel.Image> images;
+  final List<Pro.Photos> images;
   final int currentImage;
   PostGallery({@required this.images, this.currentImage});
   @override
@@ -119,7 +121,7 @@ class _PostGalleryState extends State<PostGallery> {
     );
   }
 
-  Widget _buildGalleryThumbnail(ProductModel.Image img, ind) {
+  Widget _buildGalleryThumbnail(Pro.Photos img, ind) {
     return new GestureDetector(
       onTap: () => pageController.animateToPage(ind,
           duration: Duration(milliseconds: 500), curve: Curves.easeIn),
@@ -132,7 +134,7 @@ class _PostGalleryState extends State<PostGallery> {
             child: CachedNetworkImage(
               height: thumbSize,
               width: thumbSize,
-              imageUrl: img.sm,
+              imageUrl:img.sm,
               fit: BoxFit.fill,
               placeholder: (context, url) => SizedBox(
                   width: thumbSize - 20,
@@ -145,11 +147,11 @@ class _PostGalleryState extends State<PostGallery> {
     );
   }
 
-  List<Widget> _buildGalleryView(List<ProductModel.Image> items) {
+  List<Widget> _buildGalleryView(List<Pro.Photos> items) {
     return items.map((image) => _buildGalleryItem(image.lg)).toList();
   }
 
-  List<Widget> _buildGalleryItemThumbnail(List<ProductModel.Image> items) {
+  List<Widget> _buildGalleryItemThumbnail(List<Pro.Photos> items) {
     return items
         .asMap()
         .map((index, image) =>

@@ -1,3 +1,5 @@
+import 'package:edeybe/services/server_operation.dart';
+
 class ProductModel {
   String sId;
   String categoryId;
@@ -110,39 +112,6 @@ class ProductModel {
         relatedItems.add(new RelatedItems.fromJson(v));
       });
     }
-
-    ProductModel setQuantity(int quantity) {
-      return ProductModel(
-          sId: sId,
-          brand: brand,
-          categoryId: categoryId,
-          subCategoryId: subCategoryId,
-          subCategoryName: subCategoryName,
-          price: price,
-          productId: productId,
-          productName: productName,
-          percentageDiscount: percentageDiscount,
-          photos: photos,
-          purchaseCount: purchaseCount,
-          discountPrice: discountPrice,
-          merchantPhone: merchantPhone,
-          merchantDetails: merchantDetails,
-          merchantId: merchantId,
-          merchantLocation: merchantLocation,
-          moderatorId: moderatorId,
-          relatedItems: relatedItems,
-          hasDiscount: hasDiscount,
-          hasVariants: hasVariants,
-          status: status,
-          updatedAt: updatedAt,
-          weight: weight,
-          categoryName: categoryName,
-          viewCount: viewCount,
-          time: time,
-          description: description,
-          variants: variants,
-          quantity: quantity);
-    }
   }
 
   Map<String, dynamic> toJson() {
@@ -189,6 +158,40 @@ class ProductModel {
     }
     return data;
   }
+
+    ProductModel setQuantity(int quantity) {
+      return ProductModel(
+          sId: sId,
+          brand: brand,
+          categoryId: categoryId,
+          subCategoryId: subCategoryId,
+          subCategoryName: subCategoryName,
+          price: price,
+          productId: productId,
+          productName: productName,
+          percentageDiscount: percentageDiscount,
+          photos: photos,
+          purchaseCount: purchaseCount,
+          discountPrice: discountPrice,
+          merchantPhone: merchantPhone,
+          merchantDetails: merchantDetails,
+          merchantId: merchantId,
+          merchantLocation: merchantLocation,
+          moderatorId: moderatorId,
+          relatedItems: relatedItems,
+          hasDiscount: hasDiscount,
+          hasVariants: hasVariants,
+          status: status,
+          updatedAt: updatedAt,
+          weight: weight,
+          categoryName: categoryName,
+          viewCount: viewCount,
+          time: time,
+          description: description,
+          variants: variants,
+          quantity: quantity);
+    }
+
 }
 
 class Photos {
@@ -199,9 +202,15 @@ class Photos {
   Photos({this.sm, this.md, this.lg});
 
   Photos.fromJson(Map<String, dynamic> json) {
-    sm = json['sm'];
-    md = json['md'];
-    lg = json['lg'];
+   sm= json["sm"] == null
+            ? null
+            : "$domain/api/images/" + json["sm"];
+        md= json["md"] == null
+            ? null
+            : "$domain/api/images/" + json["md"];
+        lg= json["lg"] == null
+            ? null
+            : "$domain/api/images/" + json["lg"];
   }
 
   Map<String, dynamic> toJson() {
@@ -265,7 +274,7 @@ class Variants {
   int price;
   List<Images> images;
   bool hasDiscount;
-  String discountPrice;
+  dynamic discountPrice;
   String variantId;
   bool variantSelected = false;
 

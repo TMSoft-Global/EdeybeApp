@@ -16,6 +16,7 @@ import 'package:edeybe/utils/helper.dart';
 import 'package:edeybe/widgets/Shimmer.dart';
 import 'package:edeybe/widgets/capsule.dart';
 import 'package:edeybe/widgets/cart_dialog.dart';
+import 'package:edeybe/widgets/custom_dialog.dart';
 import 'package:edeybe/widgets/custom_divider.dart';
 import 'package:edeybe/widgets/money_widget.dart';
 import 'package:edeybe/widgets/post_gallery.dart';
@@ -42,9 +43,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   final _wishlistController = Get.find<WishlistController>();
   final _userCtrler = Get.find<UserController>();
   String _deliverto;
-  int variantAmount = 0;
-  int discountedVarianAmount = 0;
+  dynamic variantAmount = 0;
+  dynamic discountedVarianAmount = 0;
   String variantSelected;
+  String variantID;
 
 // state functions
   void _setDeliveryLocation(text) {
@@ -181,12 +183,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               child: GestureDetector(
                                 onTap: () => Get.dialog(PostGallery(
                                   images:
-                                      _productStl.product.value.mediaGallery,
+                                       _productStl.productDetail.value.photos,
                                   currentImage: ind,
                                 )),
                                 child: Image(
                                   image: CachedNetworkImageProvider(
-                                    _productStl.product.value.mediaGallery[ind]
+                                    _productStl.productDetail.value.photos[ind]
                                             .sm ??
                                         "",
                                   ),
@@ -235,10 +237,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 children: [
                                   TextSpan(
                                     text: formatCurrency.format(
-                                      variantAmount== 0
+                                      discountedVarianAmount == 0
                                           ? _productController
                                               .productDetail.value.discountPrice
-                                          : variantAmount,
+                                          : discountedVarianAmount,
                                     ),
                                     style: TextStyle(
                                         fontSize: 17.w,
@@ -258,8 +260,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                     children: [
                                       TextSpan(
                                         text: formatCurrency.format(
-                                            _productController
-                                                .productDetail.value.price),
+                                           variantAmount== 0 ? _productController
+                                                .productDetail.value.price: variantAmount),
                                         style: TextStyle(
                                             decoration:
                                                 TextDecoration.lineThrough,
@@ -339,7 +341,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                         .withOpacity(0.2.w),
                                     borderColor: Colors.transparent,
                                     child: Text(
-                                      "${_productStl.product.value.priceRange.minimumPrice.discount.percentOff} % ${S.of(context).off}",
+                                      "${_productStl.productDetail.value.percentageDiscount} % ${S.of(context).off}",
                                       style: Get.textTheme.bodyText1.copyWith(
                                           color: Get.theme.primaryColor,
                                           fontSize: 13.w),
@@ -867,13 +869,20 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             ]),
         child: Wrap(
           children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal:15.0),
+              child: Text("Variants", style: TextStyle(fontSize: 20))
+            ),
+            CustomDivider(),
             for (int x = 0;
                 x < _productController.productDetail.value.variants.length;
                 x++)
               varientButton(
                   onTap: () {
-                    _setPrice(_productController
-                        .productDetail.value.variants[x].price);
+                    _setPrice(
+                        _productController
+                            .productDetail.value.variants[x].price,
+                        x);
                   },
                   index: x,
                   id: _productController
@@ -936,20 +945,29 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     setState(() => variantSelected = value);
   }
 
-  void _setPrice(value) {
-    if (value == null || value == "null") {
-      if(_productController.productDetail.value.hasDiscount){
-        
+  void _setPrice(value, int x) {
+    if (_productController.productDetail.value.hasDiscount) {
+      if (value == null || value == "null") {
+        setState(() {
+
+          variantAmount = _productController.productDetail.value.price;
+          discountedVarianAmount = _productController
+                      .productDetail.value.variants[x].discountPrice ==
+                  null
+              ? _productController.productDetail.value.discountPrice
+              : _productController
+                  .productDetail.value.variants[x].discountPrice;
+          print(discountedVarianAmount);
+        });
+      } else {
+        setState(() {
+          variantAmount = value;
+          discountedVarianAmount =
+              _productController.productDetail.value.variants[x].discountPrice;
+          print(discountedVarianAmount);
+          // print(variantAmount);
+        });
       }
-      setState(() {
-        variantAmount = _productController.productDetail.value.price;
-        print(variantAmount);
-      });
-    } else {
-      setState(() {
-        variantAmount = value;
-        print(variantAmount);
-      });
     }
   }
 
@@ -976,12 +994,46 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     Container(
                       height: 100.h,
                       width: 100.w,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          image: DecorationImage(
-                            image: NetworkImage("$image"),
-                          )),
+                      child: CarouselSlider(
+                              showDots: false,
+                              itemCount: _productController
+                                  .product.value.mediaGallery?.length,
+                              itemBuilder: (context, ind) => Container(
+                                padding: EdgeInsets.all(10.w),
+                                margin: EdgeInsets.only(right: 10.w),
+                                width: Get.width.w,
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(12.w)),
+                                child: GestureDetector(
+                                  onTap: () => Get.dialog(PostGallery(
+                                    images:
+                                        _productController.productDetail.value.photos,
+                                    currentImage: ind,
+                                  )),
+                                  child:
+                                   Image(
+                                    image: CachedNetworkImageProvider(
+                                     _productController.productDetail.value.photos[index]
+                                              .sm ??
+                                          "",
+                                    ),
+                                    // alignment: Alignment.center,
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                              ),
+                            ),
                     ),
+                    // Container(
+                    //   height: 100.h,
+                    //   width: 100.w,
+                    //   decoration: BoxDecoration(
+                    //       borderRadius: BorderRadius.circular(10),
+                    //       image: DecorationImage(
+                    //         image: NetworkImage("$image"),
+                    //       )),
+                    // ),
                     SizedBox(
                       width: 15,
                     ),
@@ -1001,11 +1053,17 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       toggleable: true,
                       activeColor: Get.theme.primaryColor,
                       groupValue: variantSelected,
-                      onChanged: (val){
+                      onChanged: (val) {
+                        setState(() {
+                          variantID = _productController
+                                .productDetail.value.variants[index].variantId;
+                        });
                         _setVariant(val);
 
-                    _setPrice(_productController
-                        .productDetail.value.variants[index].price);
+                        _setPrice(
+                            _productController
+                                .productDetail.value.variants[index].price,
+                            index);
                       },
                       value: id,
                     ))
