@@ -97,7 +97,7 @@ class ProductModel {
     percentageDiscount = json['percentageDiscount'];
     updatedAt = json['updatedAt'];
     if (json['variants'] != null) {
-      variants = new List<Variants>();
+      variants = <Variants>[];
       json['variants'].forEach((v) {
         variants.add(new Variants.fromJson(v));
       });

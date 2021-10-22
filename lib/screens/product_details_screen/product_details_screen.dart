@@ -151,7 +151,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     });
                   }
                 : null,
-            quantity: _productController.product.value?.quantity,
+            quantity: _productController.productDetail.value?.quantity,
           )),
       body: Shimmer(
           linearGradient: Constants.shimmerGradient,
