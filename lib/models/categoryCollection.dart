@@ -1,4 +1,5 @@
 import 'package:edeybe/models/product.dart';
+import 'package:edeybe/models/productModel.dart';
 import 'package:edeybe/models/subcategory.dart';
 
 class CatergoryCollection {
@@ -15,9 +16,9 @@ class CatergoryCollection {
   String id;
   List<dynamic> image;
   List<SubCategory> children;
-  List<Product> recommended;
-  List<Product> newArrival;
-  List<Product> bestSeller;
+  List<ProductModel> recommended;
+  List<ProductModel> newArrival;
+  List<ProductModel> bestSeller;
 
   factory CatergoryCollection.fromJson(Map<String, dynamic> json) =>
       CatergoryCollection(
@@ -26,16 +27,16 @@ class CatergoryCollection {
         image: json["banners"] == null ? [] : json["banners"],
         newArrival: json["newArrivals"] == null
             ? null
-            : List<Product>.from(
-                json["newArrivals"].map((p) => Product.fromJson(p))),
+            : List<ProductModel>.from(
+                json["newArrivals"].map((p) => ProductModel.fromJson(p))),
         recommended: json["recommendedProducts"] == null
             ? null
-            : List<Product>.from(
-                json["recommendedProducts"].map((p) => Product.fromJson(p))),
+            : List<ProductModel>.from(
+                json["recommendedProducts"].map((p) => ProductModel.fromJson(p))),
         bestSeller: json["bestSellers"] == null
             ? null
-            : List<Product>.from(
-                json["bestSellers"].map((p) => Product.fromJson(p))),
+            : List<ProductModel>.from(
+                json["bestSellers"].map((p) => ProductModel.fromJson(p))),
         children: List<SubCategory>.from(
             json["subCategories"].map((x) => SubCategory.fromJson(x))),
       );

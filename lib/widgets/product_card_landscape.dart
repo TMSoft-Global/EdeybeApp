@@ -1,5 +1,6 @@
 import 'package:edeybe/index.dart';
-import 'package:edeybe/models/product.dart' as ProductModel;
+import 'package:edeybe/models/productModel.dart' as Pro;
+// import 'package:edeybe/models/product.dart' as ProductModel;
 import 'package:edeybe/utils/constant.dart';
 import 'package:edeybe/utils/helper.dart';
 import 'package:edeybe/widgets/ShimmerLoader.dart';
@@ -27,7 +28,7 @@ class ProductCardLandscape extends StatelessWidget {
   final String title;
   final num price;
   final num oldPrice;
-  final ProductModel.Image image;
+  final Pro.Photos image;
   final bool isFav;
   final bool isLoading;
   final double rating;

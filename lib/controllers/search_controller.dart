@@ -2,13 +2,14 @@ import 'package:dio/dio.dart';
 import 'package:edeybe/index.dart';
 import 'package:edeybe/interface/HTTPErrorHandler.dart';
 import 'package:edeybe/models/product.dart';
+import 'package:edeybe/models/productModel.dart';
 import 'package:edeybe/services/search_operation.dart';
 import 'package:edeybe/widgets/product_card_landscape.dart';
 import 'package:flutter/material.dart';
 
 class SearchController extends GetxController implements HTTPErrorHandler {
   var operations = SearchOperation();
-  var products = <Product>[].obs;
+  var products = <ProductModel>[].obs;
   var queryTxt = "".obs;
   var searching = false.obs;
   var connectionError = false.obs;
@@ -39,7 +40,7 @@ class SearchController extends GetxController implements HTTPErrorHandler {
   void setListkey(GlobalKey<AnimatedListState> key) => listKey = key;
   void cancel() {
     clearText();
-    products.value = <Product>[].obs;
+    products.value = <ProductModel>[].obs;
     update();
   }
 
@@ -63,11 +64,11 @@ class SearchController extends GetxController implements HTTPErrorHandler {
                     child: Container(
                       padding: EdgeInsets.symmetric(vertical: 5.w),
                       child: ProductCardLandscape(
-                        title: p.name,
-                        image: p.image,
-                        discount: p.priceRange.minimumPrice.discount.percentOff,
-                        price: p.priceRange.minimumPrice.finalPrice.value,
-                        oldPrice: p.priceRange.minimumPrice.regularPrice.value,
+                        title: p.productName,
+                        image: p.photos[0],
+                        discount: p.discountPrice,
+                        price: p.price,
+                        oldPrice: p.price,
                         onAddToWishList: () => null,
                         onViewDetails: null,
                         isFav: false,

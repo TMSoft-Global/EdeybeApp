@@ -1,6 +1,7 @@
 import 'package:edeybe/controllers/wishlist_controller.dart';
 import 'package:edeybe/index.dart';
 import 'package:edeybe/models/product.dart';
+import 'package:edeybe/models/productModel.dart';
 import 'package:edeybe/widgets/custom_dialog.dart';
 import 'package:flutter/material.dart';
 
@@ -15,8 +16,8 @@ class Helper {
 
   static bool isFavourite(String id, WishlistController _wishlistController) {
     var inFav = _wishlistController.wishlistItems
-        .firstWhere((product) => product.sku == id, orElse: () => Product());
-    return inFav.sku != null;
+        .firstWhere((product) => product.productId == id, orElse: () => ProductModel());
+    return inFav.productId != null;
   }
 
   static Future<bool> signInRequired(String message, Function() onSign) {

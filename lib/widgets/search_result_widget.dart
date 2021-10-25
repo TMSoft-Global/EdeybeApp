@@ -173,14 +173,11 @@ class _SearchResultWidgetState extends State<SearchResultWidget>
                                 child: Container(
                                   padding: EdgeInsets.symmetric(vertical: 5.w),
                                   child: ProductCardLandscape(
-                                    title: p.name,
-                                    image: p.image,
-                                    discount: p.priceRange.minimumPrice.discount
-                                        .percentOff,
-                                    price: p.priceRange.minimumPrice.finalPrice
-                                        .value,
-                                    oldPrice: p.priceRange.minimumPrice
-                                        .regularPrice.value,
+                                    title: p.productName,
+                                    image: p.photos[0],
+                                    discount: p.discountPrice,
+                                    price: p.price,
+                                    oldPrice: p.price,
                                     onAddToWishList: () =>
                                         wishlistController.addToWishlist(
                                             p,
@@ -195,17 +192,14 @@ class _SearchResultWidgetState extends State<SearchResultWidget>
                                                           _productController
                                                               .product
                                                               .value
-                                                              .name,
+                                                              .productName,
                                                       cartTotal: formatCurrency.format(
                                                           wishlistController.wishlistItems.fold(
                                                               0,
                                                               (previousValue,
                                                                       element) =>
                                                                   element
-                                                                      .priceRange
-                                                                      .minimumPrice
-                                                                      .finalPrice
-                                                                      .value +
+                                                                      .price +
                                                                   previousValue))),
                                                   barrierDismissible: true,
                                                 )),
@@ -216,7 +210,7 @@ class _SearchResultWidgetState extends State<SearchResultWidget>
                                       Get.to(ProductDetailsScreen());
                                     },
                                     isFav: Helper.isFavourite(
-                                        p.sku, wishlistController),
+                                        p.productId, wishlistController),
                                     rating: 5.0,
                                     raters: 23,
                                   ),

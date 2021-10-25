@@ -1,4 +1,5 @@
 import 'package:edeybe/models/product.dart';
+import 'package:edeybe/models/productModel.dart';
 
 class SlugCollection {
   SlugCollection({this.name, this.image, this.slug, this.products});
@@ -6,7 +7,7 @@ class SlugCollection {
   String name;
   String slug;
   List<dynamic> image;
-  List<Product> products;
+  List<ProductModel> products;
 
   factory SlugCollection.fromJson(Map<String, dynamic> json) => SlugCollection(
         name: json["name"],
@@ -14,8 +15,8 @@ class SlugCollection {
         image: json["banners"] != null ? json["banners"] : [],
         products: json["products"] == null
             ? null
-            : List<Product>.from(
-                json["products"].map((p) => Product.fromJson(p))),
+            : List<ProductModel>.from(
+                json["products"].map((p) => ProductModel.fromJson(p))),
       );
 
   Map<String, dynamic> toJson() => {

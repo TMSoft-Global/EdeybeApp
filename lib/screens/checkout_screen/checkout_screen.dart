@@ -472,15 +472,15 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           0,
           (previousValue, element) =>
               previousValue +
-              (element.priceRange.minimumPrice.finalPrice.value *
+              (element.discountPrice *
                   (element.quantity)));
       var totalDiscount = _cartController.cartItems.fold(
           0,
           (previousValue, element) =>
               previousValue +
-              (element.priceRange.minimumPrice.finalPrice.value *
+              (element.discountPrice *
                       element.quantity) *
-                  (element.priceRange.minimumPrice.discount.percentOff / 100));
+                  (element.discountPrice));
       return Container(
         margin: EdgeInsets.fromLTRB(10.w, 20.w, 10.w, 10.w),
         padding: EdgeInsets.all(10.0.w),

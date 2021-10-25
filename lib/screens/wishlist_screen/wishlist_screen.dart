@@ -57,12 +57,12 @@ class _WishlistScreenState extends State<WishlistScreen> {
                   confrimPressed: () {
                     type == CartItemType.Wishlist
                         ? _wishlistController.removeFromWishlist(
-                            list.indexWhere(
-                                (element) => element.name == e.name),
+                            list.indexWhere((element) =>
+                                element.productName == e.productName),
                           )
                         : _cartController.removeFromCart(
-                            list.indexWhere(
-                                (element) => element.name == e.name),
+                            list.indexWhere((element) =>
+                                element.productName == e.productName),
                           );
                     Get.back();
                   },
@@ -71,7 +71,8 @@ class _WishlistScreenState extends State<WishlistScreen> {
                 )),
                 onDecreaseQunatity: e.quantity > 1
                     ? _wishlistController.setQuantity(
-                        list.indexWhere((element) => element.name == e.name),
+                        list.indexWhere(
+                            (element) => element.productName == e.productName),
                         -1 + (e.quantity ?? 1))
                     : () {},
                 onIncreaseQunatity: () => _wishlistController.setQuantity(
@@ -79,19 +80,17 @@ class _WishlistScreenState extends State<WishlistScreen> {
                     1 + (e.quantity ?? 1)),
                 onMovePressed: () {
                   _wishlistController.moveToCart(
-                      _wishlistController.wishlistItems
-                          .indexWhere((element) => element.name == e.name),
+                      _wishlistController.wishlistItems.indexWhere(
+                          (element) => element.productName == e.productName),
                       ({String title}) {
                     Get.dialog(
                       CartDialog(
                           title: title,
-                          productTitle: e.name,
+                          productTitle: e.productName,
                           cartTotal: formatCurrency.format(list.fold(
                               0,
                               (previousValue, element) =>
-                                  element.priceRange.minimumPrice.finalPrice
-                                      .value +
-                                  previousValue))),
+                                  element.price + previousValue))),
                       barrierDismissible: true,
                     );
                   });

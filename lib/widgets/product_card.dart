@@ -1,5 +1,6 @@
 import 'package:edeybe/index.dart';
-import 'package:edeybe/models/product.dart' as ProductModel;
+import 'package:edeybe/models/productModel.dart' as Pro;
+// import 'package:edeybe/models/product.dart' as ProductModel;
 import 'package:edeybe/utils/constant.dart';
 import 'package:edeybe/widgets/ShimmerLoader.dart';
 import 'package:edeybe/widgets/money_widget.dart';
@@ -28,7 +29,7 @@ class ProductCard extends StatelessWidget {
   final String title;
   final num price;
   final num oldPrice;
-  final ProductModel.Image image;
+  final Pro.Photos image;
   final bool isFav;
   final bool isLoading;
   final bool hasDiscount;

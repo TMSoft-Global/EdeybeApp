@@ -3,13 +3,13 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:edeybe/index.dart';
 import 'package:edeybe/models/deliveryCost.dart';
-import 'package:edeybe/models/product.dart';
+import 'package:edeybe/models/productModel.dart';
 import 'package:edeybe/services/server_operation.dart';
 import 'package:edeybe/widgets/custom_dialog.dart';
 
 class CartOperation extends ServerOperations {
   getAllCartItems(
-      void onResponse(List<Product> response), void onError(DioError error)) {
+      void onResponse(List<ProductModel> response), void onError(DioError error)) {
     dynamicRequest(
       path: "/getcart",
       schema: "",
@@ -17,7 +17,7 @@ class CartOperation extends ServerOperations {
       onResponse: (res) {
         if (res.containsKey("items")) {
           var data = (res["items"] as List<dynamic>)
-              .map((dynamic i) => Product.fromJson(i as Map<String, dynamic>))
+              .map((dynamic i) => ProductModel.fromJson(i as Map<String, dynamic>))
               // .sortedByNum((element) => element.id)
               .toList();
           onResponse(data);
@@ -26,7 +26,7 @@ class CartOperation extends ServerOperations {
     );
   }
 
-  updateCart(Map<String, dynamic> data, void onResponse(List<Product> response),
+  updateCart(Map<String, dynamic> data, void onResponse(List<ProductModel> response),
       void onError(DioError error)) {
     dynamicRequest(
       path: "/updatecart",
@@ -35,7 +35,7 @@ class CartOperation extends ServerOperations {
       onError: onError,
       onResponse: (res) {
         var data = (res["items"] as List<dynamic>)
-            .map((dynamic i) => Product.fromJson(i as Map<String, dynamic>))
+            .map((dynamic i) => ProductModel.fromJson(i as Map<String, dynamic>))
             .toList();
         onResponse(data);
       },

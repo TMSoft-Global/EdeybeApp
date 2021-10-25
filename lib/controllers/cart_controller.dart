@@ -5,14 +5,14 @@ import 'package:edeybe/controllers/wishlist_controller.dart';
 import 'package:edeybe/index.dart';
 import 'package:edeybe/interface/HTTPErrorHandler.dart';
 import 'package:edeybe/models/deliveryCost.dart';
-import 'package:edeybe/models/product.dart';
+import 'package:edeybe/models/productModel.dart';
 import 'package:edeybe/models/user.dart';
 import 'package:edeybe/services/cart_operation.dart';
 
 class CartController extends GetxController implements HTTPErrorHandler {
   User user;
   var coupon = "".obs;
-  var cartItems = <Product>[].obs;
+  var cartItems = <ProductModel>[].obs;
   var operations = CartOperation();
   var deliveryCost = DeliveryCost();
   var connectionError = false.obs;
@@ -27,22 +27,22 @@ class CartController extends GetxController implements HTTPErrorHandler {
     super.onInit();
   }
 
-  addToCart(Product p, Function callback) {
+  addToCart(ProductModel p, Function callback) {
     resetErrorState();
     Map<String, dynamic> items = {};
     var inList =
-        cartItems.firstWhere((pp) => pp.sku == p.sku, orElse: () => null);
+        cartItems.firstWhere((pp) => pp.productId == p.productId, orElse: () => null);
     if (inList != null) {
-      cartItems.removeWhere((pp) => pp.sku == p.sku);
+      cartItems.removeWhere((pp) => pp.productId == p.productId);
     } else {
       items = {
         "items": {
-          "${p.sku}": {"quantity": p.quantity}
+          "${p.productId}": {"quantity": p.quantity}
         }
       };
     }
     cartItems.forEach((item) {
-      items["items"][item.sku] = {"quantity": item.quantity};
+      items["items"][item.productId] = {"quantity": item.quantity};
     });
     operations.updateCart(items, (response) {
       cartItems.add(p);
@@ -84,11 +84,11 @@ class CartController extends GetxController implements HTTPErrorHandler {
   removeFromCart(int index) {
     resetErrorState();
     Map<String, dynamic> data = {"items": {}};
-    var removedCopy = List<Product>.from(cartItems);
+    var removedCopy = List<ProductModel>.from(cartItems);
     var removedItem = removedCopy.removeAt(index);
     if (removedItem != null) {
       removedCopy.forEach((item) {
-        data["items"][item.sku] = {"quantity": item.quantity};
+        data["items"][item.productId] = {"quantity": item.quantity};
       });
       operations.updateCart(data, (response) {
         cartItems.value = removedCopy;

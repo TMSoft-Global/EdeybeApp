@@ -1,6 +1,7 @@
 import 'package:edeybe/controllers/user_controller.dart';
 import 'package:edeybe/index.dart';
-import 'package:edeybe/models/product.dart' as ProductModel;
+import 'package:edeybe/models/productModel.dart';
+// import 'package:edeybe/models/product.dart' as ProductModel;
 import 'package:edeybe/screens/auth_screen/login_screen.dart';
 import 'package:edeybe/screens/product_details_screen/product_details_screen.dart';
 import 'package:edeybe/screens/review_screen/review_bottom_bar/reveiw_bottom_bar.dart';
@@ -14,7 +15,7 @@ import 'package:flutter/material.dart';
 class ReviewScreen extends StatelessWidget {
   ReviewScreen({Key key, this.product, this.reviews}) : super(key: key);
 
-  final ProductModel.Product product;
+  final ProductModel product;
   final List<Map<String, dynamic>> reviews;
   final _userController = Get.find<UserController>();
   @override
@@ -89,7 +90,7 @@ class ReviewScreen extends StatelessWidget {
                                         child: Image(
                                           width: 100.w,
                                           image: CachedNetworkImageProvider(
-                                            this.product.image.sm,
+                                            product.photos[i].sm,
                                           ),
                                           alignment: Alignment.center,
                                           fit: BoxFit.cover,
@@ -111,7 +112,7 @@ class ReviewScreen extends StatelessWidget {
                                                   padding: EdgeInsets.only(
                                                       bottom: 8.w),
                                                   child: Text(
-                                                    this.product.name.tr,
+                                                    product.productName.tr,
                                                     maxLines: 2,
                                                     style: TextStyle(
                                                         fontSize: 14.w,
@@ -136,7 +137,7 @@ class ReviewScreen extends StatelessWidget {
                                                       children: [
                                                         Text(
                                                           S.of(context).brand +
-                                                              " : ${this.product.brand}",
+                                                              " : ${product.brand}",
                                                           style: TextStyle(
                                                               fontSize: 12.w,
                                                               fontWeight:
@@ -147,7 +148,7 @@ class ReviewScreen extends StatelessWidget {
                                                           maxLines: 2,
                                                         ),
                                                         Text(
-                                                          "${this.product.priceRange.minimumPrice.finalPrice.currency} ${this.product.priceRange.minimumPrice.finalPrice.value}"
+                                                          "GHC ${this.product.discountPrice}"
                                                               .tr,
                                                           style: TextStyle(
                                                               fontSize: 15.w,

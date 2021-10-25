@@ -1,10 +1,11 @@
 import 'dart:convert';
 
 import 'package:edeybe/models/product.dart';
+import 'package:edeybe/models/productModel.dart';
 import 'package:edeybe/services/server_operation.dart';
 
 class WishlistOperation extends ServerOperations {
-  getSavedWishlist(void onResponse(List<Product> response)) {
+  getSavedWishlist(void onResponse(List<ProductModel> response)) {
     dynamicRequest(
       path: "/favourites/get",
       schema: '{"id":"434"}',
@@ -12,7 +13,7 @@ class WishlistOperation extends ServerOperations {
       onResponse: (res) {
         if (res != null) {
           var data = (res as List<dynamic>)
-              .map((dynamic i) => Product.fromJson(i as Map<String, dynamic>))
+              .map((dynamic i) => ProductModel.fromJson(i as Map<String, dynamic>))
               // .sortedByNum((element) => element.id)
               .toList();
           onResponse(data);
@@ -22,7 +23,7 @@ class WishlistOperation extends ServerOperations {
   }
 
   updateWishlist(
-      Map<String, dynamic> data, void onResponse(List<Product> response)) {
+      Map<String, dynamic> data, void onResponse(List<ProductModel> response)) {
     dynamicRequest(
       path: "/favourites/update",
       schema: jsonEncode(data),

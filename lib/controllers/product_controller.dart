@@ -11,10 +11,10 @@ import 'package:flutter/material.dart';
 class ProductController extends GetxController implements HTTPErrorHandler {
   User user;
   var operations = ProductOperation();
-  var product = Product().obs;
-  var products = <Product>[].obs;
+  var product = ProductModel().obs;
+  var products = <ProductModel>[].obs;
   var productDetail = ProductModel().obs;
-  var merchantProducts = <Product>[].obs;
+  var merchantProducts = <ProductModel>[].obs;
   var loading = false.obs;
   var loadingMore = false.obs;
   var page = 1.obs;
@@ -22,10 +22,10 @@ class ProductController extends GetxController implements HTTPErrorHandler {
   var hasMore = true.obs;
   var connectionError = false.obs;
   var serverError = false.obs;
-  var seller = Seller().obs;
+  // var seller = Seller().obs;
   var canceled = false.obs;
   Map<String, String> queryMap = {'limit': '20'};
-  var homeProducts = Map<String, List<Product>>().obs;
+  var homeProducts = Map<String, List<ProductModel>>().obs;
   writeReview(double rating, String message) {
     update();
   }
@@ -98,13 +98,13 @@ class ProductController extends GetxController implements HTTPErrorHandler {
   }
 
   void resetMerchantProducts() {
-    merchantProducts.value = <Product>[];
-    seller.value = Seller();
+    merchantProducts.value = <ProductModel>[];
+    // seller.value = Seller();
     merchantPage.value = 1;
   }
 
   void resetProducts() {
-    products.value = <Product>[];
+    products.value = <ProductModel>[];
     page.value = 1;
     queryMap = {'limit': '20'};
     resetPage();
@@ -208,7 +208,7 @@ class ProductController extends GetxController implements HTTPErrorHandler {
   void getMerchantProducts(String id) {
     loading.value = true;
     resetErrorState();
-    operations.getMerchantProducts(id, page.value, (response, store) {
+    operations.getMerchantProducts(id, page.value, (response) {
       if (loadingMore.value) {
         if (response.isEmpty) {
           hasMore.value = false;
@@ -220,14 +220,14 @@ class ProductController extends GetxController implements HTTPErrorHandler {
         merchantProducts.value = response;
         if (response.length < 20) hasMore.value = false;
       }
-      seller.value = store;
+      // seller.value = store;
       loading.value = false;
       if (loadingMore.value) loadingMore.value = false;
       update();
     }, handleError);
   }
 
-  setInViewProduct(Product p) {
+  setInViewProduct(ProductModel p) {
     product.value = p;
     update();
   }

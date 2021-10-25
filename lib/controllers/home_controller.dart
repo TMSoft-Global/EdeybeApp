@@ -6,6 +6,7 @@ import 'package:edeybe/interface/HTTPErrorHandler.dart';
 import 'package:edeybe/models/categoryCollection.dart';
 import 'package:edeybe/models/product.dart';
 import 'package:edeybe/models/productCollection.dart';
+import 'package:edeybe/models/productModel.dart';
 import 'package:edeybe/models/user.dart';
 import 'package:edeybe/services/home_operation.dart';
 
@@ -14,7 +15,7 @@ class HomeController extends GetxController implements HTTPErrorHandler {
   var operations = HomeOperation();
   var slugs = <String>[].obs;
   var cats = <String>[].obs;
-  var products = <Product>[].obs;
+  var products = <ProductModel>[].obs;
   var loadingSlugs = false.obs;
   var loadingCategorySlugsProducts = false.obs;
   var loadingCollections = false.obs;
@@ -54,7 +55,7 @@ class HomeController extends GetxController implements HTTPErrorHandler {
   }
 
   void resetProducts() {
-    products.value = <Product>[];
+    products.value = <ProductModel>[];
   }
 
   void getAvailableSlugs() {

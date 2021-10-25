@@ -2,7 +2,8 @@ import 'package:edeybe/controllers/home_controller.dart';
 import 'package:edeybe/controllers/product_controller.dart';
 import 'package:edeybe/controllers/wishlist_controller.dart';
 import 'package:edeybe/index.dart';
-import 'package:edeybe/models/product.dart' as ProductModel;
+// import 'package:edeybe/models/product.dart' as ProductModel;
+import 'package:edeybe/models/productModel.dart';
 import 'package:edeybe/screens/checkout_screen/index.dart';
 import 'package:edeybe/screens/product_details_screen/product_details_screen.dart';
 import 'package:edeybe/screens/wishlist_screen/wishlist_screen.dart';
@@ -14,7 +15,7 @@ import 'package:flutter/material.dart';
 class ProductsGrid extends StatelessWidget {
   final Widget heading;
   final bool isLoading;
-  final List<ProductModel.Product> products;
+  final List<ProductModel> products;
   final Axis scrollDirection;
   final Function onshowMorePressed;
   final formatCurrency = new NumberFormat.simpleCurrency(name: "");
@@ -33,7 +34,7 @@ class ProductsGrid extends StatelessWidget {
     return _buildFeaturedCards(products);
   }
 
-  Widget _buildFeaturedCards(List<ProductModel.Product> products) {
+  Widget _buildFeaturedCards(List<ProductModel> products) {
     final cards = <ProductCard>[];
     // ignore: non_constant_identifier_names
     Widget FeautredCards;
@@ -64,7 +65,7 @@ class ProductsGrid extends StatelessWidget {
     } else if (products.isNotEmpty) {
       for (int i = 0; i < products.length; i++) {
         var product = products[i];
-        var price = product.priceRange.minimumPrice;
+        var price = product.price;
         cards.add(ProductCard(
           onViewDetails: () {
             _productController.setInViewProduct(product);
@@ -77,23 +78,22 @@ class ProductsGrid extends StatelessWidget {
                         title: title,
                         type: CartItemType.Wishlist,
                         onGoForward: () => Get.to(WishlistScreen()),
-                        productTitle: product.name,
+                        productTitle: product.productName,
                         cartTotal: formatCurrency.format(
                             _wishlistController.wishlistItems.fold(
                                 0,
                                 (previousValue, element) =>
-                                    element.priceRange.minimumPrice.finalPrice
-                                        .value +
+                                    element.price +
                                     previousValue))),
                     barrierDismissible: true,
                   )),
-          image: product.image,
-          isFav: Helper.isFavourite(product.sku, _wishlistController),
-          discount: product.priceRange.minimumPrice.discount.percentOff,
-          price: price?.finalPrice?.value,
-          oldPrice: price?.regularPrice?.value,
-          title: product?.name,
-          hasDiscount: price.hasDiscount,
+          image: product.photos[0],
+          isFav: Helper.isFavourite(product.productId, _wishlistController),
+          discount: product.discountPrice,
+          price: price,
+          oldPrice: product?.price,
+          title: product?.productName,
+          hasDiscount: product.hasDiscount,
           rating: 5.0,
           raters: 23,
         ));

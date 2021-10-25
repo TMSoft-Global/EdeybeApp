@@ -1,6 +1,7 @@
 import 'package:edeybe/models/deliveryModel.dart';
 import 'package:edeybe/models/order.dart';
 import 'package:edeybe/models/product.dart';
+import 'package:edeybe/models/productModel.dart';
 import 'package:edeybe/screens/checkout_screen/index.dart';
 import 'package:edeybe/utils/helper.dart';
 import 'package:edeybe/widgets/Shimmer.dart';
@@ -46,20 +47,24 @@ class _OrderDetailsState extends State<OrderDetails> {
                   ),
                   CartItem(
                     tappable: false,
-                    product: Product(
-                        name: widget.order.name,
-                        sku: widget.order.id,
-                        image: widget.order.image,
-                        mediaGallery: widget.order.photos,
+                    product: ProductModel(
+                        productName: widget.order.name,
+                        productId:widget.order.id,
+                        // photos: widget.order.image,
+                        photos: widget.order.photos,
                         quantity: widget.order.quantity,
-                        seller: Seller(name: ""),
-                        priceRange: PriceRange(
-                            minimumPrice: MinimumPrice(
-                                finalPrice: Price(
-                                    value: double.parse(
-                                        widget.order.productTotal))))),
-                    type: CartItemType.Checkout,
-                  ),
+                        // seller: Seller(name: ""),
+                        // priceRange: PriceRange(
+                        //     minimumPrice: MinimumPrice(
+                        //         finalPrice: Price(
+                        //             value: double.parse(
+                                        // widget.order.productTotal
+                                        // )
+                                        // )
+                                        // )
+                                        )),
+                    // type: CartItemType.Checkout,
+                  // ),
                   SizedBox(
                     height: 5.w,
                   ),

@@ -4,6 +4,7 @@ import 'package:edeybe/controllers/search_controller.dart';
 import 'package:edeybe/controllers/wishlist_controller.dart';
 import 'package:edeybe/models/category.dart';
 import 'package:edeybe/models/product.dart';
+import 'package:edeybe/models/productModel.dart';
 import 'package:edeybe/models/subcategory.dart';
 import 'package:edeybe/screens/checkout_screen/index.dart';
 import 'package:edeybe/screens/product_details_screen/product_details_screen.dart';
@@ -80,7 +81,7 @@ class _ProductsViewState extends State<ProductsView>
   void dispose() {
     _animationController.dispose();
     controller.dispose();
-    if (widget.type is Seller) {
+    if (widget.type is ProductModel) {
       _productController.resetMerchantProducts();
     } else {
       _productController.resetProducts();
@@ -364,35 +365,35 @@ class _ProductsViewState extends State<ProductsView>
                 ? ProductCard(
                     width: Get.width / 2.1,
                     padding: ((1 + index) % 2 != 0 ? 10 : 0).w,
-                    title: p.name,
-                    image: p.image,
-                    discount: p.priceRange.minimumPrice.discount.percentOff,
-                    price: p.priceRange.minimumPrice.finalPrice.value,
-                    oldPrice: p.priceRange.minimumPrice.regularPrice.value,
+                    title: p.productName,
+                    image: p.photos[0],
+                    discount: p.discountPrice,
+                    price: p.price,
+                    oldPrice: p.price,
                     onAddToWishList: () => _addToWishlist(p),
                     onViewDetails: () {
                       _productController.setInViewProduct(p);
 
                       Get.to(ProductDetailsScreen());
                     },
-                    hasDiscount: p.priceRange.minimumPrice.hasDiscount,
-                    isFav: Helper.isFavourite(p.sku, _wishlistController),
+                    hasDiscount: p.hasDiscount,
+                    isFav: Helper.isFavourite(p.productId, _wishlistController),
                     rating: 5.0,
                     raters: 23,
                   )
                 : ProductCardLandscape(
-                    title: p.name,
-                    image: p.image,
-                    discount: p.priceRange.minimumPrice.discount.percentOff,
-                    price: p.priceRange.minimumPrice.finalPrice.value,
-                    oldPrice: p.priceRange.minimumPrice.regularPrice.value,
+                    title: p.productName,
+                    image: p.photos[0],
+                    discount: p.discountPrice,
+                    price: p.price,
+                    oldPrice: p.price,
                     onAddToWishList: () => _addToWishlist(p),
                     onViewDetails: () {
                       _productController.setInViewProduct(p);
 
                       Get.to(ProductDetailsScreen());
                     },
-                    isFav: Helper.isFavourite(p.sku, _wishlistController),
+                    isFav: Helper.isFavourite(p.productId, _wishlistController),
                     rating: 5.0,
                     raters: 23,
                   ),
@@ -424,9 +425,9 @@ class _ProductsViewState extends State<ProductsView>
           CircleAvatar(
             child: ShimmerLoading(
               isLoading: c.loading.value,
-              child: c.seller.value.photo != null
-                  ? CachedNetworkImage(imageUrl: c.seller.value.photo)
-                  : SizedBox.shrink(),
+              // child: c.seller.value.photo != null
+              //     ? CachedNetworkImage(imageUrl: c.seller.value.photo)
+                  child: SizedBox.shrink(),
             ),
           ),
           Padding(
@@ -436,12 +437,12 @@ class _ProductsViewState extends State<ProductsView>
                 ShimmerLoading(
                     isLoading: c.loading.value,
                     child: Container(
-                      child: Text(c.seller.value.name ?? ""),
+                      child: Text("c.seller.value.name" ?? ""),
                     )),
                 ShimmerLoading(
                     isLoading: c.loading.value,
                     child: Container(
-                      child: Text(c.seller.value.details ?? ""),
+                      child: Text("c.seller.value.details" ?? ""),
                     )),
               ],
             ),
@@ -465,7 +466,7 @@ class _ProductsViewState extends State<ProductsView>
                     .fold(
                         0,
                         (previousValue, element) =>
-                            element.priceRange.minimumPrice.finalPrice.value +
+                            element.price +
                             previousValue))),
         barrierDismissible: true,
       );

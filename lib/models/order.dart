@@ -1,5 +1,5 @@
 import 'package:edeybe/models/deliveryModel.dart';
-import 'package:edeybe/models/product.dart';
+import 'package:edeybe/models/productModel.dart';
 
 class Order {
   Order(
@@ -20,8 +20,8 @@ class Order {
   String name;
   String id;
   String orderId;
-  Image image;
-  List<Image> photos;
+  Photos image;
+  List<Photos> photos;
   int quantity;
   String productTotal;
   String transactionId;
@@ -57,11 +57,11 @@ class Order {
         deliveryDate: json["paymentDate"],
         transactionId: json["transactionId"],
         image:
-            json["photos"] == null ? null : Image.fromJson(json["photos"][0]),
+            json["photos"] == null ? null : Photos.fromJson(json["photos"][0]),
         photos: json["photos"] == null
             ? []
             : (json["photos"] as List<dynamic>)
-                .map((image) => Image.fromJson(image))
+                .map((image) => Photos.fromJson(image))
                 .toList(),
       );
 
