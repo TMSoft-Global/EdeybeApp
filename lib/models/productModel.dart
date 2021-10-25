@@ -23,13 +23,13 @@ class ProductModel {
   int purchaseCount;
   String moderatorId;
   int discountPrice = 0;
-  String percentageDiscount;
+  dynamic percentageDiscount;
   String updatedAt;
   List<Variants> variants;
   bool hasVariants;
   MerchantDetails merchantDetails;
   List<RelatedItems> relatedItems;
-  int quantity;
+  int quantity = 1;
 
   ProductModel(
       {this.sId,
@@ -60,7 +60,7 @@ class ProductModel {
       this.hasVariants,
       this.merchantDetails,
       this.relatedItems,
-      this.quantity = 1});
+      this.quantity});
 
   ProductModel.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -282,6 +282,7 @@ class Variants {
       bool variantSelected});
 
   Variants.fromJson(Map<String, dynamic> json) {
+    print(json['images']);
     variantName = json['variantName'];
     if (json['variantAttributes'] != null) {
       variantAttributes = new List<VariantAttributes>();
@@ -292,7 +293,7 @@ class Variants {
     isDefaultPrice = json['isDefaultPrice'];
     price = json['price'];
     if (json['images'] != null) {
-      images = new List<Images>();
+      images = <Images>[];
       json['images'].forEach((v) {
         images.add(new Images.fromJson(v));
       });
@@ -305,18 +306,18 @@ class Variants {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['variantName'] = this.variantName;
-    if (this.variantAttributes != null) {
+    if (variantAttributes != null) {
       data['variantAttributes'] =
-          this.variantAttributes.map((v) => v.toJson()).toList();
+          variantAttributes.map((v) => v.toJson()).toList();
     }
     data['isDefaultPrice'] = this.isDefaultPrice;
     data['price'] = this.price;
-    if (this.images != null) {
-      data['images'] = this.images.map((v) => v.toJson()).toList();
+    if (images != null) {
+      data['images'] = images.map((v) => v.toJson()).toList();
     }
-    data['hasDiscount'] = this.hasDiscount;
-    data['discountPrice'] = this.discountPrice;
-    data['variantId'] = this.variantId;
+    data['hasDiscount'] = hasDiscount;
+    data['discountPrice'] = discountPrice;
+    data['variantId'] = variantId;
     return data;
   }
 }
@@ -340,35 +341,29 @@ class VariantAttributes {
   }
 }
 
-class Images {
-  String uid;
-  String name;
-  String status;
-  String url;
-  Photos obj;
 
-  Images({this.uid, this.name, this.status, this.url, this.obj});
+class Images {
+  String sm;
+  String md;
+  String lg;
+
+  Images({this.sm, this.md, this.lg});
 
   Images.fromJson(Map<String, dynamic> json) {
-    uid = json['uid'];
-    name = json['name'];
-    status = json['status'];
-    url = json['url'];
-    obj = json['obj'] != null ? new Photos.fromJson(json['obj']) : null;
+    sm = json["sm"] == null ? null : "$domain/api/images/" + json["sm"];
+    md = json["md"] == null ? null : "$domain/api/images/" + json["md"];
+    lg = json["lg"] == null ? null : "$domain/api/images/" + json["lg"];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['uid'] = this.uid;
-    data['name'] = this.name;
-    data['status'] = this.status;
-    data['url'] = this.url;
-    if (this.obj != null) {
-      data['obj'] = this.obj.toJson();
-    }
+    data['sm'] = this.sm;
+    data['md'] = this.md;
+    data['lg'] = this.lg;
     return data;
   }
 }
+
 
 class MerchantDetails {
   String companyName;

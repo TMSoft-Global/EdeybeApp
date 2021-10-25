@@ -78,7 +78,7 @@ class CartItem extends StatelessWidget {
                                   color: Colors.black,
                                 )
                               : CachedNetworkImage(
-                                  imageUrl: product.image.sm,
+                                  imageUrl: product.photos[0].sm,
                                   // alignment: Alignment.center,
                                   fit: BoxFit.cover,
                                 ),
@@ -99,7 +99,7 @@ class CartItem extends StatelessWidget {
                                 child: isLoading
                                     ? Helper.textPlaceholder
                                     : Text(
-                                        product.name,
+                                        product.productName,
                                         maxLines: 2,
                                         style: TextStyle(
                                             fontSize: 13.w,
@@ -143,7 +143,7 @@ class CartItem extends StatelessWidget {
                                           children: [
                                             TextSpan(
                                               text:
-                                                  "${formatCurrency.format(product is Order ? double.parse(product.productTotal) : product.priceRange.minimumPrice.finalPrice.value)}",
+                                                  "${formatCurrency.format(product is Order ? double.parse(product.productTotal) : product.price)}",
                                               style: Get.textTheme.bodyText1
                                                   .copyWith(
                                                       fontSize: 14.w,

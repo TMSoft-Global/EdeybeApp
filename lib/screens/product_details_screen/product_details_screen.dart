@@ -234,12 +234,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 fontWeight: FontWeight.w800,
                                 children: [
                                   TextSpan(
-                                    text: formatCurrency.format(0
-                                        // discountedVarianAmount > 0
-                                        //     ? _productController
-                                        //         .productDetail.value.discountPrice
-                                        //     : discountedVarianAmount,
-                                        ),
+                                    text: formatCurrency.format(
+                                      discountedVarianAmount == 0
+                                          ? _productController
+                                              .productDetail.value.discountPrice
+                                          : discountedVarianAmount,
+                                    ),
                                     style: TextStyle(
                                         fontSize: 17.w,
                                         fontWeight: FontWeight.w800,
@@ -258,10 +258,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                     fontWeight: FontWeight.w800,
                                     children: [
                                       TextSpan(
-                                        text: formatCurrency.format(0
-                                            //  variantAmount== 0 ? _productController
-                                            //       .productDetail.value.price: variantAmount
-                                            ),
+                                        text: formatCurrency.format(
+                                            variantAmount == 0
+                                                ? _productController
+                                                    .productDetail.value.price
+                                                : variantAmount),
                                         style: TextStyle(
                                             decoration:
                                                 TextDecoration.lineThrough,
@@ -854,6 +855,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
   Widget _buildVarientProduct() {
     return GetBuilder<ProductController>(builder: (_p) {
+      // print(_p.product.value.productId);
       return Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8.w),
@@ -871,33 +873,31 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 15.0),
                 child: Text("Variants", style: TextStyle(fontSize: 20))),
             CustomDivider(),
-            for (int x = 0;
-                x < _productController.productDetail.value.variants.length;
-                x++)
-              varientButton(
-                  onTap: () {
-                    _setPrice(
-                        _productController
-                            .productDetail.value.variants[x].price,
-                        x);
-                  },
-                  index: x,
-                  id: _productController
-                      .productDetail.value.variants[x].variantId,
-                  size: _productController.productDetail.value.variants[x]
-                          .variantAttributes[0].sId +
-                      ": " +
-                      _productController.productDetail.value.variants[x]
-                          .variantAttributes[0].value,
-                  color: _productController.productDetail.value.variants[x]
-                          .variantAttributes[1].sId +
-                      ": " +
-                      _productController.productDetail.value.variants[x]
-                          .variantAttributes[1].value,
-                  type: _productController
-                      .productDetail.value.variants[x].variantName,
-                  image:
-                      "$domain/api/images/${_productController.productDetail.value.photos[x].sm}")
+            if (_productController.productDetail.value.hasVariants &&
+                _productController.productDetail.value.variants.length > 0)
+              Column(children: [
+                for (int x = 0;
+                    x < _productController.productDetail.value.variants.length;
+                    x++)
+                  varientButton(
+                    onTap: () {
+                      print(x);
+                      // _setPrice(
+                      //     _productController
+                      //         .productDetail.value.variants[x].price,
+                      //     x);
+                    },
+                    index: 0,
+                    id: _productController
+                        .productDetail.value.variants[x].variantId,
+                    attribute: _productController
+                        .productDetail.value.variants[x].variantAttributes,
+                    type: _productController
+                        .productDetail.value.variants[x].variantName,
+                    image:
+                        "${_productController.productDetail.value.variants[x]}",
+                  )
+              ])
           ],
         ),
       );
@@ -944,6 +944,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
   void _setPrice(value, int x) {
     if (_productController.productDetail.value.hasDiscount) {
+      print(x);
       if (value == null || value == "null") {
         setState(() {
           variantAmount = _productController.productDetail.value.price;
@@ -969,11 +970,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
   Widget varientButton({
     String type,
-    String size,
-    String color,
+    // String size,
+    var attribute,
     String id,
     int index,
-    String image,
+    var image,
     VoidCallback onTap,
   }) {
     return GestureDetector(
@@ -986,60 +987,59 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
+                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
-                      height: 100.h,
-                      width: 100.w,
-                      child: CarouselSlider(
-                        showDots: false,
-                        itemCount:
-                            _productController.product.value.photos?.length,
-                        itemBuilder: (context, ind) => Container(
-                          padding: EdgeInsets.all(10.w),
-                          margin: EdgeInsets.only(right: 10.w),
-                          width: Get.width.w,
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12.w)),
-                          child: GestureDetector(
-                            onTap: () => Get.dialog(PostGallery(
-                              images:
-                                  _productController.productDetail.value.photos,
-                              currentImage: ind,
-                            )),
-                            child: Image(
-                              image: CachedNetworkImageProvider(
-                                _productController
-                                        .productDetail.value.photos[index].sm ??
-                                    "",
+                    if (_productController
+                            .productDetail.value.variants[index].images !=
+                        null)
+                      for (var image in _productController
+                          .productDetail.value.variants[index].images) ...[
+                        // Text("${image.sm}"),
+                        Container(
+                          height: 100.h,
+                          width: 100.w,
+                          child: CarouselSlider(
+                            showDots: false,
+                            itemCount:
+                                _productController.product.value.photos?.length,
+                            itemBuilder: (context, ind) => Container(
+                              padding: EdgeInsets.all(10.w),
+                              margin: EdgeInsets.only(right: 10.w),
+                              width: Get.width.w,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(12.w)),
+                              child: GestureDetector(
+                                onTap: () => Get.dialog(PostGallery(
+                                  images: _productController
+                                      .productDetail.value.photos,
+                                  currentImage: ind,
+                                )),
+                                child: Image(
+                                  image: CachedNetworkImageProvider(
+                                    image.sm ?? "",
+                                  ),
+                                  // alignment: Alignment.center,
+                                  fit: BoxFit.contain,
+                                ),
                               ),
-                              // alignment: Alignment.center,
-                              fit: BoxFit.contain,
                             ),
                           ),
                         ),
-                      ),
-                    ),
-                    // Container(
-                    //   height: 100.h,
-                    //   width: 100.w,
-                    //   decoration: BoxDecoration(
-                    //       borderRadius: BorderRadius.circular(10),
-                    //       image: DecorationImage(
-                    //         image: NetworkImage("$image"),
-                    //       )),
-                    // ),
-                    SizedBox(
-                      width: 15,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("Type: $type"),
-                        Text("$color"),
-                        Text("$size"),
+                        SizedBox(
+                          width: 15,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Type: $type"),
+                            for (var x in attribute) ...[
+                              Text("${x.sId}: ${x.value}"),
+                              // Text("$size"),
+                            ]
+                          ],
+                        ),
                       ],
-                    ),
                   ],
                 ),
                 Container(
