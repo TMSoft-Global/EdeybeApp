@@ -27,11 +27,13 @@ class CartController extends GetxController implements HTTPErrorHandler {
     super.onInit();
   }
 
-  addToCart(ProductModel p, Function callback) {
+  addToCart(ProductModel p, Function callback, {String variantID}) {
     resetErrorState();
+    
     Map<String, dynamic> items = {};
-    var inList =
-        cartItems.firstWhere((pp) => pp.productId == p.productId, orElse: () => null);
+    var inList = cartItems.firstWhere((pp) => pp.productId == p.productId,
+        orElse: () => null);
+      // print(inList.productId);
     if (inList != null) {
       cartItems.removeWhere((pp) => pp.productId == p.productId);
     } else {
@@ -43,6 +45,7 @@ class CartController extends GetxController implements HTTPErrorHandler {
     }
     cartItems.forEach((item) {
       items["items"][item.productId] = {"quantity": item.quantity};
+      // print(item);
     });
     operations.updateCart(items, (response) {
       cartItems.add(p);
@@ -126,10 +129,7 @@ class CartController extends GetxController implements HTTPErrorHandler {
   void checkout(Map<String, dynamic> data, void callback(dynamic data)) {
     print(data);
     operations.checkoutRequest(
-        schema: data,
-        onResponse: callback,
-        
-        onError: callback);
+        schema: data, onResponse: callback, onError: callback);
   }
 
   void checkOrderStatus(

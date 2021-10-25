@@ -71,7 +71,7 @@ class ProductModel {
     price = json['price'];
     description = json['description'];
     if (json['photos'] != null) {
-      photos = new List<Photos>();
+      photos = <Photos>[];
       json['photos'].forEach((v) {
         photos.add(new Photos.fromJson(v));
       });
@@ -79,7 +79,12 @@ class ProductModel {
     status =
         json['status'] != null ? new Status.fromJson(json['status']) : null;
     merchantId = json['merchantId'];
-    productId = json['productId'];
+    productId = json.containsKey("_id")
+        ? json["_id"]
+        : json.containsKey("productId")
+            ? json["productId"]
+            : null;
+
     time = json['time'];
     categoryName = json['categoryName'];
     subCategoryName = json['subCategoryName'];
@@ -341,7 +346,6 @@ class VariantAttributes {
   }
 }
 
-
 class Images {
   String sm;
   String md;
@@ -363,7 +367,6 @@ class Images {
     return data;
   }
 }
-
 
 class MerchantDetails {
   String companyName;

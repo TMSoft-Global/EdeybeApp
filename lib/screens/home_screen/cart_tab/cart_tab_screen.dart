@@ -533,7 +533,6 @@ class _CartScreenTabState extends State<CartScreenTab>
                 SingleChildScrollView(
                     child: Column(
                   children: [
-                    Text(_cartController.cartItems.length.toString()),
                     _buildCartItem(
                         CartItemType.Cart, _cartController.cartItems),
                     if (_cartController.cartItems.isNotEmpty) _itemTotal,

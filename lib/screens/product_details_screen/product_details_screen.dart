@@ -119,13 +119,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       ),
       bottomNavigationBar: Obx(() => ProductDetailsBottomBar(
             onSetQuantity: (value) {
+              print(value);
               setState(() {
                 _productController.setQuantity(value);
               });
             },
-            onAddToCart: _productController.product != null
+            onAddToCart: _productController.productDetail != null
                 ? () {
-                    _cartController.addToCart(_productController.product?.value,
+                    _cartController.addToCart(_productController.productDetail?.value,
                         ({String title}) {
                       if (Get.isDialogOpen) {
                         Get.back();
@@ -146,7 +147,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                         element.price + previousValue))),
                         barrierDismissible: true,
                       );
-                    });
+                    }, variantID: variantID);
                   }
                 : null,
             quantity: _productController.productDetail.value?.quantity,
@@ -331,7 +332,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 //     overflow: TextOverflow.ellipsis,
                                 //   ),
                                 // ),
-                                // if (_productStl.product.value.discountPrice > 0)
+                                if (_productStl.product.value.discountPrice > 0)
                                 CapsuleWiget(
                                   borderRadius: 4.w,
                                   padding:
@@ -879,6 +880,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 for (int x = 0;
                     x < _productController.productDetail.value.variants.length;
                     x++)
+                  // Text(x.toString())
                   varientButton(
                     onTap: () {
                       print(x);
@@ -887,7 +889,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       //         .productDetail.value.variants[x].price,
                       //     x);
                     },
-                    index: 0,
+                    index: x,
                     id: _productController
                         .productDetail.value.variants[x].variantId,
                     attribute: _productController
@@ -984,6 +986,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 7),
             child: Row(
+
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
@@ -1026,20 +1029,20 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             ),
                           ),
                         ),
-                        SizedBox(
-                          width: 15,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("Type: $type"),
-                            for (var x in attribute) ...[
-                              Text("${x.sId}: ${x.value}"),
-                              // Text("$size"),
-                            ]
-                          ],
-                        ),
                       ],
+                  ],
+                ),
+                SizedBox(
+                  width: 15,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Type: $type"),
+                    for (var x in attribute) ...[
+                      Text("${x.sId}: ${x.value}"),
+                      // Text("$size"),
+                    ]
                   ],
                 ),
                 Container(

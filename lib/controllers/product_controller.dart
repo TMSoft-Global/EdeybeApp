@@ -235,7 +235,7 @@ class ProductController extends GetxController implements HTTPErrorHandler {
   setQuantity(int newQTY) {
     var prod = productDetail.value.setQuantity(newQTY);
     productDetail.value = prod;
-    // update();
+    update();
   }
 
   void setQuery(String key, String value,
