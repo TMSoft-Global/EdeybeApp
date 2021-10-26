@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 class ProductController extends GetxController implements HTTPErrorHandler {
   User user;
   var operations = ProductOperation();
-  var product = ProductModel().obs;
+  // var product = ProductModel().obs;
   var products = <ProductModel>[].obs;
   var productDetail = ProductModel().obs;
   var merchantProducts = <ProductModel>[].obs;
@@ -117,7 +117,7 @@ class ProductController extends GetxController implements HTTPErrorHandler {
   void getProductbyId(String id) {
     resetErrorState();
     operations.getAllProductById(id, (response) {
-      product.value = response;
+      productDetail.value = response;
       increaseViewCount(id);
       update();
     }, handleError);
@@ -228,7 +228,7 @@ class ProductController extends GetxController implements HTTPErrorHandler {
   }
 
   setInViewProduct(ProductModel p) {
-    product.value = p;
+    productDetail.value = p;
     update();
   }
 

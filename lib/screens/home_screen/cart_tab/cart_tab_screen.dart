@@ -106,10 +106,10 @@ class _CartScreenTabState extends State<CartScreenTab>
                         color: Colors.grey.withOpacity(.1.w), width: 5.w))))
     ]
           ..addAll(products // <-- should be a list of user selected items
-              .map<Widget>((e) => 
-              // CartItem(type: type, product: e)
-              
-               CartItem(
+              .map<Widget>((e) =>
+                  // CartItem(type: type, product: e)
+
+                  CartItem(
                     product: e,
                     type: type,
                     onRemovePressed: () => Get.dialog(CustomDialog(
@@ -202,7 +202,7 @@ class _CartScreenTabState extends State<CartScreenTab>
                             );
                           },
                   ))
-          .toList())
+              .toList())
           ..add(products != null && products.length < 1
               ? Center(
                   child: ListEmptyWidget(
@@ -314,9 +314,9 @@ class _CartScreenTabState extends State<CartScreenTab>
                   fontWeight: FontWeight.w800,
                   children: [
                     TextSpan(
-                      text: "0",
-                      // ignore: lines_longer_than_80_chars
-                      // "${formatCurrency.format(_cartController.cartItems.fold(0, (previousValue, element) => (previousValue + element.price) * (element.quantity ?? 1.00)))}",
+                      text:
+                          // ignore: lines_longer_than_80_chars
+                          "${formatCurrency.format(_cartController.cartItems.fold(0, (previousValue, element) => (previousValue + (element.hasDiscount ? element.discountPrice : element.price)) * (element.quantity ?? 1.00)))}",
                       style: Get.textTheme.bodyText1.copyWith(
                           fontSize: 11.w,
                           fontWeight: FontWeight.w800,
@@ -356,9 +356,9 @@ class _CartScreenTabState extends State<CartScreenTab>
                   fontWeight: FontWeight.w800,
                   children: [
                     TextSpan(
-                      text: "",
-                      // ignore: lines_longer_than_80_chars
-                      // "${formatCurrency.format(_cartController.cartItems.fold(0, (previousValue, element) => previousValue + element.discountPrice * (element.quantity ?? 1.00)))}",
+                      text:
+                          // ignore: lines_longer_than_80_chars
+                          "${formatCurrency.format(_cartController.cartItems.fold(0, (previousValue, element) => previousValue + (element.hasDiscount ? element.discountPrice : element.price) * (element.quantity ?? 1.00)))}",
                       style: Get.textTheme.bodyText1.copyWith(
                           fontSize: 17.w,
                           fontWeight: FontWeight.w800,

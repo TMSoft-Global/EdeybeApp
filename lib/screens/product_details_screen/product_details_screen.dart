@@ -57,8 +57,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      _productController
-          .getProductVariantByID(_productController.product.value.productId);
+      _productController.getProductVariantByID(
+          _productController.productDetail.value.productId);
     });
     // _productController
     //     .getProductbyId(_productController.product.value.sku));
@@ -79,26 +79,27 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           IconButton(
             iconSize: 25.w,
             icon: Icon(
-              Helper.isFavourite(_productController.product.value.productId,
+              Helper.isFavourite(
+                      _productController.productDetail.value.productId,
                       _wishlistController)
                   ? Icons.favorite
                   : Icons.favorite_border,
               color: Helper.isFavourite(
-                      _productController.product.value.productId,
+                      _productController.productDetail.value.productId,
                       _wishlistController)
                   ? Constants.ratingBG
                   : Colors.white,
             ),
             onPressed: () {
               _wishlistController.addToWishlist(
-                  _productController.product.value,
+                  _productController.productDetail.value,
                   ({String title}) => Get.dialog(
                         CartDialog(
                             title: title,
                             type: CartItemType.Wishlist,
                             onGoForward: () => Get.to(WishlistScreen()),
-                            productTitle:
-                                _productController.product.value.productName,
+                            productTitle: _productController
+                                .productDetail.value.productName,
                             cartTotal: formatCurrency.format(
                                 _wishlistController.wishlistItems.fold(
                                     0,
@@ -126,8 +127,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             },
             onAddToCart: _productController.productDetail != null
                 ? () {
-                    _cartController.addToCart(_productController.productDetail?.value,
-                        ({String title}) {
+                    _cartController
+                        .addToCart(_productController.productDetail?.value, (
+                            {String title}) {
                       if (Get.isDialogOpen) {
                         Get.back();
                       }
@@ -138,13 +140,15 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             onGoForward: () => _userCtrler.isLoggedIn()
                                 ? Get.off(CheckoutScreen())
                                 : Get.offAll(LoginScreen()),
-                            productTitle:
-                                _productController.product.value.productName,
+                            productTitle: _productController
+                                .productDetail.value.productName,
                             cartTotal: formatCurrency.format(
                                 _cartController.cartItems.fold(
                                     0,
                                     (previousValue, element) =>
-                                        element.price + previousValue))),
+                                        element.hasDiscount
+                                            ? element.discountPrice
+                                            : element.price + previousValue))),
                         barrierDismissible: true,
                       );
                     }, variantID: variantID);
@@ -167,11 +171,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     height: 260.h,
                     width: Get.width.w,
                     color: Constants.themeGreyLight,
-                    child: _productStl.product.value.photos != null
+                    child: _productStl.productDetail.value.photos != null
                         ? CarouselSlider(
                             showDots: false,
-                            itemCount:
-                                _productController.product.value.photos?.length,
+                            itemCount: _productController
+                                .productDetail.value.photos?.length,
                             itemBuilder: (context, ind) => Container(
                               padding: EdgeInsets.all(10.w),
                               margin: EdgeInsets.only(right: 10.w),
@@ -237,8 +241,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                   TextSpan(
                                     text: formatCurrency.format(
                                       discountedVarianAmount == 0
-                                          ? _productController
-                                              .productDetail.value.discountPrice
+                                          ? _productController.productDetail
+                                                  .value.hasDiscount
+                                              ? _productController.productDetail
+                                                  .value.discountPrice
+                                              : _productController
+                                                  .productDetail.value.price
                                           : discountedVarianAmount,
                                     ),
                                     style: TextStyle(
@@ -248,7 +256,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                   ),
                                 ],
                               ),
-                              if (_productStl.product.value.hasDiscount
+                              if (_productStl.productDetail.value.hasDiscount
                               //     .minimumPrice.finalPrice.value !=
                               // _productStl.product.value.priceRange
                               //     .minimumPrice.regularPrice.value
@@ -260,10 +268,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                     children: [
                                       TextSpan(
                                         text: formatCurrency.format(
-                                            variantAmount == 0
-                                                ? _productController
-                                                    .productDetail.value.price
-                                                : variantAmount),
+                                          variantAmount == 0
+                                              ? _productController
+                                                  .productDetail.value.price
+                                              : variantAmount,
+                                        ),
                                         style: TextStyle(
                                             decoration:
                                                 TextDecoration.lineThrough,
@@ -332,21 +341,21 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 //     overflow: TextOverflow.ellipsis,
                                 //   ),
                                 // ),
-                                if (_productStl.product.value.discountPrice > 0)
-                                CapsuleWiget(
-                                  borderRadius: 4.w,
-                                  padding:
-                                      EdgeInsets.fromLTRB(10.w, 2.w, 10.w, 2.w),
-                                  color:
-                                      Get.theme.primaryColor.withOpacity(0.2.w),
-                                  borderColor: Colors.transparent,
-                                  child: Text(
-                                    "${_productStl.productDetail.value.percentageDiscount} % ${S.of(context).off}",
-                                    style: Get.textTheme.bodyText1.copyWith(
-                                        color: Get.theme.primaryColor,
-                                        fontSize: 13.w),
-                                  ),
-                                )
+                                if (_productStl.productDetail.value.hasDiscount)
+                                  CapsuleWiget(
+                                    borderRadius: 4.w,
+                                    padding: EdgeInsets.fromLTRB(
+                                        10.w, 2.w, 10.w, 2.w),
+                                    color: Get.theme.primaryColor
+                                        .withOpacity(0.2.w),
+                                    borderColor: Colors.transparent,
+                                    child: Text(
+                                      "${_productStl.productDetail.value.percentageDiscount} % ${S.of(context).off}",
+                                      style: Get.textTheme.bodyText1.copyWith(
+                                          color: Get.theme.primaryColor,
+                                          fontSize: 13.w),
+                                    ),
+                                  )
                               ],
                             ),
                           ),
@@ -508,36 +517,37 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             ),
                           ],
                         ),
-                        // if (_productStl.product.value.seller.name != null)
-                        ListTile(
-                          tileColor: Colors.white,
-                          title: Text(
-                            "${_productStl.productDetail.value.merchantDetails.companyName}"
-                                .tr,
-                            maxLines: 2,
-                            style: TextStyle(
-                                fontSize: 13.w, fontWeight: FontWeight.w600),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          trailing: Icon(
-                            Icons.arrow_forward_ios_rounded,
-                            size: 15.w,
-                          ),
-                          onTap: () => Get.to(ProductsView(
-                              type: _productStl.productDetail.value
-                                          .merchantDetails.companyName ==
-                                      null
-                                  ? "_"
-                                  : _productStl.productDetail.value
-                                      .merchantDetails.companyName)),
-                        )
+                        if (_productStl.productDetail.value.merchantDetails !=
+                            null)
+                          ListTile(
+                            tileColor: Colors.white,
+                            title: Text(
+                              "${_productStl.productDetail.value.merchantDetails.companyName}"
+                                  .tr,
+                              maxLines: 2,
+                              style: TextStyle(
+                                  fontSize: 13.w, fontWeight: FontWeight.w600),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            trailing: Icon(
+                              Icons.arrow_forward_ios_rounded,
+                              size: 15.w,
+                            ),
+                            onTap: () => Get.to(ProductsView(
+                                type: _productStl.productDetail.value
+                                            .merchantDetails.companyName ==
+                                        null
+                                    ? "_"
+                                    : _productStl.productDetail.value
+                                        .merchantDetails.companyName)),
+                          )
                       ],
                     ),
                   ),
-                  // if (_productStl.product.value.relatedProducts != null &&
-                  //     _productController
-                  //         .product.value.relatedProducts.isNotEmpty)
-                  //   _buildRelatedProducts(),
+                  if (_productStl.productDetail.value.relatedItems != null &&
+                      _productController
+                          .productDetail.value.relatedItems.isNotEmpty)
+                    _buildRelatedProducts(),
                   // Row(
                   //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   //   children: <Widget>[
@@ -805,7 +815,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           children: <Widget>[
                             Html(
                               data: _productController
-                                      .product.value.description ??
+                                      .productDetail.value.description ??
                                   "",
                             ),
                           ],
@@ -844,10 +854,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 ),
               ],
             ),
-            // ProductsGrid(
-            //   scrollDirection: Axis.vertical,
-            //   products: _p.product.value.relatedProducts,
-            // ),
+            ProductsGrid(
+              scrollDirection: Axis.vertical,
+              products: _p.productDetail.value.relatedItems,
+            ),
           ],
         ),
       );
@@ -986,7 +996,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 7),
             child: Row(
-
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
@@ -1003,8 +1012,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           width: 100.w,
                           child: CarouselSlider(
                             showDots: false,
-                            itemCount:
-                                _productController.product.value.photos?.length,
+                            itemCount: _productController
+                                .productDetail.value.photos?.length,
                             itemBuilder: (context, ind) => Container(
                               padding: EdgeInsets.all(10.w),
                               margin: EdgeInsets.only(right: 10.w),

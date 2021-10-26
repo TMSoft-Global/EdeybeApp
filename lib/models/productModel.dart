@@ -28,7 +28,7 @@ class ProductModel {
   List<Variants> variants;
   bool hasVariants;
   MerchantDetails merchantDetails;
-  List<RelatedItems> relatedItems;
+  List<ProductModel> relatedItems;
   int quantity = 1;
 
   ProductModel(
@@ -111,9 +111,9 @@ class ProductModel {
         ? new MerchantDetails.fromJson(json['merchantDetails'])
         : null;
     if (json['relatedItems'] != null) {
-      relatedItems = new List<RelatedItems>();
+      relatedItems = <ProductModel>[];
       json['relatedItems'].forEach((v) {
-        relatedItems.add(new RelatedItems.fromJson(v));
+        relatedItems.add(new ProductModel.fromJson(v));
       });
     }
   }

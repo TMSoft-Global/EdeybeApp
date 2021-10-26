@@ -190,7 +190,7 @@ class _SearchResultWidgetState extends State<SearchResultWidget>
                                                           WishlistScreen()),
                                                       productTitle:
                                                           _productController
-                                                              .product
+                                                              .productDetail
                                                               .value
                                                               .productName,
                                                       cartTotal: formatCurrency.format(
