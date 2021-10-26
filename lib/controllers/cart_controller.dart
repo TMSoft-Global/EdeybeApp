@@ -15,6 +15,7 @@ class CartController extends GetxController implements HTTPErrorHandler {
   var cartItems = <ProductModel>[].obs;
   var operations = CartOperation();
   var deliveryCost = DeliveryCost();
+  var cartCost = ProductCost();
   var connectionError = false.obs;
   var serverError = false.obs;
   // var addressCtl = Get.find<AddressController>();
@@ -29,23 +30,31 @@ class CartController extends GetxController implements HTTPErrorHandler {
 
   addToCart(ProductModel p, Function callback, {String variantID}) {
     resetErrorState();
-    
+
+    // print(variantID);pp.selectedVariantID = variantID
     Map<String, dynamic> items = {};
     var inList = cartItems.firstWhere((pp) => pp.productId == p.productId,
         orElse: () => null);
-      // print(inList.productId);
+    // print(inList.productId);
     if (inList != null) {
       cartItems.removeWhere((pp) => pp.productId == p.productId);
     } else {
-      items = {
-        "items": {
-          "${p.productId}": {"quantity": p.quantity}
-        }
-      };
+      items = variantID == null
+          ? {
+              "items": {
+                "${p.productId}": {"quantity": p.quantity}
+              }
+            }
+          : {
+              "items": {
+                "${p.productId}_$variantID": {"quantity": p.quantity}
+              }
+            };
     }
     cartItems.forEach((item) {
       items["items"][item.productId] = {"quantity": item.quantity};
-      // print(item);
+      // item.selectedVariantID = variantID;
+      print(variantID);
     });
     operations.updateCart(items, (response) {
       cartItems.add(p);
@@ -56,11 +65,19 @@ class CartController extends GetxController implements HTTPErrorHandler {
 
   getCartITems() {
     resetErrorState();
-    operations.getAllCartItems((response) {
+    operations.getAllCartItems((response ) {
       print(response.length);
       cartItems.value = response;
+      
       update();
-    }, handleError);
+    }, handleError,(val){
+      cartCost = val;
+      update();
+    });
+  }
+
+  clearCartPrice(){
+    cartCost = ProductCost();
   }
 
   getGhanaPostAddress(String code) {
@@ -107,9 +124,18 @@ class CartController extends GetxController implements HTTPErrorHandler {
     Get.find<WishlistController>().addToWishlist(movableProduct, callback);
   }
 
-  setQuantity(int productIndex, int newQTY) {
+  setQuantity(int productIndex, int newQTY, String proID) {
+    print(newQTY);
     var item = cartItems[productIndex].setQuantity(newQTY);
     cartItems[productIndex] = item;
+    operations.updateCart({
+              "items": {
+                "$proID": {"quantity": newQTY}
+              }
+            }, (response) {
+        // cartItems.value = response;
+        update();
+      },handleError);
     update();
   }
 

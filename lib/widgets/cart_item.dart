@@ -143,7 +143,7 @@ class CartItem extends StatelessWidget {
                                           children: [
                                             TextSpan(
                                               text:
-                                                  "${formatCurrency.format(product is Order ? double.parse(product.productTotal) : product.price)}",
+                                                  "${formatCurrency.format(product is Order ? double.parse(product.productTotal) : (product.hasDiscount ? product.discountPrice : product.price))}",
                                               style: Get.textTheme.bodyText1
                                                   .copyWith(
                                                       fontSize: 14.w,
@@ -247,62 +247,67 @@ class CartItem extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Expanded(
-                              flex:type == CartItemType.Wishlist?0:2,
-                              child:type == CartItemType.Wishlist?Container(
-                                height: 0,
-                                width: 0,
-                              ): Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  Container(
-                                      width: 25.w,
-                                      height: 25.w,
-                                      child: TextButton(
-                                        style: TextButton.styleFrom(
-                                          padding: EdgeInsets.all(0),
-                                          backgroundColor: Colors.white,
-                                          shape: CircleBorder(
-                                              side: BorderSide(
+                              flex: type == CartItemType.Wishlist ? 0 : 2,
+                              child: type == CartItemType.Wishlist
+                                  ? Container(
+                                      height: 0,
+                                      width: 0,
+                                    )
+                                  : Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: <Widget>[
+                                        Container(
+                                            width: 25.w,
+                                            height: 25.w,
+                                            child: TextButton(
+                                              style: TextButton.styleFrom(
+                                                padding: EdgeInsets.all(0),
+                                                backgroundColor: Colors.white,
+                                                shape: CircleBorder(
+                                                    side: BorderSide(
+                                                        color: Get.theme
+                                                            .primaryColor)),
+                                              ),
+                                              onPressed: onDecreaseQunatity,
+                                              child: Icon(
+                                                Icons.remove,
+                                                size: 15.w,
+                                                color: Get.theme.primaryColor,
+                                              ),
+                                            )),
+                                        Container(
+                                          width: 30.w,
+                                          padding: EdgeInsets.all(5.w),
+                                          child: Text(
+                                            "${product.quantity ?? 1}",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                        Container(
+                                            width: 25.w,
+                                            height: 25.w,
+                                            child: TextButton(
+                                              style: TextButton.styleFrom(
+                                                padding: EdgeInsets.all(0),
+                                                backgroundColor: Colors.white,
+                                                shape: CircleBorder(
+                                                    side: BorderSide(
+                                                        color: Get.theme
+                                                            .primaryColor)),
+                                              ),
+                                              onPressed: onIncreaseQunatity,
+                                              child: Icon(Icons.add,
+                                                  size: 15.w,
                                                   color:
-                                                      Get.theme.primaryColor)),
-                                        ),
-                                        onPressed: onDecreaseQunatity,
-                                        child: Icon(
-                                          Icons.remove,
-                                          size: 15.w,
-                                          color: Get.theme.primaryColor,
-                                        ),
-                                      )),
-                                  Container(
-                                    width: 30.w,
-                                    padding: EdgeInsets.all(5.w),
-                                    child: Text(
-                                      "${product.quantity ?? 1}",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
+                                                      Get.theme.primaryColor),
+                                            )),
+                                      ],
                                     ),
-                                  ),
-                                  Container(
-                                      width: 25.w,
-                                      height: 25.w,
-                                      child: TextButton(
-                                        style: TextButton.styleFrom(
-                                          padding: EdgeInsets.all(0),
-                                          backgroundColor: Colors.white,
-                                          shape: CircleBorder(
-                                              side: BorderSide(
-                                                  color:
-                                                      Get.theme.primaryColor)),
-                                        ),
-                                        onPressed: onIncreaseQunatity,
-                                        child: Icon(Icons.add,
-                                            size: 15.w,
-                                            color: Get.theme.primaryColor),
-                                      )),
-                                ],
-                              ),
                             ),
                             Expanded(
                               flex: 5,
