@@ -138,7 +138,10 @@ class _CartScreenTabState extends State<CartScreenTab>
                             : _cartController.setQuantity(
                                 products.indexWhere((element) =>
                                     element.productId == e.productId),
-                                -1 + (e.quantity ?? 1),e.productId)
+                                -1 +
+                                    (_cartController.cartCost.numberOfItems ??
+                                        1),
+                                e.productId)
                         : () {},
                     onIncreaseQunatity: () => type == CartItemType.Wishlist
                         ? _wishlistController.setQuantity(
@@ -148,7 +151,8 @@ class _CartScreenTabState extends State<CartScreenTab>
                         : _cartController.setQuantity(
                             products.indexWhere(
                                 (element) => element.productId == e.productId),
-                            1 + (e.quantity ?? 1),e.productId),
+                            1 + (e.quantity ?? 1),
+                            e.productId),
                     onMovePressed: type == CartItemType.Wishlist
                         ? () {
                             _wishlistController.moveToCart(

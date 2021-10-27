@@ -65,18 +65,21 @@ class CartController extends GetxController implements HTTPErrorHandler {
 
   getCartITems() {
     resetErrorState();
-    operations.getAllCartItems((response ) {
-      print(response.length);
-      cartItems.value = response;
-      
-      update();
-    }, handleError,(val){
-      cartCost = val;
-      update();
-    });
+    operations.getAllCartItems(
+        (response) {
+          print(response.length);
+          cartItems.value = response;
+
+          update();
+        },
+        handleError,
+        (val) {
+          cartCost = val;
+          update();
+        });
   }
 
-  clearCartPrice(){
+  clearCartPrice() {
     cartCost = ProductCost();
   }
 
@@ -129,13 +132,14 @@ class CartController extends GetxController implements HTTPErrorHandler {
     var item = cartItems[productIndex].setQuantity(newQTY);
     cartItems[productIndex] = item;
     operations.updateCart({
-              "items": {
-                "$proID": {"quantity": newQTY}
-              }
-            }, (response) {
-        // cartItems.value = response;
-        update();
-      },handleError);
+      "items": {
+        "$proID": {"quantity": newQTY}
+      }
+    }, (response) {
+      // getCartITems();
+      // cartItems.value = response;
+      // update();
+    }, handleError);
     update();
   }
 
