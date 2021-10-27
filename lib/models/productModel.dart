@@ -30,37 +30,43 @@ class ProductModel {
   MerchantDetails merchantDetails;
   List<ProductModel> relatedItems;
   int quantity = 1;
+  String selectedVariant;
+  // ProductCost productCost;
 
-  ProductModel(
-      {this.sId,
-      this.categoryId,
-      this.subCategoryId,
-      this.productName,
-      this.brand,
-      this.price = 0,
-      this.description,
-      this.photos,
-      this.status,
-      this.merchantId,
-      this.productId,
-      this.time,
-      this.categoryName,
-      this.subCategoryName,
-      this.merchantLocation,
-      this.merchantPhone,
-      this.weight,
-      this.hasDiscount,
-      this.viewCount,
-      this.purchaseCount,
-      this.moderatorId,
-      this.discountPrice = 0,
-      this.percentageDiscount,
-      this.updatedAt,
-      this.variants,
-      this.hasVariants,
-      this.merchantDetails,
-      this.relatedItems,
-      this.quantity});
+  ProductModel({
+    this.sId,
+    this.categoryId,
+    this.subCategoryId,
+    this.productName,
+    this.brand,
+    this.price = 0,
+    this.description,
+    this.photos,
+    this.status,
+    this.merchantId,
+    this.productId,
+    this.time,
+    this.categoryName,
+    this.subCategoryName,
+    this.merchantLocation,
+    this.merchantPhone,
+    this.weight,
+    this.hasDiscount,
+    this.viewCount,
+    this.purchaseCount,
+    this.moderatorId,
+    this.discountPrice = 0,
+    this.percentageDiscount,
+    this.updatedAt,
+    this.variants,
+    this.hasVariants,
+    this.merchantDetails,
+    this.relatedItems,
+    this.quantity,
+    this.selectedVariant,
+    // this.productCost,
+    // this.selectedVariantID,
+  });
 
   ProductModel.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -116,10 +122,12 @@ class ProductModel {
         relatedItems.add(new ProductModel.fromJson(v));
       });
     }
+    selectedVariant = json['selectedVariant'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    // data['selected_variantID'] = selectedVariantID;
     data['_id'] = this.sId;
     data['categoryId'] = this.categoryId;
     data['subCategoryId'] = this.subCategoryId;
@@ -149,6 +157,7 @@ class ProductModel {
     data['moderatorId'] = this.moderatorId;
     data['discountPrice'] = this.discountPrice;
     data['percentageDiscount'] = this.percentageDiscount;
+    data['selectedVariant'] = this.selectedVariant;
     data['updatedAt'] = this.updatedAt;
     if (this.variants != null) {
       data['variants'] = this.variants.map((v) => v.toJson()).toList();
@@ -193,6 +202,7 @@ class ProductModel {
         time: time,
         description: description,
         variants: variants,
+        // selectedVariantID: selectedVariantID,
         quantity: quantity);
   }
 }
@@ -494,6 +504,25 @@ class RelatedItems {
     if (this.variants != null) {
       data['variants'] = this.variants.map((v) => v.toJson()).toList();
     }
+    return data;
+  }
+}
+
+class ProductCost {
+  dynamic total;
+  int numberOfItems;
+
+  ProductCost({this.total, this.numberOfItems});
+
+  ProductCost.fromJson(Map<String, dynamic> json) {
+    total = double.parse(json['total']);
+    numberOfItems = json['displayText'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['total'] = this.total;
+    data['displayText'] = this.numberOfItems;
     return data;
   }
 }

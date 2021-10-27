@@ -120,7 +120,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       ),
       bottomNavigationBar: Obx(() => ProductDetailsBottomBar(
             onSetQuantity: (value) {
-              print(value);
               setState(() {
                 _productController.setQuantity(value);
               });
@@ -146,9 +145,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 _cartController.cartItems.fold(
                                     0,
                                     (previousValue, element) =>
-                                        element.hasDiscount
-                                            ? element.discountPrice
-                                            : element.price + previousValue))),
+                                        discountedVarianAmount != 0
+                                            ? discountedVarianAmount
+                                            : variantAmount != 0
+                                                ? variantAmount
+                                                : element.hasDiscount
+                                                    ? element.discountPrice
+                                                    : element.price +
+                                                        previousValue))),
                         barrierDismissible: true,
                       );
                     }, variantID: variantID);

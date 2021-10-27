@@ -12,6 +12,7 @@ import 'package:edeybe/screens/wishlist_screen/wishlist_screen.dart';
 import 'package:edeybe/utils/Debouncer.dart';
 import 'package:edeybe/utils/cart_item_type.dart';
 import 'package:edeybe/utils/constant.dart';
+import 'package:edeybe/utils/helper.dart';
 import 'package:edeybe/widgets/ErrorBoundary.dart';
 import 'package:edeybe/widgets/Shimmer.dart';
 import 'package:edeybe/widgets/cart_dialog.dart';
@@ -40,6 +41,7 @@ class _CartScreenTabState extends State<CartScreenTab>
   final _cartController = Get.put(CartController());
   final searchController = Get.find<SearchController>();
   final _userController = Get.find<UserController>();
+
   final _searchFieldController = TextEditingController();
   String _deliverto;
   List items = [0, 1, 3];
@@ -106,10 +108,7 @@ class _CartScreenTabState extends State<CartScreenTab>
                         color: Colors.grey.withOpacity(.1.w), width: 5.w))))
     ]
           ..addAll(products // <-- should be a list of user selected items
-              .map<Widget>((e) =>
-                  // CartItem(type: type, product: e)
-
-                  CartItem(
+              .map<Widget>((e) => CartItem(
                     product: e,
                     type: type,
                     onRemovePressed: () => Get.dialog(CustomDialog(
@@ -139,7 +138,7 @@ class _CartScreenTabState extends State<CartScreenTab>
                             : _cartController.setQuantity(
                                 products.indexWhere((element) =>
                                     element.productId == e.productId),
-                                -1 + (e.quantity ?? 1))
+                                -1 + (e.quantity ?? 1),e.productId)
                         : () {},
                     onIncreaseQunatity: () => type == CartItemType.Wishlist
                         ? _wishlistController.setQuantity(
@@ -149,7 +148,7 @@ class _CartScreenTabState extends State<CartScreenTab>
                         : _cartController.setQuantity(
                             products.indexWhere(
                                 (element) => element.productId == e.productId),
-                            1 + (e.quantity ?? 1)),
+                            1 + (e.quantity ?? 1),e.productId),
                     onMovePressed: type == CartItemType.Wishlist
                         ? () {
                             _wishlistController.moveToCart(
@@ -165,7 +164,8 @@ class _CartScreenTabState extends State<CartScreenTab>
                                         _cartController.cartItems.fold(
                                             0,
                                             (previousValue, element) =>
-                                                element.discountPrice))),
+                                                element.price +
+                                                previousValue))),
                                 barrierDismissible: true,
                               );
                             });
@@ -185,7 +185,7 @@ class _CartScreenTabState extends State<CartScreenTab>
                                         _wishlistController.wishlistItems.fold(
                                             0,
                                             (previousValue, element) =>
-                                                element.discountPrice +
+                                                element.price +
                                                 previousValue)))));
                             Get.dialog(
                               CartDialog(
@@ -196,8 +196,7 @@ class _CartScreenTabState extends State<CartScreenTab>
                                       _wishlistController.wishlistItems.fold(
                                           0,
                                           (previousValue, element) =>
-                                              element.discountPrice +
-                                              previousValue))),
+                                              element.price + previousValue))),
                               barrierDismissible: true,
                             );
                           },
@@ -316,7 +315,7 @@ class _CartScreenTabState extends State<CartScreenTab>
                     TextSpan(
                       text:
                           // ignore: lines_longer_than_80_chars
-                          "${formatCurrency.format(_cartController.cartItems.fold(0, (previousValue, element) => (previousValue + (element.hasDiscount ? element.discountPrice : element.price)) * (element.quantity ?? 1.00)))}",
+                          "${formatCurrency.format(_cartController.cartItems.fold(0, (previousValue, element) => previousValue + (element.hasDiscount ? element.discountPrice : element.price) * (element.quantity ?? 1.00)))}",
                       style: Get.textTheme.bodyText1.copyWith(
                           fontSize: 11.w,
                           fontWeight: FontWeight.w800,
@@ -502,22 +501,29 @@ class _CartScreenTabState extends State<CartScreenTab>
                   child: _cartController.cartItems.length > 0
                       ? CartBottomBar(
                           currency: "GHS",
-                          totalAmount: formatCurrency.format(
-                              _cartController.cartItems?.fold(
-                                  0,
-                                  (previousValue, element) =>
-                                      previousValue +
-                                      element.price *
-                                          (element.quantity ?? 1.00))),
-                          quantity: _cartController.cartItems.length,
+                          totalAmount:
+                              _cartController.cartCost.total.toString(),
+                          // formatCurrency.format(
+
+                          // _cartController.cartItems?.fold(
+                          //     0,
+                          //     (previousValue, element) =>
+                          //         previousValue +
+                          //         (element.hasDiscount? element.discountPrice: element.price) *
+                          //             (element.quantity ?? 1.00))
+                          // ),
+                          quantity: _cartController.cartCost.numberOfItems,
                           onGoToCheckout: () {
-                            _userController.isLoggedIn()
-                                ? Get.to(AddressScreen(
+                            !_userController.isLoggedIn()
+                                ? Helper.signInRequired(
+                                    "You must sign in to checkout",
+                                    () => Get.offAll(LoginScreen()),
+                                  )
+                                : Get.to(AddressScreen(
                                     hasContinueButton: true,
                                     onContinuePressed: () =>
                                         Get.off(CheckoutScreen()),
-                                  ))
-                                : Get.off(LoginScreen());
+                                  ));
                           },
                         )
                       : null,
@@ -533,6 +539,7 @@ class _CartScreenTabState extends State<CartScreenTab>
                 SingleChildScrollView(
                     child: Column(
                   children: [
+                    // Text("${_cartController.cartCost.total}"),
                     _buildCartItem(
                         CartItemType.Cart, _cartController.cartItems),
                     if (_cartController.cartItems.isNotEmpty) _itemTotal,

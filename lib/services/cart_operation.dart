@@ -8,8 +8,8 @@ import 'package:edeybe/services/server_operation.dart';
 import 'package:edeybe/widgets/custom_dialog.dart';
 
 class CartOperation extends ServerOperations {
-  getAllCartItems(
-      void onResponse(List<ProductModel> response), void onError(DioError error)) {
+  getAllCartItems(void onResponse(List<ProductModel> response),
+      void onError(DioError error),cartCost(ProductCost productCost)) {
     dynamicRequest(
       path: "/getcart",
       schema: "",
@@ -17,25 +17,34 @@ class CartOperation extends ServerOperations {
       onResponse: (res) {
         if (res.containsKey("items")) {
           var data = (res["items"] as List<dynamic>)
-              .map((dynamic i) => ProductModel.fromJson(i as Map<String, dynamic>))
+              .map((dynamic i) =>
+                  ProductModel.fromJson(i as Map<String, dynamic>))
               // .sortedByNum((element) => element.id)
               .toList();
+          ProductCost productCost = ProductCost(
+              numberOfItems: res['numberOfItems'], total: res['total']);
           onResponse(data);
+          cartCost(productCost);
         }
       },
     );
   }
 
-  updateCart(Map<String, dynamic> data, void onResponse(List<ProductModel> response),
+  updateCart(
+      Map<String, dynamic> data,
+      void onResponse(List<ProductModel> response),
       void onError(DioError error)) {
     dynamicRequest(
       path: "/updatecart",
       schema: jsonEncode(data),
       method: "PUT",
       onError: onError,
+      showDialog: true,
       onResponse: (res) {
+        print(res);
         var data = (res["items"] as List<dynamic>)
-            .map((dynamic i) => ProductModel.fromJson(i as Map<String, dynamic>))
+            .map(
+                (dynamic i) => ProductModel.fromJson(i as Map<String, dynamic>))
             .toList();
         onResponse(data);
       },

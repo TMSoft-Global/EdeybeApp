@@ -100,10 +100,10 @@ class _ProductsViewState extends State<ProductsView>
     }
   }
 
-  void loadMore() {
-    _productController.setNextPage(isMerchant: widget.type is Seller);
-    loadData();
-  }
+  // void loadMore() {
+  //   _productController.setNextPage(isMerchant: widget.type is Seller);
+  //   loadData();
+  // }
 
   void loadData() {
     if (widget.type is SubCategory) {
@@ -118,9 +118,10 @@ class _ProductsViewState extends State<ProductsView>
       // else if (ProductType.Slugs == widget.type)
       //   _productController.getAllProducts();
     }
-    widget.type is Seller
-        ? _productController.getMerchantProducts(widget.type.id)
-        : _productController.getAllProducts();
+    // widget.type is Seller
+    //     ? _productController.getMerchantProducts(widget.type.id)
+    //     : 
+        _productController.getAllProducts();
   }
 
   void _showSearch() {
@@ -260,7 +261,7 @@ class _ProductsViewState extends State<ProductsView>
                     ),
                   ),
             centerTitle: false,
-            bottom: !showSearch && !(widget.type is Seller)
+            bottom: !showSearch 
                 ? PreferredSize(
                     child: Filter(
                         switchListView: _toggleListView,
@@ -293,8 +294,9 @@ class _ProductsViewState extends State<ProductsView>
                         runAlignment: WrapAlignment.center,
                         spacing: 0,
                         runSpacing: 0,
-                        children: [if (widget.type is Seller) _storeDetails(c)]
-                          ..addAll(_buildProducts(c)),
+                        children: 
+                        // [if (widget.type is Seller) _storeDetails(c)]
+                          _buildProducts(c),
                       ),
                     ),
                   ),
@@ -348,66 +350,68 @@ class _ProductsViewState extends State<ProductsView>
                         raters: 0,
                       ),
               ));
-    } else if (c.products != null &&
-        (c.products.isNotEmpty ||
-            (widget.type is Seller && c.merchantProducts.isNotEmpty))) {
-      List<Widget> prods =
-          ((widget.type is Seller) ? c.merchantProducts : c.products)
-              .map<Widget>(
-        (p) {
-          var index =
-              ((widget.type is Seller) ? c.merchantProducts : c.products)
-                  .indexOf(p);
-          return Container(
-            padding: EdgeInsets.symmetric(vertical: 5.w),
-            // height: showGrid ? 310.w : null,
-            child: showGrid
-                ? ProductCard(
-                    width: Get.width / 2.1,
-                    padding: ((1 + index) % 2 != 0 ? 10 : 0).w,
-                    title: p.productName,
-                    image: p.photos[0],
-                    discount: p.discountPrice,
-                    price: p.price,
-                    oldPrice: p.price,
-                    onAddToWishList: () => _addToWishlist(p),
-                    onViewDetails: () {
-                      _productController.setInViewProduct(p);
+    } 
+    // else if (c.products != null &&
+    //     (c.products.isNotEmpty ||
+    //         (widget.type is Seller && c.merchantProducts.isNotEmpty))) {
+    //   List<Widget> prods =
+    //       ((widget.type is Seller) ? c.merchantProducts : c.products)
+    //           .map<Widget>(
+    //     (p) {
+    //       var index =
+    //           ((widget.type is Seller) ? c.merchantProducts : c.products)
+    //               .indexOf(p);
+    //       return Container(
+    //         padding: EdgeInsets.symmetric(vertical: 5.w),
+    //         // height: showGrid ? 310.w : null,
+    //         child: showGrid
+    //             ? ProductCard(
+    //                 width: Get.width / 2.1,
+    //                 padding: ((1 + index) % 2 != 0 ? 10 : 0).w,
+    //                 title: p.productName,
+    //                 image: p.photos[0],
+    //                 discount: p.discountPrice,
+    //                 price: p.price,
+    //                 oldPrice: p.price,
+    //                 onAddToWishList: () => _addToWishlist(p),
+    //                 onViewDetails: () {
+    //                   _productController.setInViewProduct(p);
 
-                      Get.to(ProductDetailsScreen());
-                    },
-                    hasDiscount: p.hasDiscount,
-                    isFav: Helper.isFavourite(p.productId, _wishlistController),
-                    rating: 5.0,
-                    raters: 23,
-                  )
-                : ProductCardLandscape(
-                    title: p.productName,
-                    image: p.photos[0],
-                    discount: p.discountPrice,
-                    price: p.price,
-                    oldPrice: p.price,
-                    onAddToWishList: () => _addToWishlist(p),
-                    onViewDetails: () {
-                      _productController.setInViewProduct(p);
+    //                   Get.to(ProductDetailsScreen());
+    //                 },
+    //                 hasDiscount: p.hasDiscount,
+    //                 isFav: Helper.isFavourite(p.productId, _wishlistController),
+    //                 rating: 5.0,
+    //                 raters: 23,
+    //               )
+    //             : ProductCardLandscape(
+    //                 title: p.productName,
+    //                 image: p.photos[0],
+    //                 discount: p.discountPrice,
+    //                 price: p.price,
+    //                 oldPrice: p.price,
+    //                 onAddToWishList: () => _addToWishlist(p),
+    //                 onViewDetails: () {
+    //                   _productController.setInViewProduct(p);
 
-                      Get.to(ProductDetailsScreen());
-                    },
-                    isFav: Helper.isFavourite(p.productId, _wishlistController),
-                    rating: 5.0,
-                    raters: 23,
-                  ),
-          );
-        },
-      ).toList();
-      prods.add(SeeMoreWidget(
-        canSeeMore: c.hasMore.value,
-        loading: c.loading.value,
-        onPress: loadMore,
-      ));
+    //                   Get.to(ProductDetailsScreen());
+    //                 },
+    //                 isFav: Helper.isFavourite(p.productId, _wishlistController),
+    //                 rating: 5.0,
+    //                 raters: 23,
+    //               ),
+    //       );
+    //     },
+    //   ).toList();
+    //   prods.add(SeeMoreWidget(
+    //     canSeeMore: c.hasMore.value,
+    //     loading: c.loading.value,
+    //     onPress: loadMore,
+    //   ));
 
-      return prods;
-    } else {
+    //   return prods;
+    // } 
+    else {
       return <Widget>[
         ListEmptyWidget(
             message: S.of(context).productsEmpty, child: SizedBox.shrink())
