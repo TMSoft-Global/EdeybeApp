@@ -966,10 +966,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               ? _productController.productDetail.value.discountPrice
               : _productController
                   .productDetail.value.variants[x].discountPrice;
-          print(discountedVarianAmount);
+          variantID == null;
         });
+        print(discountedVarianAmount);
       } else {
         setState(() {
+          variantID =
+              _productController.productDetail.value.variants[x].variantId;
           variantAmount = value;
           discountedVarianAmount =
               _productController.productDetail.value.variants[x].discountPrice;
