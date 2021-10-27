@@ -30,31 +30,25 @@ class CartController extends GetxController implements HTTPErrorHandler {
 
   addToCart(ProductModel p, Function callback, {String variantID}) {
     resetErrorState();
-
-    // print(variantID);pp.selectedVariantID = variantID
+    print(variantID);
     Map<String, dynamic> items = {};
     var inList = cartItems.firstWhere((pp) => pp.productId == p.productId,
         orElse: () => null);
-    // print(inList.productId);
     if (inList != null) {
       cartItems.removeWhere((pp) => pp.productId == p.productId);
     } else {
-      items = variantID == null
-          ? {
-              "items": {
+      items = {
+        "items": variantID == null
+            ? {
                 "${p.productId}": {"quantity": p.quantity}
               }
-            }
-          : {
-              "items": {
+            : {
                 "${p.productId}_$variantID": {"quantity": p.quantity}
               }
-            };
+      };
     }
     cartItems.forEach((item) {
       items["items"][item.productId] = {"quantity": item.quantity};
-      // item.selectedVariantID = variantID;
-      print(variantID);
     });
     operations.updateCart(items, (response) {
       cartItems.add(p);
@@ -128,19 +122,43 @@ class CartController extends GetxController implements HTTPErrorHandler {
   }
 
   setQuantity(int productIndex, int newQTY, String proID) {
-    print(newQTY);
+    Map<String, dynamic> items = {};
+
     var item = cartItems[productIndex].setQuantity(newQTY);
     cartItems[productIndex] = item;
-    operations.updateCart({
-      "items": {
-        "$proID": {"quantity": newQTY}
-      }
-    }, (response) {
-      // getCartITems();
-      // cartItems.value = response;
-      // update();
-    }, handleError);
+    items = {
+        "items": item.selectedVariant == null
+            ? {
+                "${item.productId}": {"quantity": item.quantity}
+              }
+            : {
+                "${item.productId}_${item.selectedVariant}": {"quantity": item.quantity}
+              }
+      };
+    cartItems.forEach((item) {
+      // if (proID == item.productId) 
+        // increaseItem();
+        // print(items);
+        items["items"][item.productId] = {"quantity": newQTY};
+    
+    });
+
+    print(items);
+
     update();
+  }
+
+  increaseItem({int newQTY, String proID}) {
+    print("object");
+    // operations.updateCart({
+    //   "items": {
+    //     "$proID": {"quantity": newQTY}
+    //   }
+    // }, (response) {
+    //   cartItems.addAll(response);
+    //   getCartITems();
+    //   update();
+    // }, handleError);
   }
 
   applyCoupon(String couponValue) {

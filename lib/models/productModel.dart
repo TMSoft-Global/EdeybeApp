@@ -62,10 +62,8 @@ class ProductModel {
     this.hasVariants,
     this.merchantDetails,
     this.relatedItems,
-    this.quantity,
+    this.quantity =1,
     this.selectedVariant,
-    // this.productCost,
-    // this.selectedVariantID,
   });
 
   ProductModel.fromJson(Map<String, dynamic> json) {
@@ -123,6 +121,7 @@ class ProductModel {
       });
     }
     selectedVariant = json['selectedVariant'];
+    quantity = json['quantity']== null ? 1 : json['quantity'];
   }
 
   Map<String, dynamic> toJson() {
@@ -134,6 +133,7 @@ class ProductModel {
     data['productName'] = this.productName;
     data['brand'] = this.brand;
     data['price'] = this.price;
+    data['quantity']= quantity;
     data['description'] = this.description;
     if (this.photos != null) {
       data['photos'] = this.photos.map((v) => v.toJson()).toList();
@@ -202,6 +202,7 @@ class ProductModel {
         time: time,
         description: description,
         variants: variants,
+        selectedVariant: selectedVariant,
         // selectedVariantID: selectedVariantID,
         quantity: quantity);
   }

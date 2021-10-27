@@ -34,6 +34,7 @@ class CartOperation extends ServerOperations {
       Map<String, dynamic> data,
       void onResponse(List<ProductModel> response),
       void onError(DioError error)) {
+        print(data);
     dynamicRequest(
       path: "/updatecart",
       schema: jsonEncode(data),

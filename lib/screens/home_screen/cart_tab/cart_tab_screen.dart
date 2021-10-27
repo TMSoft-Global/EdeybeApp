@@ -109,6 +109,8 @@ class _CartScreenTabState extends State<CartScreenTab>
     ]
           ..addAll(products // <-- should be a list of user selected items
               .map<Widget>((e) => CartItem(
+                // index: e.variants[0].,
+                // variantId:e.discountPrice
                     product: e,
                     type: type,
                     onRemovePressed: () => Get.dialog(CustomDialog(
@@ -189,7 +191,7 @@ class _CartScreenTabState extends State<CartScreenTab>
                                         _wishlistController.wishlistItems.fold(
                                             0,
                                             (previousValue, element) =>
-                                                element.price +
+                                                element.variants[0].price +
                                                 previousValue)))));
                             Get.dialog(
                               CartDialog(
@@ -316,6 +318,8 @@ class _CartScreenTabState extends State<CartScreenTab>
                   fontSize: 11.w,
                   fontWeight: FontWeight.w800,
                   children: [
+
+                    
                     TextSpan(
                       text:
                           // ignore: lines_longer_than_80_chars
@@ -361,7 +365,7 @@ class _CartScreenTabState extends State<CartScreenTab>
                     TextSpan(
                       text:
                           // ignore: lines_longer_than_80_chars
-                          "${formatCurrency.format(_cartController.cartItems.fold(0, (previousValue, element) => previousValue + (element.hasDiscount ? element.discountPrice : element.price) * (element.quantity ?? 1.00)))}",
+                          "${formatCurrency.format(_cartController.cartItems.fold(0, (previousValue, element) => previousValue + (double.parse(_cartController.cartCost.total)) * (element.quantity ?? 1.00)))}",
                       style: Get.textTheme.bodyText1.copyWith(
                           fontSize: 17.w,
                           fontWeight: FontWeight.w800,
@@ -546,7 +550,7 @@ class _CartScreenTabState extends State<CartScreenTab>
                     // Text("${_cartController.cartCost.total}"),
                     _buildCartItem(
                         CartItemType.Cart, _cartController.cartItems),
-                    if (_cartController.cartItems.isNotEmpty) _itemTotal,
+                    // if (_cartController.cartItems.isNotEmpty) _itemTotal,
                   ],
                 )),
                 if (showSearch) SearchResultWidget(closeSearch: _cancelSearch)

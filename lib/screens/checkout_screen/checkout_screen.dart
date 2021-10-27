@@ -525,7 +525,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     currencyFirst: true,
                     children: [
                       TextSpan(
-                          text: formatCurrency.format(totalAmonut),
+                          text: formatCurrency.format(double.parse(_cartController.cartCost.total)),
                           style: TextStyle(
                               fontWeight: FontWeight.normal,
                               color: Colors.black,
