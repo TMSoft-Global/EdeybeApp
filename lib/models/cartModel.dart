@@ -1,3 +1,5 @@
+import 'package:edeybe/models/productModel.dart';
+
 class CartModel {
   List<Items> items;
   String total;
@@ -97,7 +99,7 @@ class Items {
     price = json['price'];
     description = json['description'];
     if (json['photos'] != null) {
-      photos = new List<Photos>();
+      photos = <Photos>[];
       json['photos'].forEach((v) {
         photos.add(new Photos.fromJson(v));
       });
@@ -176,29 +178,6 @@ class Items {
     return data;
   }
 }
-
-class Photos {
-  String sm;
-  String md;
-  String lg;
-
-  Photos({this.sm, this.md, this.lg});
-
-  Photos.fromJson(Map<String, dynamic> json) {
-    sm = json['sm'];
-    md = json['md'];
-    lg = json['lg'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['sm'] = this.sm;
-    data['md'] = this.md;
-    data['lg'] = this.lg;
-    return data;
-  }
-}
-
 class Status {
   bool instock;
 
@@ -240,85 +219,6 @@ class MerchantLocation {
     data['lat'] = this.lat;
     data['long'] = this.long;
     data['digitalAddress'] = this.digitalAddress;
-    return data;
-  }
-}
-
-class Variants {
-  String variantName;
-  List<VariantAttributes> variantAttributes;
-  bool isDefaultPrice;
-  int price;
-  List<Photos> images;
-  bool hasDiscount;
-  double discountPrice;
-  String variantId;
-
-  Variants(
-      {this.variantName,
-      this.variantAttributes,
-      this.isDefaultPrice,
-      this.price,
-      this.images,
-      this.hasDiscount,
-      this.discountPrice,
-      this.variantId});
-
-  Variants.fromJson(Map<String, dynamic> json) {
-    variantName = json['variantName'];
-    if (json['variantAttributes'] != null) {
-      variantAttributes = new List<VariantAttributes>();
-      json['variantAttributes'].forEach((v) {
-        variantAttributes.add(new VariantAttributes.fromJson(v));
-      });
-    }
-    isDefaultPrice = json['isDefaultPrice'];
-    price = json['price'];
-    if (json['images'] != null) {
-      images = new List<Photos>();
-      json['images'].forEach((v) {
-        images.add(new Photos.fromJson(v));
-      });
-    }
-    hasDiscount = json['hasDiscount'];
-    discountPrice = json['discountPrice'];
-    variantId = json['variantId'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['variantName'] = this.variantName;
-    if (this.variantAttributes != null) {
-      data['variantAttributes'] =
-          this.variantAttributes.map((v) => v.toJson()).toList();
-    }
-    data['isDefaultPrice'] = this.isDefaultPrice;
-    data['price'] = this.price;
-    if (this.images != null) {
-      data['images'] = this.images.map((v) => v.toJson()).toList();
-    }
-    data['hasDiscount'] = this.hasDiscount;
-    data['discountPrice'] = this.discountPrice;
-    data['variantId'] = this.variantId;
-    return data;
-  }
-}
-
-class VariantAttributes {
-  String sId;
-  String value;
-
-  VariantAttributes({this.sId, this.value});
-
-  VariantAttributes.fromJson(Map<String, dynamic> json) {
-    sId = json['_id'];
-    value = json['value'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
-    data['value'] = this.value;
     return data;
   }
 }

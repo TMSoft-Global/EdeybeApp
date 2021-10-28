@@ -61,7 +61,7 @@ class ProductCard extends StatelessWidget {
                     Container(
                       padding:
                           EdgeInsets.only(top: 10.w, left: 10.w, right: 10.w),
-                      height: 150.w,
+                      // height: 160.w,
                       width: width ?? (Get.width / 2.3).w,
                       child: ShimmerLoading(
                         isLoading: isLoading,

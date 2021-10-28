@@ -23,7 +23,7 @@ class _OrderDetailsState extends State<OrderDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Order Detials ${widget.order.orderId}"),
+          title: Text("Order Detials ${widget.order.transactionId}"),
         ),
         body: SafeArea(
           child: SingleChildScrollView(
@@ -47,13 +47,17 @@ class _OrderDetailsState extends State<OrderDetails> {
                   ),
                   CartItem(
                     tappable: false,
-                    product: ProductModel(
-                        productName: widget.order.name,
-                        productId:widget.order.id,
+                    product: Order(
+                        productName: widget.order.productName,
+                        productId:widget.order.transactionId,
                         // photos: widget.order.image,
                         photos: widget.order.photos,
                         quantity: widget.order.quantity,
-                        // seller: Seller(name: ""),
+                        hasDiscount: false,
+                        hasVariants: false,
+                        productTotal: widget.order.productTotal
+
+                        // merchantDetails: "",
                         // priceRange: PriceRange(
                         //     minimumPrice: MinimumPrice(
                         //         finalPrice: Price(
@@ -117,7 +121,7 @@ class _OrderDetailsState extends State<OrderDetails> {
               TableCell(
                 child: Container(
                   alignment: Alignment.centerRight,
-                  child: Text(widget.order.orderId,
+                  child: Text(widget.order.transactionId,
                       style: TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 12.w)),
                 ),
@@ -287,7 +291,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                   child: Text(
                       DateFormat.yMEd()
                           .add_jms()
-                          .format(DateTime.parse(widget.order.deliveryDate)),
+                          .format(DateTime.parse(widget.order.paymentDate)),
                       style: TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 12.w)),
                 ),

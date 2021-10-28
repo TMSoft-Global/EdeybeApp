@@ -45,7 +45,6 @@ class WishlistController extends GetxController implements HTTPErrorHandler {
     Map<String, dynamic> items = {"items": []};
     var inList =
         wishlistItems.firstWhere((p) => p.productId == item.productId, orElse: () => null);
-        print(inList.productName);
     if (inList != null) {
       wishlistItems.removeWhere((p) => p.productId == item.productId);
     } else {

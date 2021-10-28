@@ -55,12 +55,15 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen>
                               thickness: 2.0,
                             )
                           ]..addAll(value
-                              .map<Widget>((e) => CartItem(
+                              .map<Widget>((e) => 
+                              // Text(e.hasVariants.toString())
+                              CartItem(
                                     product: e,
                                     type: type,
                                     onViewDetails: () =>
                                         Get.to(OrderDetails(order: e)),
-                                  ))
+                                  )
+                                  )
                               .toList()),
                         )))
                     .values
@@ -105,7 +108,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen>
   Map<String, List<Order>> groupOrders(List<Order> data, int type) =>
       data.groupBy((order) {
         return DateFormat("E d MMM, yyyy").format(
-            DateTime.parse(type == 2 ? order.deliveryDate : order.paymentDate));
+            DateTime.parse(type == 2 ? order.paymentDate : order.paymentDate));
       });
 
   @override

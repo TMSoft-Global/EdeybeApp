@@ -167,13 +167,6 @@ class _AddorEditScreenState extends State<AddorEditScreen> {
           child: SingleChildScrollView(
               child: Column(
             children: <Widget>[
-              Container(
-                  width: Get.width,
-                  padding: EdgeInsets.fromLTRB(20.w, 10.w, 20.w, 10.w),
-                  color: Constants.themeGreyLight.withOpacity(0.5),
-                  child: Text(S.of(context).addressDetails.toUpperCase(),
-                      style: TextStyle(
-                          fontSize: 17.w, fontWeight: FontWeight.w600))),
               Form(
                 key: _formKey,
                 autovalidateMode: autoValidate
@@ -326,125 +319,6 @@ class _AddorEditScreenState extends State<AddorEditScreen> {
                       //   ),
                       // ),
                       // SizedBox(width: 10.w),
-
-                      Container(
-                        decoration:
-                            BoxDecoration(color: Colors.white, boxShadow: [
-                          BoxShadow(
-                            color: Constants.boxShadow,
-                            blurRadius: 3.4.w,
-                            offset: Offset(0, 3.4.w),
-                          )
-                        ]),
-                        margin: EdgeInsets.fromLTRB(10.w, 10.w, 10.w, 10.w),
-                        padding: EdgeInsets.fromLTRB(15.w, 5.w, 15.w, 20.w),
-                        child: Column(
-                          children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-                                Expanded(
-                                  flex: 1,
-                                  child: Container(
-                                    child: Text("Place Name",
-                                        style: TextStyle(
-                                            color: Constants.themeGreyDark)),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 3,
-                                  child: Container(
-                                    padding: EdgeInsets.only(
-                                      left: 10.w,
-                                    ),
-                                    child: Text(locName
-                                        // "${address.firstName} ${address.lastName}",
-
-                                        ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-                                Expanded(
-                                  flex: 1,
-                                  child: Container(
-                                    child: Text(S.of(context).address,
-                                        style: TextStyle(
-                                            color: Constants.themeGreyDark)),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 3,
-                                  child: Container(
-                                    padding: EdgeInsets.only(
-                                      left: 10.w,
-                                    ),
-                                    child: Text(
-                                      locationAddress ?? "",
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-                                Expanded(
-                                  flex: 1,
-                                  child: Container(
-                                    child: Text("Longitude",
-                                        style: TextStyle(
-                                            color: Constants.themeGreyDark)),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 3,
-                                  child: Container(
-                                    padding: EdgeInsets.only(
-                                      left: 10.w,
-                                    ),
-                                    child: Text(
-                                      long ?? "",
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-                                Expanded(
-                                  flex: 1,
-                                  child: Container(
-                                    child: Text("Latitude",
-                                        style: TextStyle(
-                                            color: Constants.themeGreyDark)),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 3,
-                                  child: Container(
-                                    padding: EdgeInsets.only(
-                                      left: 10.w,
-                                    ),
-                                    child: Text(
-                                      lat ?? "",
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-
                       Container(
                           width: Get.width,
                           padding: EdgeInsets.only(left: 8.w, right: 8.w),
@@ -654,9 +528,130 @@ class _AddorEditScreenState extends State<AddorEditScreen> {
                     ],
                   ),
                 ),
-              )
-       
-       
+              ),
+              Container(
+                  width: Get.width,
+                  padding: EdgeInsets.fromLTRB(20.w, 10.w, 20.w, 10.w),
+                  color: Constants.themeGreyLight.withOpacity(0.5),
+                  child: Text(S.of(context).addressDetails.toUpperCase(),
+                      style: TextStyle(
+                          fontSize: 17.w, fontWeight: FontWeight.w600))),
+              Container(
+                decoration: BoxDecoration(color: Colors.white, boxShadow: [
+                  BoxShadow(
+                    color: Constants.boxShadow,
+                    blurRadius: 3.4.w,
+                    offset: Offset(0, 3.4.w),
+                  )
+                ]),
+                margin: EdgeInsets.fromLTRB(10.w, 10.w, 10.w, 10.w),
+                padding: EdgeInsets.fromLTRB(15.w, 5.w, 15.w, 20.w),
+                child: Column(
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Expanded(
+                          flex: 1,
+                          child: Container(
+                            child: Text("Place Name",
+                                style:
+                                    TextStyle(color: Constants.themeGreyDark)),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 3,
+                          child: Container(
+                            padding: EdgeInsets.only(
+                              left: 10.w,
+                            ),
+                            child: Text(locName
+                                // "${address.firstName} ${address.lastName}",
+
+                                ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Expanded(
+                          flex: 1,
+                          child: Container(
+                            child: Text(S.of(context).address,
+                                style:
+                                    TextStyle(color: Constants.themeGreyDark)),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 3,
+                          child: Container(
+                            padding: EdgeInsets.only(
+                              left: 10.w,
+                            ),
+                            child: Text(
+                              locationAddress ?? "",
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    // Row(
+                    //   crossAxisAlignment: CrossAxisAlignment.start,
+                    //   mainAxisAlignment: MainAxisAlignment.start,
+                    //   children: <Widget>[
+                    //     Expanded(
+                    //       flex: 1,
+                    //       child: Container(
+                    //         child: Text("Longitude",
+                    //             style:
+                    //                 TextStyle(color: Constants.themeGreyDark)),
+                    //       ),
+                    //     ),
+                    //     Expanded(
+                    //       flex: 3,
+                    //       child: Container(
+                    //         padding: EdgeInsets.only(
+                    //           left: 10.w,
+                    //         ),
+                    //         child: Text(
+                    //           long ?? "",
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
+                    // Row(
+                    //   crossAxisAlignment: CrossAxisAlignment.start,
+                    //   mainAxisAlignment: MainAxisAlignment.start,
+                    //   children: <Widget>[
+                    //     Expanded(
+                    //       flex: 1,
+                    //       child: Container(
+                    //         child: Text("Latitude",
+                    //             style:
+                    //                 TextStyle(color: Constants.themeGreyDark)),
+                    //       ),
+                    //     ),
+                    //     Expanded(
+                    //       flex: 3,
+                    //       child: Container(
+                    //         padding: EdgeInsets.only(
+                    //           left: 10.w,
+                    //         ),
+                    //         child: Text(
+                    //           lat ?? "",
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
+                  ],
+                ),
+              ),
             ],
           )),
         ));

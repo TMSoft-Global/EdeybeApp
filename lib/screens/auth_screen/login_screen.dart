@@ -19,6 +19,8 @@ class _LoginScreenState extends State<LoginScreen> {
   GlobalKey<FormState> _key = GlobalKey<FormState>();
   final FocusNode _emailF = FocusNode();
   final FocusNode _pass = FocusNode();
+  bool _obscureText = true;
+
 
   KeyboardActionsConfig _buildConfig(BuildContext context) {
     return KeyboardActionsConfig(
@@ -111,7 +113,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         focusNode: _pass,
                         maxLines: 1,
                         enableSuggestions: true,
-                        obscureText: true,
+                        obscureText: _obscureText,
                         validator: (value) {
                           return (value.isNotEmpty && value.length >= 6)
                               ? null
@@ -121,6 +123,19 @@ class _LoginScreenState extends State<LoginScreen> {
                         onSaved: (newValue) => _password = newValue,
                         style: TextStyle(fontSize: 14.w),
                         decoration: InputDecoration(
+                          suffixIcon: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _obscureText = !_obscureText;
+                                  });
+                                },
+                                child: Icon(
+                                  _obscureText
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                  color: Colors.black,
+                                ),
+                              ),
                           hintStyle: TextStyle(fontSize: 14.w),
                           contentPadding: EdgeInsets.symmetric(
                               vertical: 2.w, horizontal: 10.w),

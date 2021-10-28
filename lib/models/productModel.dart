@@ -97,13 +97,13 @@ class ProductModel {
         : null;
     merchantPhone = json['merchantPhone'];
     weight = json['weight'];
-    hasDiscount = json['hasDiscount'];
     viewCount = json['viewCount'];
     purchaseCount = json['purchase_count'];
     moderatorId = json['moderatorId'];
     discountPrice = json['discountPrice'];
     percentageDiscount = json['percentageDiscount'];
     updatedAt = json['updatedAt'];
+    hasDiscount = json['hasDiscount'];
     if (json['variants'] != null) {
       variants = <Variants>[];
       json['variants'].forEach((v) {

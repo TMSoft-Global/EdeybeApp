@@ -173,55 +173,55 @@ class AddressCard extends StatelessWidget {
                 ),
               ],
             ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Expanded(
-                  flex: 1,
-                  child: Container(
-                    child: Text("Longitude",
-                        style: TextStyle(color: Constants.themeGreyDark)),
-                  ),
-                ),
-                Expanded(
-                  flex: 3,
-                  child: Container(
-                    padding: EdgeInsets.only(
-                      left: 10.w,
-                    ),
-                    child: Text(
-                      deliveryAddress.long ?? "",
+            // Row(
+            //   crossAxisAlignment: CrossAxisAlignment.start,
+            //   mainAxisAlignment: MainAxisAlignment.start,
+            //   children: <Widget>[
+            //     Expanded(
+            //       flex: 1,
+            //       child: Container(
+            //         child: Text("Longitude",
+            //             style: TextStyle(color: Constants.themeGreyDark)),
+            //       ),
+            //     ),
+            //     Expanded(
+            //       flex: 3,
+            //       child: Container(
+            //         padding: EdgeInsets.only(
+            //           left: 10.w,
+            //         ),
+            //         child: Text(
+            //           deliveryAddress.long ?? "",
                       
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Expanded(
-                  flex: 1,
-                  child: Container(
-                    child: Text("Latitude",
-                        style: TextStyle(color: Constants.themeGreyDark)),
-                  ),
-                ),
-                Expanded(
-                  flex: 3,
-                  child: Container(
-                    padding: EdgeInsets.only(
-                      left: 10.w,
-                    ),
-                    child: Text(
-                      deliveryAddress.lat ?? "",
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            //         ),
+            //       ),
+            //     ),
+            //   ],
+            // ),
+            // Row(
+            //   crossAxisAlignment: CrossAxisAlignment.start,
+            //   mainAxisAlignment: MainAxisAlignment.start,
+            //   children: <Widget>[
+            //     Expanded(
+            //       flex: 1,
+            //       child: Container(
+            //         child: Text("Latitude",
+            //             style: TextStyle(color: Constants.themeGreyDark)),
+            //       ),
+            //     ),
+            //     Expanded(
+            //       flex: 3,
+            //       child: Container(
+            //         padding: EdgeInsets.only(
+            //           left: 10.w,
+            //         ),
+            //         child: Text(
+            //           deliveryAddress.lat ?? "",
+            //         ),
+            //       ),
+            //     ),
+            //   ],
+            // ),
           ],
         ),
       ),

@@ -138,28 +138,31 @@ class CartItem extends StatelessWidget {
                                       // mainAxisAlignment:
                                       // MainAxisAlignment.spaceBetween,
                                       children: <Widget>[
-                                        for (var x in product.variants)
-                                          if (x.variantId ==
-                                              product.selectedVariant)
-                                            MoneyWidget(
-                                              offset: Offset(3, 3.5),
-                                              scalefactor: 1,
-                                              currency: "GHS",
-                                              fontWeight: FontWeight.w800,
-                                              children: [
-                                                // TextSpan(text: "Hellp")
-                                                TextSpan(
-                                                  text:
-                                                      "${formatCurrency.format(product is Order ? double.parse(product.productTotal) : (x.hasDiscount ? x.discountPrice : x.price))}",
-                                                  style: Get.textTheme.bodyText1
-                                                      .copyWith(
-                                                          fontSize: 14.w,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          color: Colors.black),
-                                                ),
-                                              ],
-                                            ),
+                                        if (product.variants != null)
+                                          for (var x in product.variants)
+                                            if (x.variantId ==
+                                                product.selectedVariant)
+                                              MoneyWidget(
+                                                offset: Offset(3, 3.5),
+                                                scalefactor: 1,
+                                                currency: "GHS",
+                                                fontWeight: FontWeight.w800,
+                                                children: [
+                                                  // TextSpan(text: "Hellp")
+                                                  TextSpan(
+                                                    text:
+                                                        "${formatCurrency.format(product is Order ? double.parse(product.productTotal) : (x.hasDiscount ? x.discountPrice : x.price))}",
+                                                    style: Get
+                                                        .textTheme.bodyText1
+                                                        .copyWith(
+                                                            fontSize: 14.w,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color:
+                                                                Colors.black),
+                                                  ),
+                                                ],
+                                              ),
                                         if (!product.hasVariants)
                                           MoneyWidget(
                                             offset: Offset(3, 3.5),
