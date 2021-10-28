@@ -340,7 +340,7 @@ class Variants {
 
 class VariantAttributes {
   String sId;
-  String value;
+  dynamic value;
 
   VariantAttributes({this.sId, this.value});
 

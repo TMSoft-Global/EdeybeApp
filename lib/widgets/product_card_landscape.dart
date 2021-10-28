@@ -185,7 +185,7 @@ class ProductCardLandscape extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        if (discount > 0)
+                        if (discount == null ? 0 :discount > 0)
                           ShimmerLoading(
                               isLoading: isLoading,
                               child: _buildShimmerLoaderChild(CapsuleWiget(

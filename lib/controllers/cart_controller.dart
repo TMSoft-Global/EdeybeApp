@@ -127,22 +127,27 @@ class CartController extends GetxController implements HTTPErrorHandler {
     var item = cartItems[productIndex].setQuantity(newQTY);
     cartItems[productIndex] = item;
     items = {
-        "items": item.selectedVariant == null
-            ? {
-                "${item.productId}": {"quantity": item.quantity}
+      "items": item.selectedVariant == null
+          ? {
+              "${item.productId}": {"quantity": item.quantity}
+            }
+          : {
+              "${item.productId}_${item.selectedVariant}": {
+                "quantity": item.quantity
               }
-            : {
-                "${item.productId}_${item.selectedVariant}": {"quantity": item.quantity}
-              }
-      };
+            }
+    };
     cartItems.forEach((item) {
-      // if (proID == item.productId) 
-        // increaseItem();
-        // print(items);
+      if (proID == item.productId) {
         items["items"][item.productId] = {"quantity": newQTY};
-    
+      } else {
+        items["items"][item.productId] = {"quantity": item.quantity};
+      }
     });
-
+    operations.updateCart(items, (response) {
+      getCartITems();
+      update();
+    }, handleError);
     print(items);
 
     update();

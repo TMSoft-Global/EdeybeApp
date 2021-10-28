@@ -109,8 +109,8 @@ class _CartScreenTabState extends State<CartScreenTab>
     ]
           ..addAll(products // <-- should be a list of user selected items
               .map<Widget>((e) => CartItem(
-                // index: e.variants[0].,
-                // variantId:e.discountPrice
+                    // index: e.variants[0].,
+                    // variantId:e.discountPrice
                     product: e,
                     type: type,
                     onRemovePressed: () => Get.dialog(CustomDialog(
@@ -140,9 +140,7 @@ class _CartScreenTabState extends State<CartScreenTab>
                             : _cartController.setQuantity(
                                 products.indexWhere((element) =>
                                     element.productId == e.productId),
-                                -1 +
-                                    (_cartController.cartCost.numberOfItems ??
-                                        1),
+                                -1 + (e.quantity ?? 1),
                                 e.productId)
                         : () {},
                     onIncreaseQunatity: () => type == CartItemType.Wishlist
@@ -154,7 +152,8 @@ class _CartScreenTabState extends State<CartScreenTab>
                             products.indexWhere(
                                 (element) => element.productId == e.productId),
                             1 + (e.quantity ?? 1),
-                            e.productId),
+                            e.productId,
+                          ),
                     onMovePressed: type == CartItemType.Wishlist
                         ? () {
                             _wishlistController.moveToCart(
@@ -318,8 +317,6 @@ class _CartScreenTabState extends State<CartScreenTab>
                   fontSize: 11.w,
                   fontWeight: FontWeight.w800,
                   children: [
-
-                    
                     TextSpan(
                       text:
                           // ignore: lines_longer_than_80_chars

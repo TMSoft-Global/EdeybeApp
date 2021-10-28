@@ -172,10 +172,11 @@ class _SearchResultWidgetState extends State<SearchResultWidget>
                                         reverseCurve: Curves.bounceOut)),
                                 child: Container(
                                   padding: EdgeInsets.symmetric(vertical: 5.w),
+                                // child: Image.network(p.photos[0].sm),
                                   child: ProductCardLandscape(
                                     title: p.productName,
                                     image: p.photos[0],
-                                    discount: p.discountPrice,
+                                    discount: p.hasDiscount ? p.discountPrice : 0,
                                     price: p.price,
                                     oldPrice: p.price,
                                     onAddToWishList: () =>
@@ -209,11 +210,13 @@ class _SearchResultWidgetState extends State<SearchResultWidget>
                                         widget.closeSearch();
                                       Get.to(ProductDetailsScreen());
                                     },
-                                    isFav: Helper.isFavourite(
+                                    isFav: 
+                                    Helper.isFavourite(
                                         p.productId, wishlistController),
                                     rating: 5.0,
                                     raters: 23,
                                   ),
+                               
                                 ),
                               );
                             }
