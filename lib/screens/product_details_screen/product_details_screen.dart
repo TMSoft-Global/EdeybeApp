@@ -46,6 +46,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   dynamic discountedVarianAmount = 0;
   String variantSelected;
   String variantID;
+  bool hasVariant = false;
 
 // state functions
   void _setDeliveryLocation(text) {
@@ -959,8 +960,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   }
 
   void _setPrice(value, int x) {
-    if (_productController.productDetail.value.hasDiscount) {
-      print(x);
+    if (_productController.productDetail.value.hasVariants) {
+      // print(x);
       if (value == null || value == "null") {
         setState(() {
           variantAmount = _productController.productDetail.value.price;
@@ -972,7 +973,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   .productDetail.value.variants[x].discountPrice;
           variantID == null;
         });
-        print(discountedVarianAmount);
+        print("====$discountedVarianAmount");
       } else {
         setState(() {
           variantID =
@@ -1011,41 +1012,43 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     if (_productController
                             .productDetail.value.variants[index].images !=
                         null)
-                      for (var image in _productController
-                          .productDetail.value.variants[index].images) ...[
-                        // Text("${image.sm}"),
-                        Container(
-                          height: 100.h,
-                          width: 100.w,
-                          child: CarouselSlider(
-                            showDots: false,
-                            itemCount: _productController
-                                .productDetail.value.photos?.length,
-                            itemBuilder: (context, ind) => Container(
-                              padding: EdgeInsets.all(10.w),
-                              margin: EdgeInsets.only(right: 10.w),
-                              width: Get.width.w,
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(12.w)),
-                              child: GestureDetector(
-                                onTap: () => Get.dialog(PostGallery(
-                                  images: _productController
-                                      .productDetail.value.photos,
-                                  currentImage: ind,
-                                )),
-                                child: Image(
-                                  image: CachedNetworkImageProvider(
-                                    image.sm ?? "",
-                                  ),
-                                  // alignment: Alignment.center,
-                                  fit: BoxFit.contain,
+                      // for (var image in _productController
+                      //     .productDetail.value.variants[index].images) ...[
+                      // Text("${image.sm}"),
+                      Container(
+                        height: 100.h,
+                        width: 100.w,
+                        child: CarouselSlider(
+                          showDots: false,
+                          itemCount: _productController
+                              .productDetail.value.photos?.length,
+                          itemBuilder: (context, ind) => Container(
+                            padding: EdgeInsets.all(10.w),
+                            margin: EdgeInsets.only(right: 10.w),
+                            width: Get.width.w,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(12.w)),
+                            child: GestureDetector(
+                              onTap: () => Get.dialog(PostGallery(
+                                images: _productController
+                                    .productDetail.value.photos,
+                                currentImage: ind,
+                              )),
+                              child: Image(
+                                image: CachedNetworkImageProvider(
+                                  _productController.productDetail.value
+                                          .variants[index].images[0].sm ??
+                                      "",
                                 ),
+                                // alignment: Alignment.center,
+                                fit: BoxFit.contain,
                               ),
                             ),
                           ),
                         ),
-                      ],
+                      ),
+                    // ],
                   ],
                 ),
                 SizedBox(
@@ -1071,6 +1074,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         setState(() {
                           variantID = _productController
                               .productDetail.value.variants[index].variantId;
+                          print(_productController
+                              .productDetail.value.variants[index].price);
                         });
                         _setVariant(val);
 

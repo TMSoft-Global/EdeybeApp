@@ -51,6 +51,9 @@ class CardUtils {
           color: Colors.grey[600],
         );
         break;
+      case CardType.TGO:
+        // TODO: Handle this case.
+        break;
     }
 
     Widget widget;

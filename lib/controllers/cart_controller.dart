@@ -121,13 +121,13 @@ class CartController extends GetxController implements HTTPErrorHandler {
     Get.find<WishlistController>().addToWishlist(movableProduct, callback);
   }
 
-  setQuantity(int productIndex, int newQTY, String proID) {
+  setQuantity(int productIndex, int newQTY, String proID,{String variantID}) {
     Map<String, dynamic> items = {};
 
     var item = cartItems[productIndex].setQuantity(newQTY);
     cartItems[productIndex] = item;
     items = {
-      "items": item.selectedVariant == null
+      "items": variantID == null
           ? {
               "${item.productId}": {"quantity": item.quantity}
             }

@@ -1,6 +1,8 @@
 import 'package:edeybe/controllers/cart_controller.dart';
 import 'package:edeybe/controllers/wishlist_controller.dart';
+import 'package:edeybe/screens/checkout_screen/checkout_screen.dart';
 import 'package:edeybe/screens/checkout_screen/index.dart';
+import 'package:edeybe/screens/home_screen/cart_tab/cart_tab_screen.dart';
 import 'package:edeybe/utils/cart_item_type.dart';
 import 'package:edeybe/widgets/Shimmer.dart';
 import 'package:edeybe/widgets/cart_dialog.dart';
@@ -86,6 +88,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                     Get.dialog(
                       CartDialog(
                           title: title,
+                          onGoForward: () => Get.to(CheckoutScreen()),
                           productTitle: e.productName,
                           cartTotal: formatCurrency.format(list.fold(
                               0,

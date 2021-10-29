@@ -3,11 +3,9 @@ import 'package:edeybe/controllers/cart_controller.dart';
 import 'package:edeybe/index.dart';
 import 'package:edeybe/interface/HTTPErrorHandler.dart';
 import 'package:edeybe/models/deliveryModel.dart';
-import 'package:edeybe/models/shippingAddress.dart';
 import 'package:edeybe/services/address_operations.dart';
 import 'package:edeybe/services/cart_operation.dart';
 import 'package:edeybe/widgets/custom_dialog.dart';
-import 'package:flutter/material.dart';
 
 class AddressController extends GetxController implements HTTPErrorHandler {
   var addresses = <ShippingAddress>[].obs;
