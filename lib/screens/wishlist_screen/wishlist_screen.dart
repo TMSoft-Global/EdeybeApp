@@ -1,9 +1,12 @@
 import 'package:edeybe/controllers/cart_controller.dart';
+import 'package:edeybe/controllers/user_controller.dart';
 import 'package:edeybe/controllers/wishlist_controller.dart';
+import 'package:edeybe/screens/auth_screen/login_screen.dart';
 import 'package:edeybe/screens/checkout_screen/checkout_screen.dart';
 import 'package:edeybe/screens/checkout_screen/index.dart';
 import 'package:edeybe/screens/home_screen/cart_tab/cart_tab_screen.dart';
 import 'package:edeybe/utils/cart_item_type.dart';
+import 'package:edeybe/utils/helper.dart';
 import 'package:edeybe/widgets/Shimmer.dart';
 import 'package:edeybe/widgets/cart_dialog.dart';
 import 'package:edeybe/widgets/cart_item.dart';
@@ -25,6 +28,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
   final formatCurrency = new NumberFormat.simpleCurrency(name: "");
   final _wishlistController = Get.find<WishlistController>();
   final _cartController = Get.find<CartController>();
+  final _userController = Get.find<UserController>();
 
   @override
   void initState() {
@@ -88,7 +92,12 @@ class _WishlistScreenState extends State<WishlistScreen> {
                     Get.dialog(
                       CartDialog(
                           title: title,
-                          onGoForward: () => Get.to(CheckoutScreen()),
+                          onGoForward: () => !_userController.isLoggedIn()
+                              ? Helper.signInRequired(
+                                  "You must sign in to checkout",
+                                  () => Get.offAll(LoginScreen()),
+                                )
+                              : Get.to(CheckoutScreen()),
                           productTitle: e.productName,
                           cartTotal: formatCurrency.format(list.fold(
                               0,

@@ -118,10 +118,12 @@ class CartController extends GetxController implements HTTPErrorHandler {
     // ignore: todo
     //TODO: Add Wishlist Constroller and item to wishlist
     var movableProduct = cartItems.removeAt(index);
+    print(movableProduct);
     Get.find<WishlistController>().addToWishlist(movableProduct, callback);
   }
 
   setQuantity(int productIndex, int newQTY, String proID,{String variantID}) {
+    print(variantID);
     Map<String, dynamic> items = {};
 
     var item = cartItems[productIndex].setQuantity(newQTY);
@@ -149,21 +151,7 @@ class CartController extends GetxController implements HTTPErrorHandler {
       update();
     }, handleError);
     print(items);
-
     update();
-  }
-
-  increaseItem({int newQTY, String proID}) {
-    print("object");
-    // operations.updateCart({
-    //   "items": {
-    //     "$proID": {"quantity": newQTY}
-    //   }
-    // }, (response) {
-    //   cartItems.addAll(response);
-    //   getCartITems();
-    //   update();
-    // }, handleError);
   }
 
   applyCoupon(String couponValue) {

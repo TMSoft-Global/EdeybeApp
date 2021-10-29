@@ -517,13 +517,13 @@ class ProductCost {
 
   ProductCost.fromJson(Map<String, dynamic> json) {
     total = double.parse(json['total']);
-    numberOfItems = json['displayText'];
+    numberOfItems = json['totalPossible'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['total'] = this.total;
-    data['displayText'] = this.numberOfItems;
+    data['totalPossible'] = this.numberOfItems;
     return data;
   }
 }

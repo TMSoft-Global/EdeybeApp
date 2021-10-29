@@ -165,7 +165,13 @@ class _CartScreenTabState extends State<CartScreenTab>
                               Get.dialog(
                                 CartDialog(
                                     title: title,
-                                    onGoForward: () => Get.to(CheckoutScreen()),
+                                    onGoForward: () =>
+                                        !_userController.isLoggedIn()
+                                            ? Helper.signInRequired(
+                                                "You must sign in to checkout",
+                                                () => Get.offAll(LoginScreen()),
+                                              )
+                                            : Get.to(CheckoutScreen()),
                                     productTitle: e.productName,
                                     cartTotal: formatCurrency.format(
                                         _cartController.cartItems.fold(
@@ -192,7 +198,7 @@ class _CartScreenTabState extends State<CartScreenTab>
                                         _wishlistController.wishlistItems.fold(
                                             0,
                                             (previousValue, element) =>
-                                                element.variants[0].price +
+                                                element.price +
                                                 previousValue)))));
                             Get.dialog(
                               CartDialog(

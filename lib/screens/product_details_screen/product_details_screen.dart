@@ -245,7 +245,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 children: [
                                   TextSpan(
                                     text: formatCurrency.format(
-                                      discountedVarianAmount == 0
+                                      discountedVarianAmount == 0 ||
+                                              discountedVarianAmount == null
                                           ? _productController.productDetail
                                                   .value.hasDiscount
                                               ? _productController.productDetail
@@ -261,11 +262,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                   ),
                                 ],
                               ),
-                              if (_productStl.productDetail.value.hasDiscount
-                              //     .minimumPrice.finalPrice.value !=
-                              // _productStl.product.value.priceRange
-                              //     .minimumPrice.regularPrice.value
-                              )
+                              if (_productStl.productDetail.value.hasDiscount)
                                 MoneyWidget(
                                     offset: Offset(3, 3.5),
                                     scalefactor: 1,
@@ -960,8 +957,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   }
 
   void _setPrice(value, int x) {
+    print(value);
     if (_productController.productDetail.value.hasVariants) {
-      // print(x);
       if (value == null || value == "null") {
         setState(() {
           variantAmount = _productController.productDetail.value.price;
@@ -971,7 +968,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               ? _productController.productDetail.value.discountPrice
               : _productController
                   .productDetail.value.variants[x].discountPrice;
-          variantID == null;
+          variantID ==
+              _productController.productDetail.value.variants[x].variantId;
         });
         print("====$discountedVarianAmount");
       } else {
@@ -979,8 +977,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           variantID =
               _productController.productDetail.value.variants[x].variantId;
           variantAmount = value;
-          discountedVarianAmount =
-              _productController.productDetail.value.variants[x].discountPrice;
+          discountedVarianAmount = _productController
+                  .productDetail.value.variants[x].hasDiscount
+              ? _productController.productDetail.value.variants[x].discountPrice
+              : _productController.productDetail.value.variants[x].price;
           print(discountedVarianAmount);
           // print(variantAmount);
         });
@@ -1074,8 +1074,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         setState(() {
                           variantID = _productController
                               .productDetail.value.variants[index].variantId;
-                          print(_productController
-                              .productDetail.value.variants[index].price);
+                          // print(_productController
+                          //     .productDetail.value.variants[index].price);
                         });
                         _setVariant(val);
 

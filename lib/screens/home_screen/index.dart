@@ -8,6 +8,7 @@ import 'package:edeybe/controllers/wishlist_controller.dart';
 import 'package:edeybe/screens/home_screen/cart_tab/cart_tab_screen.dart';
 import 'package:edeybe/screens/home_screen/home_tab/home_tab_screen.dart';
 import 'package:edeybe/screens/home_screen/profile_screen_tab/profile_screen.dart';
+import 'package:edeybe/widgets/custom_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:edeybe/index.dart';
 
@@ -56,131 +57,143 @@ class _HomeIndexState extends State<HomeIndex> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: PageView(
-        onPageChanged: (i) => setState(() {
-          current = i;
-        }),
-        controller: pageController,
-        children: <Widget>[
-          HomeScreenTab(),
-          CategoryTabScreen(),
-          CartScreenTab(),
-          ProfileScreen(),
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        onTap: (i) {
-         getCart();
-          clearPageNo();
-          setState(() {
-            current = i;
-            pageController.jumpToPage(
-              current,
-            );
-          });
+    return WillPopScope(
+      onWillPop: () => Get.dialog(CustomDialog(
+        title: 'Confirmation',
+        confrimText: 'Yes',
+        content: 'Do you want to exit the app?',
+        confrimPressed: () {
+          Navigator.of(context).pop(true);
+          return true;
         },
-        selectedItemColor: Colors.black,
-        currentIndex: current,
-        type: BottomNavigationBarType.fixed,
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset('assets/icons/ic_home.svg'),
-            label: S.of(context).home,
-            activeIcon: SvgPicture.asset(
-              'assets/icons/ic_home.svg',
-              color: Colors.black,
+        cancelPressed: ()=>Navigator.pop(context),
+      )),
+      child: Scaffold(
+        body: PageView(
+          onPageChanged: (i) => setState(() {
+            current = i;
+          }),
+          controller: pageController,
+          children: <Widget>[
+            HomeScreenTab(),
+            CategoryTabScreen(),
+            CartScreenTab(),
+            ProfileScreen(),
+          ],
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          onTap: (i) {
+            getCart();
+            clearPageNo();
+            setState(() {
+              current = i;
+              pageController.jumpToPage(
+                current,
+              );
+            });
+          },
+          selectedItemColor: Colors.black,
+          currentIndex: current,
+          type: BottomNavigationBarType.fixed,
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset('assets/icons/ic_home.svg'),
+              label: S.of(context).home,
+              activeIcon: SvgPicture.asset(
+                'assets/icons/ic_home.svg',
+                color: Colors.black,
+              ),
             ),
-          ),
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset('assets/icons/ic_category.svg'),
-            label: S.of(context).category,
-            activeIcon: SvgPicture.asset(
-              'assets/icons/ic_category.svg',
-              color: Colors.black,
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset('assets/icons/ic_category.svg'),
+              label: S.of(context).category,
+              activeIcon: SvgPicture.asset(
+                'assets/icons/ic_category.svg',
+                color: Colors.black,
+              ),
             ),
-          ),
-          // BottomNavigationBarItem(
-          //   icon: SvgPicture.asset('assets/icons/ic_offer.svg'),
-          //   label: Text(S.of(context).offer),
-          //   activeIcon: SvgPicture.asset(
-          //     'assets/icons/ic_offer.svg',
-          //     color: Get.theme.primaryColor,
-          //   ),
-          // ),
-          BottomNavigationBarItem(
-            icon: GetBuilder<CartController>(
-                builder: (_) => Stack(
-                      children: <Widget>[
-                        SvgPicture.asset(
-                          'assets/icons/ic_cart.svg',
-                        ),
-                        if (cartController.cartItems.length > 0)
-                          Positioned(
-                            top: 0,
-                            right: 0,
-                            child: Container(
-                              height: 16,
-                              width: 16,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.red,
-                              ),
-                              child: Center(
-                                child: Text(
-                                  cartController.cartItems.length.toString(),
-                                  style: Get.textTheme.caption.copyWith(
-                                    color: Colors.white,
-                                    fontSize: 8.sp,
+            // BottomNavigationBarItem(
+            //   icon: SvgPicture.asset('assets/icons/ic_offer.svg'),
+            //   label: Text(S.of(context).offer),
+            //   activeIcon: SvgPicture.asset(
+            //     'assets/icons/ic_offer.svg',
+            //     color: Get.theme.primaryColor,
+            //   ),
+            // ),
+            BottomNavigationBarItem(
+              icon: GetBuilder<CartController>(
+                  builder: (_) => Stack(
+                        children: <Widget>[
+                          SvgPicture.asset(
+                            'assets/icons/ic_cart.svg',
+                          ),
+                          if (cartController.cartItems.length > 0)
+                            Positioned(
+                              top: 0,
+                              right: 0,
+                              child: Container(
+                                height: 16,
+                                width: 16,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.red,
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    cartController.cartItems.length.toString(),
+                                    style: Get.textTheme.caption.copyWith(
+                                      color: Colors.white,
+                                      fontSize: 8.sp,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          )
-                      ],
-                    )),
-            label: S.of(context).cart,
-            activeIcon: GetBuilder<CartController>(
-                builder: (_) => Stack(
-                      children: <Widget>[
-                        SvgPicture.asset(
-                          'assets/icons/ic_cart.svg',
-                          color: Colors.black,
-                        ),
-                        if (cartController.cartItems.length > 0)
-                          Positioned(
-                            top: 0,
-                            right: 0,
-                            child: Container(
-                              height: 16,
-                              width: 16,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.red,
-                              ),
-                              child: Center(
-                                child: Text(
-                                  cartController.cartItems.length.toString(),
-                                  style: Get.textTheme.caption.copyWith(
-                                    color: Colors.white,
-                                    fontSize: 8.sp,
+                            )
+                        ],
+                      )),
+              label: S.of(context).cart,
+              activeIcon: GetBuilder<CartController>(
+                  builder: (_) => Stack(
+                        children: <Widget>[
+                          SvgPicture.asset(
+                            'assets/icons/ic_cart.svg',
+                            color: Colors.black,
+                          ),
+                          if (cartController.cartItems.length > 0)
+                            Positioned(
+                              top: 0,
+                              right: 0,
+                              child: Container(
+                                height: 16,
+                                width: 16,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.red,
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    cartController.cartItems.length.toString(),
+                                    style: Get.textTheme.caption.copyWith(
+                                      color: Colors.white,
+                                      fontSize: 8.sp,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          )
-                      ],
-                    )),
-          ),
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset('assets/icons/ic_profile.svg'),
-            label: S.of(context).profile,
-            activeIcon: SvgPicture.asset(
-              'assets/icons/ic_profile.svg',
-              color: Colors.black,
+                            )
+                        ],
+                      )),
             ),
-          ),
-        ],
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset('assets/icons/ic_profile.svg'),
+              label: S.of(context).profile,
+              activeIcon: SvgPicture.asset(
+                'assets/icons/ic_profile.svg',
+                color: Colors.black,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

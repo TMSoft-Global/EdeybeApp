@@ -3,6 +3,7 @@ import 'package:edeybe/controllers/user_controller.dart';
 import 'package:edeybe/encryption/encryptData.dart';
 import 'package:edeybe/index.dart';
 import 'package:edeybe/screens/configuration_screen/config_screen.dart';
+import 'package:edeybe/screens/home_screen/index.dart';
 import 'package:edeybe/services/firebase_notification.dart';
 import 'package:edeybe/services/siren.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -31,21 +32,23 @@ class _SplashScreenState extends State<SplashScreen>
       // Wait for Firebase to initialize and set `_initialized` state to true
       await Firebase.initializeApp();
       setFirebase(
-        onPressed: (str) {
-          return null;
-        },
-        dispatchService: _userController.setPushNotificationToken,
-        noti: (val){
-          
-        }
-      );
+          onPressed: (str) {
+            return null;
+          },
+          dispatchService: _userController.setPushNotificationToken,
+          noti: (val) {});
 
       var _cookie = GetStorage().read("cookie");
       if (_cookie != null) {
         // print(_cookie);
         _userController.loginFromBase();
       } else {
-        Get.off(ConfigurationScreen());
+        var token = await GetStorage().read("anony-cookie");
+        if (token == null) {
+          _userController.getAnnonymousToken();
+        }
+        Get.offAll(HomeIndex());
+        // Get.off(ConfigurationScreen());
       }
     } catch (e) {
       // Set `_error` state to true if Firebase initialization fails

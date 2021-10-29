@@ -479,9 +479,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           0,
           (previousValue, element) =>
               previousValue +
-              ((element.hasDiscount ? element.discountPrice : element.price) *
-                      element.quantity) *
-                  (element.price));
+              ((element.hasDiscount ? element.discountPrice : 0) *
+                      element.quantity) );
+                  //     *
+                  // (element.price)));
       return Container(
         margin: EdgeInsets.fromLTRB(10.w, 20.w, 10.w, 10.w),
         padding: EdgeInsets.all(10.0.w),
@@ -527,7 +528,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     children: [
                       TextSpan(
                           text: formatCurrency.format(
-                              double.parse(_cartController.cartCost.total)),
+                              double.parse("${_cartController.cartCost.total}".toString())),
                           style: TextStyle(
                               fontWeight: FontWeight.normal,
                               color: Colors.black,
@@ -537,32 +538,32 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 ),
               ),
             ]),
-            TableRow(children: [
-              TableCell(
-                child: Container(
-                  alignment: Alignment.centerLeft,
-                  child: Text("${S.of(context).promotionDiscounts}"),
-                ),
-              ),
-              TableCell(
-                child: Container(
-                  alignment: Alignment.centerRight,
-                  child: MoneyWidget(
-                    offset: Offset(0, 4),
-                    fontWeight: FontWeight.w700,
-                    currencyFirst: true,
-                    children: [
-                      TextSpan(
-                          text: formatCurrency.format(totalDiscount),
-                          style: TextStyle(
-                              fontWeight: FontWeight.normal,
-                              color: Colors.black,
-                              fontSize: 14.w))
-                    ],
-                  ),
-                ),
-              ),
-            ]),
+            // TableRow(children: [
+            //   TableCell(
+            //     child: Container(
+            //       alignment: Alignment.centerLeft,
+            //       child: Text("${S.of(context).promotionDiscounts}"),
+            //     ),
+            //   ),
+            //   TableCell(
+            //     child: Container(
+            //       alignment: Alignment.centerRight,
+            //       child: MoneyWidget(
+            //         offset: Offset(0, 4),
+            //         fontWeight: FontWeight.w700,
+            //         currencyFirst: true,
+            //         children: [
+            //           TextSpan(
+            //               text: formatCurrency.format(totalDiscount),
+            //               style: TextStyle(
+            //                   fontWeight: FontWeight.normal,
+            //                   color: Colors.black,
+            //                   fontSize: 14.w))
+            //         ],
+            //       ),
+            //     ),
+            //   ),
+            // ]),
             TableRow(children: [
               TableCell(
                 child: Container(
