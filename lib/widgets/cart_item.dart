@@ -7,6 +7,7 @@ import 'package:edeybe/utils/helper.dart';
 import 'package:edeybe/widgets/ShimmerLoader.dart';
 import 'package:edeybe/widgets/money_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:intl/intl.dart';
 
 class CartItem extends StatelessWidget {
@@ -147,11 +148,12 @@ class CartItem extends StatelessWidget {
                                                 scalefactor: 1,
                                                 currency: "GHS",
                                                 fontWeight: FontWeight.w800,
+                                                currencyFirst: true,
                                                 children: [
                                                   // TextSpan(text: "Hellp")
                                                   TextSpan(
                                                     text:
-                                                        "${formatCurrency.format(product is Order ? double.parse(product.productTotal) : (x.hasDiscount ? x.discountPrice : x.price))}",
+                                                        "${formatCurrency.format(product is Order ? double.parse(product.productTotal) : (x.discountPrice == null && x.price == null ? product.price : x.hasDiscount ? x.discountPrice : x.price))}",
                                                     style: Get
                                                         .textTheme.bodyText1
                                                         .copyWith(

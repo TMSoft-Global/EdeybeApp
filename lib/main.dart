@@ -57,3 +57,9 @@ class _EdeybeAppState extends State<EdeybeApp> {
             debugShowCheckedModeBanner: false));
   }
 }
+/**
+ * Find a way to add variantID to the product selected in local, 
+ * when adding a new state of cart, it will not overwrite the one 
+ * with the variantID on the server.
+ * 
+ */

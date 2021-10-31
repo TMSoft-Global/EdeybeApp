@@ -61,7 +61,7 @@ class CartController extends GetxController implements HTTPErrorHandler {
     resetErrorState();
     operations.getAllCartItems(
         (response) {
-          print(response.length);
+          // print(response.length);
           cartItems.value = response;
 
           update();
@@ -118,7 +118,7 @@ class CartController extends GetxController implements HTTPErrorHandler {
     // ignore: todo
     //TODO: Add Wishlist Constroller and item to wishlist
     var movableProduct = cartItems.removeAt(index);
-    print(movableProduct);
+    // print(movableProduct);
     Get.find<WishlistController>().addToWishlist(movableProduct, callback);
   }
 

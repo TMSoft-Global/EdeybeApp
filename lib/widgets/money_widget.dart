@@ -32,7 +32,7 @@ class MoneyWidget extends StatelessWidget {
               transformHitTests: true,
               offset: offset ?? Offset(0, 0),
               child: Text(
-                "${currency ?? 'GHS'}" + " ",
+                "${currency ?? 'GHS'} " + " ",
                 //superscript is usually smaller in size
                 textScaleFactor: scalefactor ?? 1.0,
                 style: TextStyle(

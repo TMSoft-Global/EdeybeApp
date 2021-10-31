@@ -94,6 +94,7 @@ class _FilterWidgetState extends State<FilterWidget> {
     if (sortValue != null) {
       result['sort'] = sortValue;
     }
+    print(result);
     return result;
   }
 

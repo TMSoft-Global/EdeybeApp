@@ -76,7 +76,7 @@ class AddressController extends GetxController implements HTTPErrorHandler {
 
   getAllDeliveryAddresses() {
     addressoperations.getAllAddresses((response) {
-      print(response);
+      // print(response);
       delivery.value = response;
       update();
     }, (data) {

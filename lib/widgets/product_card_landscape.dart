@@ -102,7 +102,7 @@ class ProductCardLandscape extends StatelessWidget {
                           width: 30.w,
                           height: 30.w,
                           child: RawMaterialButton(
-                            onPressed:onAddToWishList,
+                            onPressed: onAddToWishList,
                             fillColor: Constants.themeGreyLight,
                             shape: CircleBorder(),
                             elevation: 2.0.w,
@@ -185,7 +185,7 @@ class ProductCardLandscape extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        if (discount == null ? 0 :discount > 0)
+                        if (discount == null || discount > 0)
                           ShimmerLoading(
                               isLoading: isLoading,
                               child: _buildShimmerLoaderChild(CapsuleWiget(

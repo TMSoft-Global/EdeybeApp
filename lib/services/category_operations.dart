@@ -10,6 +10,7 @@ class CategoryOperation extends ServerOperations {
       schema: "",
       onError: onError,
       onResponse: (res) {
+        print(res);
         var data = (res as List<dynamic>)
             .map((dynamic i) => Category.fromJson(i as Map<String, dynamic>))
             // .sortedByNum((element) => element.id)

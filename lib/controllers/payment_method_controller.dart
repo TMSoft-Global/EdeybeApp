@@ -69,11 +69,11 @@ class PaymentMethodController extends GetxController {
                 : "",
         "type": "card"
       };
-      print("..........$data");
-      print("..........${card.type}");
+      // print("..........$data");
+      // print("..........${card.type}");
       payementServer.verifyCard(data, (error) {}, (val) {
         if (val != null) {
-          print(val);
+          // print(val);
           if (val.containsKey('success')) {
             Get.to(SimpleWebview(
               url: val['success']['cardVerifyLink'],
