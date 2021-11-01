@@ -9,6 +9,7 @@ import 'package:edeybe/models/productCollection.dart';
 import 'package:edeybe/models/productModel.dart';
 import 'package:edeybe/models/user.dart';
 import 'package:edeybe/services/home_operation.dart';
+import 'package:flutter/material.dart';
 
 class HomeController extends GetxController implements HTTPErrorHandler {
   User user;
@@ -45,7 +46,6 @@ class HomeController extends GetxController implements HTTPErrorHandler {
     products = products;
     update();
   }
-
   void getPromotions() {
     resetErrorState();
     operations.getPromotions((response) {

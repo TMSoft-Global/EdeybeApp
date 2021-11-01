@@ -33,6 +33,7 @@ class _HomeScreenTabState extends State<HomeScreenTab>
   final _searchFieldController = TextEditingController();
   final _productController = Get.find<ProductController>();
   bool showSearch = false;
+  var refreshKey = GlobalKey<RefreshIndicatorState>();
   Debouncer debounce = Debouncer();
   AnimationController _animationController;
   FocusNode _focus = new FocusNode();
@@ -88,6 +89,22 @@ class _HomeScreenTabState extends State<HomeScreenTab>
     _searchFieldController.text = "";
   }
 
+  Future<Null> refreshList() async {
+    refreshKey.currentState?.show(atTop: false);
+    await Future.delayed(Duration(seconds: 3));
+    print("Refresh");
+    bannerUrl = [
+      "${bannersBaseURL}banner1.png",
+      "${bannersBaseURL}banner2.png",
+      "${bannersBaseURL}banner3.png",
+      "${bannersBaseURL}banner4.png",
+    ];
+    homeController.getAvailableSlugs();
+    homeController.getAvailableCatsCollection();
+
+    return null;
+  }
+
   void _onFocusChange() {
     if (_focus.hasFocus) {
       controller.forward();
@@ -102,176 +119,181 @@ class _HomeScreenTabState extends State<HomeScreenTab>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 1,
-        title: Row(
-          children: <Widget>[
-            Expanded(
-                flex: _animation.value,
-                child: Container(
-                  // padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.w),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(4.w),
-                    color: Colors.white,
-                  ),
-                  height: 40.w,
-                  child: TextField(
-                    focusNode: _focus,
-                    autofocus: false,
-                    onChanged: (text) {
-                      if (text.length >= 3) {
-                        debounce.run(() {
-                          searchController.searchProducts(text);
-                        });
-                      }
-                    },
-                    controller: _searchFieldController,
-                    decoration: InputDecoration(
-                        isDense: true,
-                        border: InputBorder.none,
-                        labelText: S.of(context).searchOnedeybe,
-                        hintText: S.of(context).searchOnedeybe,
-                        hintStyle: TextStyle(fontSize: 14.w),
-                        hintMaxLines: 1,
-                        floatingLabelBehavior: FloatingLabelBehavior.never,
-                        prefixIcon: Icon(
-                          Icons.search,
-                          color: Colors.grey,
-                        ),
-                        suffixIcon: _searchFieldController.text.length > 0
-                            ? FadeTransition(
-                                opacity: Tween<double>(
-                                  begin: 0.0,
-                                  end: 1.0,
-                                ).animate(_animationController),
-                                child: InkWell(
-                                  child: Icon(Icons.close),
-                                  onTap: () {
-                                    setState(() {
-                                      _searchFieldController.text = "";
-                                      searchController.clear();
-                                    });
-                                  },
-                                ))
-                            : null),
-                    style: TextStyle(fontSize: 14.w),
-                  ),
-                )),
-            showSearch
-                ? Expanded(
-                    flex: 1,
-                    child: FadeTransition(
-                      opacity: animation,
-                      child: TextButton(
-                        style: ButtonStyle(
-                            padding: MaterialStateProperty.resolveWith(
-                                (states) => EdgeInsets.all(0))),
-                        onPressed: _cancelSearch,
-                        child: Text(
-                          S.of(context).cancel,
-                          style: TextStyle(fontSize: 15.w),
-                        ),
-                      ),
-                    ),
-                  )
-                : TextButton(
-                    onPressed: () {
-                      Get.to<Map<String, String>>(FilterWidget()).then((value) {
-                        if (value != null) {
-                          _productController.resetProducts();
-                          _productController.setQuery('', '',
-                              reset: true, data: value, merge: true);
-                          Get.to(ProductsView());
-                        }
-                      });
-                    },
-                    child: Icon(
-                      Icons.filter_list_rounded,
-                      size: 30.w,
+    return RefreshIndicator(
+      onRefresh: refreshList,
+      key: refreshKey,
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 1,
+          title: Row(
+            children: <Widget>[
+              Expanded(
+                  flex: _animation.value,
+                  child: Container(
+                    // padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.w),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4.w),
                       color: Colors.white,
                     ),
-                  ),
-          ],
-        ),
-        centerTitle: false,
-      ),
-      body: Obx(() {
-        var children = <Widget>[];
-        children.add(SizedBox(
-          height: 8.h,
-        ));
-        children.add(Container(
-          height: 150.w,
-          width: Get.width.w,
-          child: CarouselSlider(
-            itemCount: bannerUrl.length,
-            autoPlay: true,
-            containerHeight: 150.w,
-            itemBuilder: (context, ind) => Image(
-              width: Get.width.w,
-              image: CachedNetworkImageProvider(
-                bannerUrl[ind],
-              ),
-              alignment: Alignment.center,
-              fit: BoxFit.cover,
-            ),
-          ),
-        ));
-        children.add(Container(
-          color: Colors.white,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.only(
-                    bottom: 8.w, top: 8.w, left: 10.w, right: 10.w),
-                alignment: Alignment.bottomLeft,
-                child:
-                    Text(S.of(context).shopBy + " " + S.of(context).category),
-              ),
-              TextButton(
-                style: TextButton.styleFrom(
-                    textStyle: TextStyle(color: Constants.dark),
-                    shape: RoundedRectangleBorder(
-                        side: BorderSide(color: Colors.transparent))),
-                onPressed: () {
-                  cartegoryController
-                      .getSubCategories(cartegoryController.categories[0].id);
-                  Get.to(SubCategoryScreen());
-                },
-                child: Text(
-                  S.current.viewAll,
-                ),
-              )
+                    height: 40.w,
+                    child: TextField(
+                      focusNode: _focus,
+                      autofocus: false,
+                      onChanged: (text) {
+                        if (text.length >= 3) {
+                          debounce.run(() {
+                            searchController.searchProducts(text);
+                          });
+                        }
+                      },
+                      controller: _searchFieldController,
+                      decoration: InputDecoration(
+                          isDense: true,
+                          border: InputBorder.none,
+                          labelText: S.of(context).searchOnedeybe,
+                          hintText: S.of(context).searchOnedeybe,
+                          hintStyle: TextStyle(fontSize: 14.w),
+                          hintMaxLines: 1,
+                          floatingLabelBehavior: FloatingLabelBehavior.never,
+                          prefixIcon: Icon(
+                            Icons.search,
+                            color: Colors.grey,
+                          ),
+                          suffixIcon: _searchFieldController.text.length > 0
+                              ? FadeTransition(
+                                  opacity: Tween<double>(
+                                    begin: 0.0,
+                                    end: 1.0,
+                                  ).animate(_animationController),
+                                  child: InkWell(
+                                    child: Icon(Icons.close),
+                                    onTap: () {
+                                      setState(() {
+                                        _searchFieldController.text = "";
+                                        searchController.clear();
+                                      });
+                                    },
+                                  ))
+                              : null),
+                      style: TextStyle(fontSize: 14.w),
+                    ),
+                  )),
+              showSearch
+                  ? Expanded(
+                      flex: 1,
+                      child: FadeTransition(
+                        opacity: animation,
+                        child: TextButton(
+                          style: ButtonStyle(
+                              padding: MaterialStateProperty.resolveWith(
+                                  (states) => EdgeInsets.all(0))),
+                          onPressed: _cancelSearch,
+                          child: Text(
+                            S.of(context).cancel,
+                            style: TextStyle(fontSize: 15.w),
+                          ),
+                        ),
+                      ),
+                    )
+                  : TextButton(
+                      onPressed: () {
+                        Get.to<Map<String, String>>(FilterWidget())
+                            .then((value) {
+                          if (value != null) {
+                            _productController.resetProducts();
+                            _productController.setQuery('', '',
+                                reset: true, data: value, merge: true);
+                            Get.to(ProductsView());
+                          }
+                        });
+                      },
+                      child: Icon(
+                        Icons.filter_list_rounded,
+                        size: 30.w,
+                        color: Colors.white,
+                      ),
+                    ),
             ],
           ),
-        ));
-        // Build categories
-        children.add(_buildCategoryList());
-        children.add(_buildBuyAirtimeComponent());
-        children.add(_buildProductCollection());
-        children.add(_buildTopCategorySlugsProducts());
-
-        return Shimmer(
-          linearGradient: Constants.shimmerGradient,
-          child: GetBuilder<HomeController>(
-              builder: (hc) => ErrorBoundary(
-                  child: Stack(
-                    children: <Widget>[
-                      SingleChildScrollView(
-                        child: Column(children: children),
-                      ),
-                      if (showSearch)
-                        SearchResultWidget(closeSearch: _cancelSearch)
-                    ],
+          centerTitle: false,
+        ),
+        body: Obx(() {
+          var children = <Widget>[];
+          children.add(SizedBox(
+            height: 8.h,
+          ));
+          children.add(Container(
+            height: 150.w,
+            width: Get.width.w,
+            child: CarouselSlider(
+              itemCount: bannerUrl.length,
+              autoPlay: true,
+              containerHeight: 150.w,
+              itemBuilder: (context, ind) => Image(
+                width: Get.width.w,
+                image: CachedNetworkImageProvider(
+                  bannerUrl[ind],
+                ),
+                alignment: Alignment.center,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ));
+          children.add(Container(
+            color: Colors.white,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.only(
+                      bottom: 8.w, top: 8.w, left: 10.w, right: 10.w),
+                  alignment: Alignment.bottomLeft,
+                  child:
+                      Text(S.of(context).shopBy + " " + S.of(context).category),
+                ),
+                TextButton(
+                  style: TextButton.styleFrom(
+                      textStyle: TextStyle(color: Constants.dark),
+                      shape: RoundedRectangleBorder(
+                          side: BorderSide(color: Colors.transparent))),
+                  onPressed: () {
+                    cartegoryController
+                        .getSubCategories(cartegoryController.categories[0].id);
+                    Get.to(SubCategoryScreen());
+                  },
+                  child: Text(
+                    S.current.viewAll,
                   ),
-                  canceled: hc.canceled.value,
-                  connectionError: hc.connectionError.value,
-                  serverError: hc.serverError.value,
-                  onRetry: () => hc.onInit())),
-        );
-      }),
+                )
+              ],
+            ),
+          ));
+          // Build categories
+          children.add(_buildCategoryList());
+          children.add(_buildBuyAirtimeComponent());
+          children.add(_buildProductCollection());
+          children.add(_buildTopCategorySlugsProducts());
+
+          return Shimmer(
+            linearGradient: Constants.shimmerGradient,
+            child: GetBuilder<HomeController>(
+                builder: (hc) => ErrorBoundary(
+                    child: Stack(
+                      children: <Widget>[
+                        SingleChildScrollView(
+                          child: Column(children: children),
+                        ),
+                        if (showSearch)
+                          SearchResultWidget(closeSearch: _cancelSearch)
+                      ],
+                    ),
+                    canceled: hc.canceled.value,
+                    connectionError: hc.connectionError.value,
+                    serverError: hc.serverError.value,
+                    onRetry: () => hc.onInit())),
+          );
+        }),
+      ),
     );
   }
 
