@@ -2,12 +2,9 @@ import 'package:edeybe/controllers/address_controller.dart';
 import 'package:edeybe/controllers/cart_controller.dart';
 import 'package:edeybe/controllers/user_controller.dart';
 import 'package:edeybe/index.dart';
-import 'package:edeybe/screens/otp/userVerify.dart';
-import 'package:edeybe/screens/payment_method/add_payment_method/add_card.dart';
 import 'package:edeybe/screens/splash_screen/splash_screen.dart';
-import 'package:edeybe/services/simpleWeb.dart';
 import 'package:edeybe/utils/AppTheme.dart';
-import 'package:edeybe/widgets/transLoading.dart';
+import 'package:edeybe/variants/variantsImage.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
@@ -49,8 +46,8 @@ class _EdeybeAppState extends State<EdeybeApp> {
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
             ],
-            home: SplashScreen(),
-            // home: OtpVerification(phone: "mccamo51@gmail.com", timer: 20,),
+            // home: SplashScreen(),
+            home: VariantsImage(),
             supportedLocales: S.delegate.supportedLocales,
             // locale: DevicePreview.of(context).locale, // <--- Add the locale
             // builder: DevicePreview.appBuilder,
