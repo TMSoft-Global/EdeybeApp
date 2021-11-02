@@ -2,6 +2,7 @@ import 'package:edeybe/controllers/cart_controller.dart';
 import 'package:edeybe/controllers/product_controller.dart';
 import 'package:edeybe/controllers/user_controller.dart';
 import 'package:edeybe/controllers/wishlist_controller.dart';
+import 'package:edeybe/models/productModel.dart';
 import 'package:edeybe/screens/auth_screen/login_screen.dart';
 import 'package:edeybe/screens/checkout_screen/checkout_screen.dart';
 import 'package:edeybe/screens/product_details_screen/product_details_bottom_bar/bottom_bar.dart';
@@ -46,6 +47,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   dynamic discountedVarianAmount = 0;
   String variantSelected;
   String variantID;
+  List<Images> imgs = [];
   bool hasVariant = false;
 
 // state functions
@@ -177,35 +179,54 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     width: Get.width.w,
                     color: Constants.themeGreyLight,
                     child: _productStl.productDetail.value.photos != null
-                        ? CarouselSlider(
-                            showDots: false,
-                            itemCount: _productController
-                                .productDetail.value.photos?.length,
-                            itemBuilder: (context, ind) => Container(
-                              padding: EdgeInsets.all(10.w),
-                              margin: EdgeInsets.only(right: 10.w),
-                              width: Get.width.w,
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(12.w)),
-                              child: GestureDetector(
-                                onTap: () => Get.dialog(PostGallery(
-                                  images:
-                                      _productStl.productDetail.value.photos,
-                                  currentImage: ind,
-                                )),
-                                child: Image(
-                                  image: CachedNetworkImageProvider(
-                                    _productStl.productDetail.value.photos[ind]
-                                            .sm ??
-                                        "",
-                                  ),
-                                  // alignment: Alignment.center,
-                                  fit: BoxFit.contain,
-                                ),
-                              ),
-                            ),
+                        ? Container(
+                            height: 180.w,
+                            width: Get.width.w,
+                            child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: _productStl
+                                    .productDetail.value.photos.length,
+                                itemBuilder: (_, i) {
+                                  return Container(
+                                    width:
+                                        MediaQuery.of(context).size.width - 10,
+                                    child: Image.network(
+                                      _productStl
+                                          .productDetail.value.photos[i].sm,
+                                      fit: BoxFit.fitWidth,
+                                    ),
+                                  );
+                                }),
                           )
+                        // CarouselSlider(
+                        //     showDots: false,
+                        //     itemCount: _productController
+                        //         .productDetail.value.photos?.length,
+                        //     itemBuilder: (context, ind) => Container(
+                        //       padding: EdgeInsets.all(10.w),
+                        //       margin: EdgeInsets.only(right: 10.w),
+                        //       width: Get.width.w,
+                        //       decoration: BoxDecoration(
+                        //           color: Colors.white,
+                        //           borderRadius: BorderRadius.circular(12.w)),
+                        //       child: GestureDetector(
+                        //         onTap: () => Get.dialog(PostGallery(
+                        //           images:
+                        //               _productStl.productDetail.value.photos,
+                        //           currentImage: ind,
+                        //         )),
+                        //         child: Image(
+                        //           image: CachedNetworkImageProvider(
+                        //             _productStl.productDetail.value.photos[ind]
+                        //                     .sm ??
+                        //                 "",
+                        //           ),
+                        //           // alignment: Alignment.center,
+                        //           fit: BoxFit.contain,
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   )
                         : SizedBox.shrink(),
                   ),
                   Container(
@@ -490,17 +511,17 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         ],
                       )),
                   CustomDivider(
-                    height: 60.h,
-                    thickness: 60.h,
+                    height: 30.h,
+                    thickness: 30.h,
                     color: Colors.grey[200],
                   ),
-                  _buildDeliveryWidget(),
+                  _buildVarientProduct(),
                   CustomDivider(
                     height: 60.h,
                     thickness: 60.h,
                     color: Colors.grey[200],
                   ),
-                  _buildVarientProduct(),
+                  _buildDeliveryWidget(),
                   CustomDivider(
                     height: 5.h,
                     thickness: 5.h,
@@ -888,29 +909,67 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             CustomDivider(),
             if (_productController.productDetail.value.hasVariants &&
                 _productController.productDetail.value.variants.length > 0)
-              Column(children: [
+              Row(children: [
+                GestureDetector(
+                  onTap: () => setState(() => _setPrice(null, 0)),
+                  child: CircleAvatar(
+                    radius: 30,
+                    backgroundImage: NetworkImage(
+                        _productController.productDetail.value.photos[0].sm),
+                  ),
+                ),
                 for (int x = 0;
                     x < _productController.productDetail.value.variants.length;
                     x++)
-                  // Text(x.toString())
-                  varientButton(
-                    onTap: () {
-                      print(x);
-                      // _setPrice(
-                      //     _productController
-                      //         .productDetail.value.variants[x].price,
-                      //     x);
-                    },
-                    index: x,
-                    id: _productController
-                        .productDetail.value.variants[x].variantId,
-                    attribute: _productController
-                        .productDetail.value.variants[x].variantAttributes,
-                    type: _productController
-                        .productDetail.value.variants[x].variantName,
-                    image:
-                        "${_productController.productDetail.value.variants[x]}",
-                  )
+                  if (_productController
+                          .productDetail.value.variants[x].images !=
+                      null)
+                    // Text(x.toString())
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          variantID = _productController
+                              .productDetail.value.variants[x].variantId;
+                          // print(_productController
+                          //     .productDetail.value.variants[index].price);
+                        });
+                        // _setVariant(val);
+
+                        _setPrice(
+                            _productController
+                                .productDetail.value.variants[x].price,
+                            x);
+                        // imgs = _productController.productDetail.value.variants[x].images;
+
+                        // print(imgs);
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: CircleAvatar(
+                          radius: 30,
+                          backgroundImage: NetworkImage(_productController
+                              .productDetail.value.variants[x].images[0].sm),
+                        ),
+                      ),
+                    )
+                // varientButton(
+                //   onTap: () {
+                //     print(x);
+                //     // _setPrice(
+                //     //     _productController
+                //     //         .productDetail.value.variants[x].price,
+                //     //     x);
+                //   },
+                //   index: x,
+                //   id: _productController
+                //       .productDetail.value.variants[x].variantId,
+                //   attribute: _productController
+                //       .productDetail.value.variants[x].variantAttributes,
+                //   type: _productController
+                //       .productDetail.value.variants[x].variantName,
+                //   image:
+                //       "${_productController.productDetail.value.variants[x]}",
+                // )
               ])
           ],
         ),
