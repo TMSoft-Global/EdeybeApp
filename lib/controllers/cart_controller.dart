@@ -8,6 +8,7 @@ import 'package:edeybe/models/deliveryCost.dart';
 import 'package:edeybe/models/productModel.dart';
 import 'package:edeybe/models/user.dart';
 import 'package:edeybe/services/cart_operation.dart';
+import 'package:edeybe/utils/helper.dart';
 
 class CartController extends GetxController implements HTTPErrorHandler {
   User user;
@@ -30,13 +31,15 @@ class CartController extends GetxController implements HTTPErrorHandler {
 
   addToCart(ProductModel p, Function callback, {String variantID}) {
     resetErrorState();
-    print(variantID);
+    
     Map<String, dynamic> items = {};
     var inList = cartItems.firstWhere((pp) => pp.productId == p.productId,
         orElse: () => null);
-    if (inList != null) {
-      cartItems.removeWhere((pp) => pp.productId == p.productId);
-    } else {
+    // if (inList != null) {
+    //   // print("object");
+    //   cartItems.removeWhere((pp) => pp.productId == p.productId);
+    // } else 
+    {
       items = {
         "items": variantID == null
             ? {
@@ -51,10 +54,11 @@ class CartController extends GetxController implements HTTPErrorHandler {
       items["items"][item.productId] = {"quantity": item.quantity};
     });
     operations.updateCart(items, (response) {
-      cartItems.add(p);
+      cartItems.value = response;
       update();
       callback(title: inList != null ? "Item removed from cart" : inList);
     }, handleError);
+    print(items);
   }
 
   getCartITems() {
@@ -123,7 +127,7 @@ class CartController extends GetxController implements HTTPErrorHandler {
   }
 
   setQuantity(int productIndex, int newQTY, String proID,{String variantID}) {
-    print(variantID);
+    print("11111${variantID}_$proID}");
     Map<String, dynamic> items = {};
 
     var item = cartItems[productIndex].setQuantity(newQTY);
@@ -140,9 +144,10 @@ class CartController extends GetxController implements HTTPErrorHandler {
             }
     };
     cartItems.forEach((item) {
-      if (proID == item.productId) {
+      if (item.isVariant) {
         items["items"][item.productId] = {"quantity": newQTY};
-      } else {
+      }
+       else {
         items["items"][item.productId] = {"quantity": item.quantity};
       }
     });
