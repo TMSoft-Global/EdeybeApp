@@ -39,10 +39,12 @@ class CartOperation extends ServerOperations {
       path: "/updatecart",
       schema: jsonEncode(data),
       method: "PUT",
-      onError: onError,
+      onError: (onError){
+        print(onError.message);
+      },
       showDialog: true,
       onResponse: (res) {
-        print(res);
+        // print(res);
         var data = (res["items"] as List<dynamic>)
             .map(
                 (dynamic i) => ProductModel.fromJson(i as Map<String, dynamic>))
