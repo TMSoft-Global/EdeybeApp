@@ -31,6 +31,7 @@ class ProductModel {
   List<ProductModel> relatedItems;
   int quantity = 1;
   String selectedVariant;
+  bool isVariant = false;
   // ProductCost productCost;
 
   ProductModel({
@@ -64,6 +65,7 @@ class ProductModel {
     this.relatedItems,
     this.quantity =1,
     this.selectedVariant,
+    this.isVariant =  false,
   });
 
   ProductModel.fromJson(Map<String, dynamic> json) {
@@ -74,6 +76,7 @@ class ProductModel {
     brand = json['brand'];
     price = json['price'];
     description = json['description'];
+    isVariant = json['isVariant'];
     if (json['photos'] != null) {
       photos = <Photos>[];
       json['photos'].forEach((v) {
@@ -149,6 +152,7 @@ class ProductModel {
     if (this.merchantLocation != null) {
       data['merchantLocation'] = this.merchantLocation.toJson();
     }
+    data['isVariant']= isVariant;
     data['merchantPhone'] = this.merchantPhone;
     data['weight'] = this.weight;
     data['hasDiscount'] = this.hasDiscount;
