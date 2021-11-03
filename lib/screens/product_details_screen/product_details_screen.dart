@@ -13,6 +13,7 @@ import 'package:edeybe/services/server_operation.dart';
 import 'package:edeybe/utils/cart_item_type.dart';
 import 'package:edeybe/utils/constant.dart';
 import 'package:edeybe/utils/helper.dart';
+import 'package:edeybe/variants/variantsImage.dart';
 import 'package:edeybe/widgets/Shimmer.dart';
 import 'package:edeybe/widgets/capsule.dart';
 import 'package:edeybe/widgets/cart_dialog.dart';
@@ -27,6 +28,8 @@ import 'package:flutter/material.dart';
 import 'package:edeybe/index.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/rendering.dart';
+
+import 'Untitled-1.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   ProductDetailsScreen({Key key}) : super(key: key);
@@ -48,7 +51,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   String variantSelected;
   String variantID;
   List<Images> imgs = [];
+  List<Photos> variantImg = [];
   bool hasVariant = false;
+  bool selectedVariant = false;
 
 // state functions
   void _setDeliveryLocation(text) {
@@ -182,22 +187,28 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         ? Container(
                             height: 180.w,
                             width: Get.width.w,
-                            child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: _productStl
-                                    .productDetail.value.photos.length,
-                                itemBuilder: (_, i) {
-                                  return Container(
-                                    width:
-                                        MediaQuery.of(context).size.width - 10,
-                                    child: Image.network(
-                                      _productStl
-                                          .productDetail.value.photos[i].sm,
-                                      fit: BoxFit.fitWidth,
-                                    ),
-                                  );
-                                }),
-                          )
+                            child: imageCarousel(
+                              context: context,
+                              images: variantImg.isEmpty
+                                  ? _productStl.productDetail.value.photos
+                                  : variantImg,
+                            )
+                            //     ListView.builder(
+                            // scrollDirection: Axis.horizontal,
+                            // itemCount: _productStl
+                            //     .productDetail.value.photos.length,
+                            // itemBuilder: (_, i) {
+                            //   return Container(
+                            //     width:
+                            //         MediaQuery.of(context).size.width - 10,
+                            //     child: Image.network(
+                            //       _productStl
+                            //           .productDetail.value.photos[i].sm,
+                            //       fit: BoxFit.fitWidth,
+                            //     ),
+                            //   );
+                            // }),
+                            )
                         // CarouselSlider(
                         //     showDots: false,
                         //     itemCount: _productController
@@ -909,110 +920,141 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             CustomDivider(),
             if (_productController.productDetail.value.hasVariants &&
                 _productController.productDetail.value.variants.length > 0)
-              Row(children: [
-                GestureDetector(
-                  onTap: () => setState(() => _setPrice(null, 0)),
-                  child: CircleAvatar(
-                    radius: 30,
-                    backgroundImage: NetworkImage(
-                        _productController.productDetail.value.photos[0].sm),
-                  ),
-                ),
-                for (int x = 0;
-                    x < _productController.productDetail.value.variants.length;
-                    x++)
-                  if (_productController
-                          .productDetail.value.variants[x].images !=
-                      null)
-                    // Text(x.toString())
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          variantID = _productController
-                              .productDetail.value.variants[x].variantId;
-                          // print(_productController
-                          //     .productDetail.value.variants[index].price);
-                        });
-                        // _setVariant(val);
-
-                        _setPrice(
-                            _productController
-                                .productDetail.value.variants[x].price,
-                            x);
-                        // imgs = _productController.productDetail.value.variants[x].images;
-
-                        // print(imgs);
-                      },
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: CircleAvatar(
-                          radius: 30,
-                          backgroundImage: NetworkImage(_productController
-                              .productDetail.value.variants[x].images[0].sm),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Container(
+                  child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() => _setPrice(null, 0));
+                              variantImg =
+                                  _productController.productDetail.value.photos;
+                            },
+                            child: CircleAvatar(
+                              radius: 40,
+                              backgroundImage: NetworkImage(_productController
+                                  .productDetail.value.photos[0].sm),
+                            ),
+                          ),
                         ),
-                      ),
-                    )
-                // varientButton(
-                //   onTap: () {
-                //     print(x);
-                //     // _setPrice(
-                //     //     _productController
-                //     //         .productDetail.value.variants[x].price,
-                //     //     x);
-                //   },
-                //   index: x,
-                //   id: _productController
-                //       .productDetail.value.variants[x].variantId,
-                //   attribute: _productController
-                //       .productDetail.value.variants[x].variantAttributes,
-                //   type: _productController
-                //       .productDetail.value.variants[x].variantName,
-                //   image:
-                //       "${_productController.productDetail.value.variants[x]}",
-                // )
-              ])
+                        for (int x = 0;
+                            x <
+                                _productController
+                                    .productDetail.value.variants.length;
+                            x++)
+                          if (_productController
+                                  .productDetail.value.variants[x].images !=
+                              null)
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  variantID = _productController.productDetail
+                                      .value.variants[x].variantId;
+                                  variantImg = _productController
+                                      .productDetail.value.variants[x].images;
+                                });
+
+                                _setPrice(
+                                    _productController
+                                        .productDetail.value.variants[x].price,
+                                    x);
+
+                                setState(() {
+                                  _productController.productDetail.value
+                                    .variants.forEach((element) =>element.variantSelected=false);
+                                    _productController
+                                        .productDetail.value.variants[x].variantSelected = true;
+                                });
+                              },
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                            width: 2,
+                                            color: _productController
+                                                    .productDetail
+                                                    .value
+                                                    .variants[x]
+                                                    .variantSelected
+                                                ? Get.theme.primaryColor
+                                                : Colors.transparent),
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: CircleAvatar(
+                                        radius: 40,
+                                        backgroundImage: NetworkImage(
+                                            _productController
+                                                .productDetail
+                                                .value
+                                                .variants[x]
+                                                .images[0]
+                                                .sm),
+                                      ),
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        // Text("Type: ${_productController
+                                        //               .productDetail.value.variants[x].variantName}"),
+                                        // Text("Include", style: TextStyle(fontSize: 9),),
+                                        for (var x in _productController
+                                            .productDetail
+                                            .value
+                                            .variants[x]
+                                            .variantAttributes) ...[
+                                          Text(
+                                            "${x.sId}: ${x.value}",
+                                            style: TextStyle(fontSize: 9),
+                                          ),
+                                          // Text("$size"),
+                                        ]
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )
+                        // varientButton(
+                        //   onTap: () {
+                        //     print(x);
+                        //     // _setPrice(
+                        //     //     _productController
+                        //     //         .productDetail.value.variants[x].price,
+                        //     //     x);
+                        //   },
+                        //   index: x,
+                        // id: _productController
+                        //     .productDetail.value.variants[x].variantId,
+                        //   attribute: _productController
+                        //       .productDetail.value.variants[x].variantAttributes,
+                        //   type: _productController
+                        //       .productDetail.value.variants[x].variantName,
+                        //   image:
+                        //       "${_productController.productDetail.value.variants[x]}",
+                        // )
+                      ]),
+                ),
+              )
           ],
         ),
       );
-
-      // child: Table(
-      //   children: <TableRow>[
-      //     TableRow(
-      //       children: [
-      //         Container(
-      //           padding: EdgeInsets.only(bottom: 8.w, left: 15),
-      //           child: Text("Variants",
-      //               style: Get.textTheme.bodyText1.copyWith(
-      //                   fontWeight: FontWeight.bold, fontSize: 18.w)),
-      //         ),
-      //       ],
-      //     ),
-      //     TableRow(
-      //       children: [
-      //         Table(
-      //           children: _productController.productDetail.value.variants
-      //               .map<TableRow>((e) => TableRow(children: [
-
-      //                     varientButton(
-      //                       id: e.variantId,
-      //                       size: e.variantAttributes[0].sId + ": "+ e.variantAttributes[0].value,
-      //                       color: e.variantAttributes[1].sId + ": "+ e.variantAttributes[1].value,
-      //                       type: e.variantName,
-      //                       image: "$domain/api/images/${_productController.productDetail.value.photos[0].sm}"
-      //                       // "https://media.istockphoto.com/photos/running-shoes-picture-id1249496770?s=612x612"
-      //                     )
-      //                   ]))
-      //               .toList(),
-      //         ),
-      //       ],
-      //     ),
-      //   ],
-      // ));
     });
   }
 
   void _setVariant(value) {
     setState(() => variantSelected = value);
+  }
+
+  ValueChanged<String> _valueChangedHandler() {
+    return (value) => setState(() => variantSelected = value);
   }
 
   void _setPrice(value, int x) {
@@ -1047,110 +1089,75 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     }
   }
 
-  Widget varientButton({
-    String type,
-    // String size,
-    var attribute,
-    String id,
-    int index,
-    var image,
-    VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 7),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    if (_productController
-                            .productDetail.value.variants[index].images !=
-                        null)
-                      // for (var image in _productController
-                      //     .productDetail.value.variants[index].images) ...[
-                      // Text("${image.sm}"),
-                      Container(
-                        height: 100.h,
-                        width: 100.w,
-                        child: CarouselSlider(
-                          showDots: false,
-                          itemCount: _productController
-                              .productDetail.value.photos?.length,
-                          itemBuilder: (context, ind) => Container(
-                            padding: EdgeInsets.all(10.w),
-                            margin: EdgeInsets.only(right: 10.w),
-                            width: Get.width.w,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(12.w)),
-                            child: GestureDetector(
-                              onTap: () => Get.dialog(PostGallery(
-                                images: _productController
-                                    .productDetail.value.photos,
-                                currentImage: ind,
-                              )),
-                              child: Image(
-                                image: CachedNetworkImageProvider(
-                                  _productController.productDetail.value
-                                          .variants[index].images[0].sm ??
-                                      "",
-                                ),
-                                // alignment: Alignment.center,
-                                fit: BoxFit.contain,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    // ],
-                  ],
-                ),
-                SizedBox(
-                  width: 15,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("Type: $type"),
-                    for (var x in attribute) ...[
-                      Text("${x.sId}: ${x.value}"),
-                      // Text("$size"),
-                    ]
-                  ],
-                ),
-                Container(
-                    alignment: Alignment.centerRight,
-                    child: Radio(
-                      toggleable: true,
-                      activeColor: Get.theme.primaryColor,
-                      groupValue: variantSelected,
-                      onChanged: (val) {
-                        setState(() {
-                          variantID = _productController
-                              .productDetail.value.variants[index].variantId;
-                          // print(_productController
-                          //     .productDetail.value.variants[index].price);
-                        });
-                        _setVariant(val);
+//   Widget varientButton({
+//     String type,
+//     var attribute,
+//     String id,
+//     int index,
+//     var image,
+//     Function(String) onTap,
+//   }) {
+//     return GestureDetector(
+//       onTap: onTap(type),
+//       child: Column(
+//         children: [
+//           Padding(
+//             padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 7),
+//             child: Row(
+//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//               children: [
+//                 Padding(
+//                   padding: EdgeInsets.all(8.0),
+//                   child: Column(
+//                     children: [
+//                       CircleAvatar(
+//                         radius: 40,
+//                         backgroundImage: NetworkImage(_productController
+//                             .productDetail.value.variants[index].images[0].sm),
+//                       ),
+//                       Column(
+//                         crossAxisAlignment: CrossAxisAlignment.start,
+//                         children: [
+//                           for (var x in _productController.productDetail.value
+//                               .variants[index].variantAttributes) ...[
+//                             Text(
+//                               "${x.sId}: ${x.value}",
+//                               style: TextStyle(fontSize: 9),
+//                             ),
+//                           ]
+//                         ],
+//                       ),
+//                     ],
+//                   ),
+//                 ),
+//                 Container(
+//                     alignment: Alignment.centerRight,
+//                     child: Radio(
+//                       toggleable: true,
+//                       activeColor: Get.theme.primaryColor,
+//                       groupValue: variantSelected,
+//                       onChanged: (val) {
+//                         setState(() {
+//                           variantID = _productController
+//                               .productDetail.value.variants[index].variantId;
+//                           // print(_productController
+//                           //     .productDetail.value.variants[index].price);
+//                         });
+//                         // ;
 
-                        _setPrice(
-                            _productController
-                                .productDetail.value.variants[index].price,
-                            index);
-                      },
-                      value: id,
-                    ))
-              ],
-            ),
-          ),
-          CustomDivider()
-        ],
-      ),
-    );
-  }
+//                         _setPrice(
+//                             _productController
+//                                 .productDetail.value.variants[index].price,
+//                             index);
+//                       },
+//                       value: id,
+//                     ))
+//               ],
+//             ),
+//           ),
+//           CustomDivider()
+//         ],
+//       ),
+//     );
+//   }
 }
