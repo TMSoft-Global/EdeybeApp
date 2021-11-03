@@ -284,7 +284,7 @@ class Variants {
   List<VariantAttributes> variantAttributes;
   bool isDefaultPrice;
   int price;
-  List<Images> images;
+  List<Photos> images;
   bool hasDiscount;
   dynamic discountPrice;
   String variantId;
@@ -313,9 +313,9 @@ class Variants {
     isDefaultPrice = json['isDefaultPrice'];
     price = json['price'];
     if (json['images'] != null) {
-      images = <Images>[];
+      images = <Photos>[];
       json['images'].forEach((v) {
-        images.add(new Images.fromJson(v));
+        images.add(new Photos.fromJson(v));
       });
     }
     hasDiscount = json['hasDiscount'];
