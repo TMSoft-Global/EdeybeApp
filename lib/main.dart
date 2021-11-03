@@ -46,8 +46,8 @@ class _EdeybeAppState extends State<EdeybeApp> {
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
             ],
-            // home: SplashScreen(),
-            home: VariantsImage(),
+            home: SplashScreen(),
+            // home: VariantsImage(),
             supportedLocales: S.delegate.supportedLocales,
             // locale: DevicePreview.of(context).locale, // <--- Add the locale
             // builder: DevicePreview.appBuilder,

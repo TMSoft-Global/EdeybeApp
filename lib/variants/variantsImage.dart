@@ -1,4 +1,5 @@
 import 'package:edeybe/index.dart';
+import 'package:edeybe/models/productModel.dart';
 import 'package:flutter/material.dart';
 
 class VariantsImage extends StatefulWidget {
@@ -7,7 +8,6 @@ class VariantsImage extends StatefulWidget {
 }
 
 class _VariantsImageState extends State<VariantsImage> {
-  
   List<String> images = [
     "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
     "https://images.ctfassets.net/hrltx12pl8hq/7yQR5uJhwEkRfjwMFJ7bUK/dc52a0913e8ff8b5c276177890eb0129/offset_comp_772626-opt.jpg",
@@ -21,7 +21,7 @@ class _VariantsImageState extends State<VariantsImage> {
     "https://picjumbo.com/wp-content/uploads/creative-space-hero-image-place-for-text-free-photo-1080x720.jpg"
   ];
 
-  List<String>  imageString=[];
+  List<String> imageString = [];
   bool autoPlay = true;
   @override
   void initState() {
@@ -37,21 +37,21 @@ class _VariantsImageState extends State<VariantsImage> {
       SizedBox(
         height: 30,
       ),
-      imageCarousel(context: context,images: imageString,)
-        // child: CarouselSlider(
-        //   itemCount:autoPlay? images.length : images2.length,
-        //   autoPlay: autoPlay,
-        //   containerHeight: 150.w,
-        //   itemBuilder: (context, ind) => Image(
-        //     width: Get.width.w,
-        //     image: NetworkImage(
-        //      !autoPlay ? images[ind] : images2[ind],
-        //     ),
-        //     alignment: Alignment.center,
-        //     fit: BoxFit.cover,
-        //   ),
-        // ),
-      ,
+      // imageCarousel(context: context,images: imageString,)
+      // child: CarouselSlider(
+      //   itemCount:autoPlay? images.length : images2.length,
+      //   autoPlay: autoPlay,
+      //   containerHeight: 150.w,
+      //   itemBuilder: (context, ind) => Image(
+      //     width: Get.width.w,
+      //     image: NetworkImage(
+      //      !autoPlay ? images[ind] : images2[ind],
+      //     ),
+      //     alignment: Alignment.center,
+      //     fit: BoxFit.cover,
+      //   ),
+      // ),
+      // ,
       SizedBox(
         height: 30,
       ),
@@ -59,11 +59,11 @@ class _VariantsImageState extends State<VariantsImage> {
         children: [
           for (var image in images)
             GestureDetector(
-              onTap: (){
+              onTap: () {
                 setState(() {
-                    imageString = images2;
-                    // autoPlay = false;
-                  });
+                  imageString = images2;
+                  // autoPlay = false;
+                });
               },
               child: Padding(
                 padding: const EdgeInsets.all(5.0),
@@ -79,34 +79,34 @@ class _VariantsImageState extends State<VariantsImage> {
   }
 }
 
-
-Widget imageCarousel({List<String>images, BuildContext context}){
+Widget imageCarousel({List<Photos> images, BuildContext context}) {
   return Container(
-        height: 180.w,
-        width: Get.width.w,
-        child: PageView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: images.length,
-            itemBuilder: (_,i){
-            return Container(
-              width: MediaQuery.of(context).size.width-10,
-              child: Image.network(images[i],
+    height: 180.w,
+    width: Get.width.w,
+    child: PageView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: images.length,
+        itemBuilder: (_, i) {
+          return Container(
+            width: MediaQuery.of(context).size.width - 10,
+            child: CachedNetworkImage(
+              imageUrl: images[i].sm,
               fit: BoxFit.fitWidth,
-              ),
-            );  }),
-        );
-        // child: CarouselSlider(
-        //   itemCount:autoPlay? images.length : images2.length,
-        //   autoPlay: autoPlay,
-        //   containerHeight: 150.w,
-        //   itemBuilder: (context, ind) => Image(
-        //     width: Get.width.w,
-        //     image: NetworkImage(
-        //      !autoPlay ? images[ind] : images2[ind],
-        //     ),
-        //     alignment: Alignment.center,
-        //     fit: BoxFit.cover,
-        //   ),
-        // ),
-      
+            ),
+          );
+        }),
+  );
+  // child: CarouselSlider(
+  //   itemCount:autoPlay? images.length : images2.length,
+  //   autoPlay: autoPlay,
+  //   containerHeight: 150.w,
+  //   itemBuilder: (context, ind) => Image(
+  //     width: Get.width.w,
+  //     image: NetworkImage(
+  //      !autoPlay ? images[ind] : images2[ind],
+  //     ),
+  //     alignment: Alignment.center,
+  //     fit: BoxFit.cover,
+  //   ),
+  // ),
 }
