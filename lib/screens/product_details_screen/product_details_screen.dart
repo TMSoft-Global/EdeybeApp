@@ -273,6 +273,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 offset: Offset(3, 3.5),
                                 scalefactor: 1,
                                 fontWeight: FontWeight.w800,
+                                currencyFirst: true,
                                 children: [
                                   TextSpan(
                                     text: formatCurrency.format(
@@ -298,6 +299,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                     offset: Offset(3, 3.5),
                                     scalefactor: 1,
                                     fontWeight: FontWeight.w800,
+                                    currencyFirst: true,
                                     children: [
                                       TextSpan(
                                         text: formatCurrency.format(
@@ -888,7 +890,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               ],
             ),
             ProductsGrid(
-              scrollDirection: Axis.vertical,
+              scrollDirection: Axis.horizontal,
               products: _p.productDetail.value.relatedItems,
             ),
           ],

@@ -93,6 +93,7 @@ class PaymentMethodController extends GetxController {
           Get.to(
             Otp(
                 data: card.number,
+                time: 180,
                 onVerify: (String otp) => addPaymentMethod(card, otp: otp),
                 onResend: (Function callBack) =>
                     payementServer.sendVerification(card.number, () {

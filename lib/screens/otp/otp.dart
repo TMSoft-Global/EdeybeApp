@@ -8,10 +8,12 @@ class Otp extends StatefulWidget {
   final Function onVerify;
   final Function onResend;
   final String data;
+  final int time;
   const Otp(
       {Key key,
       @required this.data,
       @required this.onVerify,
+      @required this.time,
       @required this.onResend})
       : super(key: key);
 
@@ -36,7 +38,7 @@ class _OtpState extends State<Otp> with SingleTickerProviderStateMixin {
   int _fifthDigit;
   int _sixthDigit;
 
-  final int time = 300;
+  // final int time = 300;
   Timer timer;
   Timer resetStateTimer;
   int resendCount = 1;
@@ -260,7 +262,7 @@ class _OtpState extends State<Otp> with SingleTickerProviderStateMixin {
   // Overridden methods
   @override
   void initState() {
-    totalTimeInSeconds = time;
+    totalTimeInSeconds = widget.time;
     super.initState();
     _controller = AnimationController(
         vsync: this, duration: Duration(seconds: totalTimeInSeconds))
@@ -382,7 +384,7 @@ class _OtpState extends State<Otp> with SingleTickerProviderStateMixin {
   Future<Null> _startCountdown() async {
     setState(() {
       _hideResendButton = true;
-      totalTimeInSeconds = time * resendCount;
+      totalTimeInSeconds = widget.time * resendCount;
     });
     _controller.reverse(
         from: _controller.value == 0.0 ? 1.0 : _controller.value);
@@ -391,9 +393,9 @@ class _OtpState extends State<Otp> with SingleTickerProviderStateMixin {
   Future<Null> _resendStartCountdown(res) async {
     setState(() {
       _hideResendButton = true;
-      totalTimeInSeconds = time * resendCount;
+      totalTimeInSeconds = widget.time * resendCount;
     });
-    _controller.duration = Duration(seconds: time * resendCount);
+    _controller.duration = Duration(seconds: widget.time * resendCount);
 
     _controller.reverse(
         from: _controller.value == 0.0 ? 1.0 : _controller.value);
