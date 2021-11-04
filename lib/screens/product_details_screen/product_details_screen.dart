@@ -29,7 +29,6 @@ import 'package:edeybe/index.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/rendering.dart';
 
-import 'Untitled-1.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   ProductDetailsScreen({Key key}) : super(key: key);

@@ -55,6 +55,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   final FocusNode _mobile = FocusNode();
 
   bool autoValidate = false;
+  bool acceptTnC = false;
   // final name
   // GlobalKey<FormFieldState> _cvv = new GlobalKey<FormFieldState>();
   TextStyle style = TextStyle(fontSize: 14.w);
@@ -129,8 +130,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   style: TextStyle(
                       color: canPlaceOrder() ? Colors.white : Colors.black),
                 ),
-                onPressed: canPlaceOrder()
-                    ? () {
+                onPressed:!acceptTnC? Helper.textPlaceholder: canPlaceOrder()
+                    ?  () {
                         // "rico@mail.com password!1$"
                         if (_formKey.currentState.validate()) {
                           var selectedCard = _paymentController.cards
@@ -329,7 +330,19 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                 ),
                               ))),
                   _biuldPaymentMethod,
-                  _buildCartItem
+                  _buildCartItem,
+                  Row(children: [
+                    TextButton(
+                        onPressed: () {},
+                        child: Text("Terms and conditions applied")),
+                    Checkbox(
+                        value: acceptTnC,
+                        onChanged: (va) {
+                          setState(() {
+                            acceptTnC = !acceptTnC;
+                          });
+                        })
+                  ])
                 ],
               ),
             )));
@@ -480,9 +493,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           (previousValue, element) =>
               previousValue +
               ((element.hasDiscount ? element.discountPrice : 0) *
-                      element.quantity) );
-                  //     *
-                  // (element.price)));
+                  element.quantity));
+      //     *
+      // (element.price)));
       return Container(
         margin: EdgeInsets.fromLTRB(10.w, 20.w, 10.w, 10.w),
         padding: EdgeInsets.all(10.0.w),
@@ -527,8 +540,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     currencyFirst: true,
                     children: [
                       TextSpan(
-                          text: formatCurrency.format(
-                              double.parse("${_cartController.cartCost.total}".toString())),
+                          text: formatCurrency.format(double.parse(
+                              "${_cartController.cartCost.total}".toString())),
                           style: TextStyle(
                               fontWeight: FontWeight.normal,
                               color: Colors.black,
