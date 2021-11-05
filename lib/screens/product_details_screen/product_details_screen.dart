@@ -616,7 +616,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     );
   }
 
-  // build delivery offer options
+  // build delivery offer options   
   Widget _buildDeliveryOffers(String icon, {String label}) {
     return Container(
       alignment: Alignment.centerLeft,
