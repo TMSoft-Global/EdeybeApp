@@ -31,14 +31,14 @@ class CartController extends GetxController implements HTTPErrorHandler {
 
   addToCart(ProductModel p, Function callback, {String variantID}) {
     resetErrorState();
-    
+
     Map<String, dynamic> items = {};
     var inList = cartItems.firstWhere((pp) => pp.productId == p.productId,
         orElse: () => null);
     // if (inList != null) {
     //   // print("object");
     //   cartItems.removeWhere((pp) => pp.productId == p.productId);
-    // } else 
+    // } else
     {
       items = {
         "items": variantID == null
@@ -60,6 +60,7 @@ class CartController extends GetxController implements HTTPErrorHandler {
     }, handleError);
     print(items);
   }
+
 
   getCartITems() {
     resetErrorState();
@@ -126,7 +127,7 @@ class CartController extends GetxController implements HTTPErrorHandler {
     Get.find<WishlistController>().addToWishlist(movableProduct, callback);
   }
 
-  setQuantity(int productIndex, int newQTY, String proID,{String variantID}) {
+  setQuantity(int productIndex, int newQTY, String proID, {String variantID}) {
     print("11111${variantID}_$proID}");
     Map<String, dynamic> items = {};
 
@@ -146,8 +147,7 @@ class CartController extends GetxController implements HTTPErrorHandler {
     cartItems.forEach((item) {
       if (item.isVariant) {
         items["items"][item.productId] = {"quantity": newQTY};
-      }
-       else {
+      } else {
         items["items"][item.productId] = {"quantity": item.quantity};
       }
     });

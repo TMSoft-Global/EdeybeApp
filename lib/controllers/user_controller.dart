@@ -234,6 +234,18 @@ class UserController extends GetxController implements HTTPErrorHandler {
     });
   }
 
+
+  postCommentAndRate(String productID, String comment, double rating, String transID) {
+    print("$productID $comment $rating $transID");
+    _userOperations.ratingAndComment(productID, comment, rating,transID, (val){
+      print("------------------$val");
+    });
+  }
+
+  getCommentAndRate(String productID) {
+    _userOperations.getratingAndComment(productID,print);
+  }
+
   setHistory(List<Order> data, int count) {
     if (historyLoadingMore.value) {
       if (data.isEmpty) {

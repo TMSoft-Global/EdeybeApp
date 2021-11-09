@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:edeybe/controllers/user_controller.dart';
 import 'package:edeybe/models/order.dart';
 import 'package:edeybe/screens/checkout_screen/index.dart';
 import 'package:edeybe/screens/order_history_screen/order_details/order_details.dart';
 import 'package:edeybe/utils/cart_item_type.dart';
 import 'package:edeybe/utils/constant.dart';
+import 'package:edeybe/utils/ratingDialog.dart';
+import 'package:edeybe/utils/ratingStars.dart';
 import 'package:edeybe/widgets/Shimmer.dart';
 import 'package:edeybe/widgets/cart_item.dart';
 import 'package:edeybe/widgets/custom_divider.dart';
@@ -24,7 +28,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen>
     with TickerProviderStateMixin {
   List<Order> orders = [];
   UserController _userController = Get.find<UserController>();
-  
+
   TabController _tabController;
   @override
   void initState() {
@@ -42,7 +46,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen>
       CartItemType type, Map<String, List<Order>> orders, Widget loadMore) {
     return orders.isNotEmpty
         ? SingleChildScrollView(
-          controller: _userController.controller,
+            controller: _userController.controller,
             child: Column(
                 children: orders
                     .map((key, value) => MapEntry<String, Widget>(
@@ -55,15 +59,16 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen>
                               thickness: 2.0,
                             )
                           ]..addAll(value
-                              .map<Widget>((e) => 
-                              // Text(e.hasVariants.toString())
-                              CartItem(
-                                    product: e,
-                                    type: type,
-                                    onViewDetails: () =>
-                                        Get.to(OrderDetails(order: e)),
-                                  )
-                                  )
+                              .map<Widget>((e) =>
+                                  // Text(e.transactionId .toString())
+                                  CartItem(
+                                      isComment: true,
+                                      onRateComment: () => {},
+                                      product: e,
+                                      type: type,
+                                      tappable: true,
+                                      onViewDetails: () =>
+                                          Get.to(OrderDetails(order: e))))
                               .toList()),
                         )))
                     .values

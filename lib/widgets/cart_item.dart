@@ -1,10 +1,15 @@
+import 'dart:io';
+
 import 'package:edeybe/controllers/product_controller.dart';
 import 'package:edeybe/index.dart';
 import 'package:edeybe/models/order.dart';
 import 'package:edeybe/screens/product_details_screen/product_details_screen.dart';
 import 'package:edeybe/utils/cart_item_type.dart';
 import 'package:edeybe/utils/helper.dart';
+import 'package:edeybe/utils/ratingDialog.dart';
+import 'package:edeybe/utils/ratingStars.dart';
 import 'package:edeybe/widgets/ShimmerLoader.dart';
+import 'package:edeybe/widgets/custom_dialog.dart';
 import 'package:edeybe/widgets/money_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
@@ -18,15 +23,16 @@ class CartItem extends StatelessWidget {
   final VoidCallback onDecreaseQunatity;
   final VoidCallback onTrackOrder;
   final VoidCallback onViewDetails;
-  // final String variantId;
+  final VoidCallback onRateComment;
   final dynamic product;
   final bool isLoading;
   final bool tappable;
+  final bool isComment;
   final formatCurrency = new NumberFormat.simpleCurrency(name: "");
   CartItem(
       {Key key,
       @required this.type,
-      // this.variantId,
+      this.onRateComment,
       @required this.product,
       this.onMovePressed,
       this.isLoading = false,
@@ -34,6 +40,7 @@ class CartItem extends StatelessWidget {
       this.onIncreaseQunatity,
       this.onDecreaseQunatity,
       this.onViewDetails,
+      this.isComment = false,
       this.tappable = true,
       this.onRemovePressed})
       : super(key: key);
@@ -118,14 +125,40 @@ class CartItem extends StatelessWidget {
                                       padding: const EdgeInsets.all(2.0),
                                       child: Helper.textPlaceholder,
                                     )
-                                  : Text(
-                                      S.of(context).soldBy +
-                                          " : ${product is Order ? "" : product.brand}",
-                                      style: TextStyle(
-                                          fontSize: 12.w,
-                                          fontWeight: FontWeight.bold),
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 2,
+                                  : Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          S.of(context).soldBy +
+                                              " : ${product is Order ? "" : product.brand}",
+                                          style: TextStyle(
+                                              fontSize: 12.w,
+                                              fontWeight: FontWeight.bold),
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 2,
+                                        ),
+                                        if (isComment)
+                                          TextButton(
+                                              style: TextButton.styleFrom(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 10),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.w),
+                                                ),
+                                              ),
+                                              onPressed: () {
+                                                androidSelectCity(context: context, title: product);
+                                              },
+                                              child: Text(
+                                                "Rate",
+                                                style: TextStyle(
+                                                  fontSize: 14.w,
+                                                ),
+                                              ))
+                                      ],
                                     ),
                             ),
                             ShimmerLoading(
@@ -171,6 +204,7 @@ class CartItem extends StatelessWidget {
                                             scalefactor: 1,
                                             currency: "GHS",
                                             fontWeight: FontWeight.w800,
+                                            currencyFirst: true,
                                             children: [
                                               // TextSpan(text: "Hellp")
                                               TextSpan(
@@ -474,8 +508,51 @@ class CartItem extends StatelessWidget {
                           ],
                         ),
                 ),
+              // if (isComment)
+              //  RationgDialog()
             ],
           )),
     );
   }
+}
+
+Widget _ratings(
+    {BuildContext context,
+    Function(double rating) onRating,
+    TextEditingController controller,
+    FocusNode focus}) {
+  return Container(
+    color: Colors.white,
+    // height: 100,
+    width: double.infinity,
+    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        ratingStar(
+          size: 30,
+          function: (double rating) {
+            print(rating);
+            Platform.isIOS
+                ? iosRatingDialog(
+                    commentController: controller,
+                    commentFocus: focus,
+                    context: context,
+                    star: "$rating",
+                    submit: onRating(rating),
+                    rate: rating.toString(),
+                  )
+                : ratingDialog(
+                    commentController: controller,
+                    commentFocus: focus,
+                    context: context,
+                    star: "$rating",
+                    submit: onRating(rating));
+          },
+          rate: 0,
+        ),
+      ],
+    ),
+  );
 }
