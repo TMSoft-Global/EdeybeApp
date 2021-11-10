@@ -5,6 +5,7 @@ import 'package:edeybe/controllers/address_controller.dart';
 import 'package:edeybe/index.dart';
 import 'package:edeybe/interface/HTTPErrorHandler.dart';
 import 'package:edeybe/models/order.dart';
+import 'package:edeybe/models/ratingModel.dart';
 import 'package:edeybe/models/user.dart';
 import 'package:edeybe/screens/checkout_screen/index.dart';
 import 'package:edeybe/screens/configuration_screen/config_screen.dart';
@@ -22,6 +23,7 @@ class UserController extends GetxController implements HTTPErrorHandler {
   dynamic recentlyViewed;
   var addressCtl = Get.find<AddressController>();
   UserOperations _userOperations = UserOperations();
+   
   var connectionError = false.obs;
   var serverError = false.obs;
   var canceled = false.obs;
@@ -234,17 +236,8 @@ class UserController extends GetxController implements HTTPErrorHandler {
     });
   }
 
-
-  postCommentAndRate(String productID, String comment, double rating, String transID) {
-    print("$productID $comment $rating $transID");
-    _userOperations.ratingAndComment(productID, comment, rating,transID, (val){
-      print("------------------$val");
-    });
-  }
-
-  getCommentAndRate(String productID) {
-    _userOperations.getratingAndComment(productID,print);
-  }
+ 
+ 
 
   setHistory(List<Order> data, int count) {
     if (historyLoadingMore.value) {

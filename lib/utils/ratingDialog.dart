@@ -1,4 +1,4 @@
-import 'package:edeybe/controllers/user_controller.dart';
+import 'package:edeybe/controllers/product_controller.dart';
 import 'package:edeybe/index.dart';
 import 'package:edeybe/utils/ratingStars.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,7 +15,7 @@ class RationgDialog extends StatefulWidget {
 }
 
 class _RationgDialogState extends State<RationgDialog> {
-  UserController _userController = Get.find<UserController>();
+  ProductController _userController = Get.find<ProductController>();
   final commentController = TextEditingController();
 
   bool isShowComment = false;

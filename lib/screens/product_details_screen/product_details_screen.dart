@@ -9,7 +9,6 @@ import 'package:edeybe/screens/product_details_screen/product_details_bottom_bar
 import 'package:edeybe/screens/products_view/products.dart';
 // import 'package:edeybe/screens/review_screen/review_screen.dart';
 import 'package:edeybe/screens/wishlist_screen/wishlist_screen.dart';
-import 'package:edeybe/services/server_operation.dart';
 import 'package:edeybe/utils/cart_item_type.dart';
 import 'package:edeybe/utils/constant.dart';
 import 'package:edeybe/utils/helper.dart';
@@ -67,6 +66,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       _productController.getProductVariantByID(
           _productController.productDetail.value.productId);
     });
+     _productController.getCommentAndRate("productID");
     // _productController
     //     .getProductbyId(_productController.product.value.sku));
     super.initState();
@@ -539,7 +539,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     thickness: 5.h,
                     color: Colors.grey[200],
                   ),
-                  _buildProductAndSpecsDetails(),
+                  _buildProductAndSpecsDetails()
+                  ,
                   Padding(
                     padding: EdgeInsets.all(8.w),
                     child: Column(
@@ -821,7 +822,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       ]));
     });
     return DefaultTabController(
-        length: 1,
+        length:2 ,
         child: Container(
           color: Colors.white,
           constraints:
@@ -835,7 +836,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 unselectedLabelColor: Get.textTheme.bodyText1.color,
                 tabs: <Widget>[
                   Tab(text: S.of(context).productDetails.toUpperCase()),
-                  // Tab(text: S.of(context).specifications.toUpperCase())
+                  Tab(text: S.of(context).reviews.toUpperCase())
                 ],
               ),
               Expanded(
@@ -857,21 +858,33 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         ),
                       ),
                     ),
-                    // SingleChildScrollView(
-                    //   child: Container(
-                    //     padding: EdgeInsets.all(20.w),
-                    //     child: Table(
-                    //       border: TableBorder.all(color: Colors.grey[400]),
-                    //       children: rows,
-                    //     ),
-                    //   ),
-                    // ),
+                    SingleChildScrollView(
+                      child: Container(
+                        padding: EdgeInsets.all(20.w),
+                        child: Container(
+                          child: _buildReviewComment(),
+                        )
+                      ),
+                    ),
                   ],
                 ),
               )
             ],
           ),
         ));
+  }
+
+  Widget _buildReviewComment(){
+    // return GetBuilder<UserController>(builder: (_user){
+     
+      return Column(
+        children: [
+          Text("data")
+          // for(var x in _productController.ratingReview.ratings)
+          // Text(x.productId)
+        ],
+      );
+    // });
   }
 
   Widget _buildRelatedProducts() {

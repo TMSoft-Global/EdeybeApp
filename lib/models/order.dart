@@ -17,6 +17,7 @@ class Order {
   List<Variants> variants;
   bool hasVariants =false;
   bool hasDiscount = false;
+  bool canRate;
 
   String selectedVariant;
 
@@ -35,11 +36,13 @@ class Order {
     this.cartDeliveryCost,
     this.variants,
     this.hasVariants = false,
+    this.canRate = false,
 
     this.selectedVariant,
   });
 
   Order.fromJson(Map<String, dynamic> json) {
+    print(json['canRate']);
     sId = json['_id'];
     if (json['photos'] != null) {
       photos = <Photos>[];
@@ -50,7 +53,7 @@ class Order {
     productId = json['productId'];
     productName = json['productName'];
     hasDiscount = false;
-
+    canRate = json['canRate'];
     selectedVariant = json['selectedVariant'];
     quantity = json['quantity'];
     productTotal = json['productTotal'];
@@ -75,10 +78,11 @@ class Order {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
-    if (this.photos != null) {
-      data['photos'] = this.photos.map((v) => v.toJson()).toList();
+    data['_id'] = sId;
+    if (photos != null) {
+      data['photos'] = photos.map((v) => v.toJson()).toList();
     }
+    data['canRate'] = this.canRate;
     data['productId'] = this.productId;
     data['productName'] = this.productName;
     data['quantity'] = this.quantity;

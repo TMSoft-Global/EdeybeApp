@@ -138,7 +138,7 @@ class CartItem extends StatelessWidget {
                                           overflow: TextOverflow.ellipsis,
                                           maxLines: 2,
                                         ),
-                                        if (isComment)
+                                        if (isComment != null && isComment)
                                           TextButton(
                                               style: TextButton.styleFrom(
                                                 padding: EdgeInsets.symmetric(

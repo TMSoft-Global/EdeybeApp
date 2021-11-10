@@ -44,7 +44,7 @@ class RatingCommentModel {
 
 class Ratings {
   String sId;
-  double rating;
+  dynamic rating;
   String comment;
   String user;
   String productId;

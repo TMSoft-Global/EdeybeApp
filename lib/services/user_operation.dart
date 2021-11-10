@@ -6,6 +6,7 @@ import 'package:edeybe/models/deliveryModel.dart';
 import 'package:edeybe/models/order.dart';
 import 'package:edeybe/models/product.dart';
 import 'package:edeybe/models/productModel.dart';
+import 'package:edeybe/models/ratingModel.dart';
 import 'package:edeybe/models/shippingAddress.dart';
 import 'package:edeybe/models/user.dart';
 import 'package:edeybe/screens/otp/otp.dart';
@@ -231,37 +232,6 @@ class UserOperations extends ServerOperations {
       showDialog: true,
     );
   }
-
-  ratingAndComment(String productId, String comment, double rating,
-      String transID, onResponse(Function)) {
-    dynamicRequest(
-      path: "/ratings-comments/$productId",
-      schema: jsonEncode({
-        "rating": rating,
-        "comment": "$comment",
-        "transactionId": "$transID"
-      }),
-      onResponse: (res) {
-        Get.back();
-
-        print(res);
-      },
-      showDialog: true,
-    );
-  }
-
-  getratingAndComment(String productId, onResponse(Function)) {
-    dynamicRequest(
-      path: "/ratings-comments/$productId",
-      method: "GET",
-      schema: "",
-      onResponse: (res) {
-        print(res);
-      },
-      showDialog: true,
-    );
-  }
-
   verifyOtp(
       {String otp,
       String registerID,

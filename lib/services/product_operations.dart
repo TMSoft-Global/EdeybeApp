@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:edeybe/index.dart';
 import 'package:edeybe/models/product.dart';
 import 'package:edeybe/models/productModel.dart';
+import 'package:edeybe/models/ratingModel.dart';
 import 'package:edeybe/services/server_operation.dart';
 import 'package:edeybe/utils/helper.dart';
 
@@ -24,6 +26,57 @@ class ProductOperation extends ServerOperations {
       },
     );
   }
+
+  ratingAndComment(String productId, String comment, double rating,
+      String transID, onResponse(Function)) {
+    dynamicRequest(
+      path: "/ratings-comments/$productId",
+      schema: jsonEncode({
+        "rating": rating,
+        "comment": "$comment",
+        "transactionId": "$transID"
+      }),
+      onResponse: (res) {
+        Get.back();
+
+        print(res);
+      },
+      showDialog: true,
+    );
+  }
+
+  getratingAndComment(String productId, onResponse(RatingCommentModel res)) {
+    dynamicRequest(
+      path: "/ratings-comments/$productId",
+      method: "GET",
+      schema: "",
+      onResponse: (onResponse){
+        // var data = jsonDecode(onResponse);
+        print(onResponse['ratings']);
+      var data =  (onResponse["ratings"] as List<dynamic>)
+            .map((dynamic i) => Ratings.fromJson(i as Map<String, dynamic>))
+            .toList();
+           var rs =  BreakDownRatings(
+             star1: onResponse['breakDownRatings']['star1'],
+             star2: onResponse['breakDownRatings']['star2'],
+             star3: onResponse['breakDownRatings']['star3'],
+             star4: onResponse['breakDownRatings']['star4'],
+             star5: onResponse['breakDownRatings']['star5'],
+           );
+        RatingCommentModel ratingCommentModel = RatingCommentModel(
+          ratings: data,
+          productRating: onResponse['productRating'],
+          breakDownRatings: rs,
+          totalRating: onResponse['totalRating'],
+          totalRatingWithoutComment: onResponse['totalRatingWithoutComment'],
+        );
+        print(ratingCommentModel);
+        onResponse(ratingCommentModel);
+      },
+      showDialog: false,
+    );
+  }
+
 
   getTotalPossible(Map<String, String> query, void onResponse(int response),
       void onError(DioError error)) {

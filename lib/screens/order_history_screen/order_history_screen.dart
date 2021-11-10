@@ -60,9 +60,9 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen>
                             )
                           ]..addAll(value
                               .map<Widget>((e) =>
-                                  // Text(e.transactionId .toString())
+                                  // Text(e.canRate .toString()),)
                                   CartItem(
-                                      isComment: true,
+                                      isComment: false,
                                       onRateComment: () => {},
                                       product: e,
                                       type: type,
