@@ -64,6 +64,7 @@ Future<String> onSelect(String data) async {
   if (decodeData['type'] == 'router'.toLowerCase()) {
     if (decodeData['message']['status'] == 'failed'.toLowerCase()) {
       // print(decodeData);
+      Get.dialog(CustomDialog());
       if (decodeData['pageKey'] == 'home') {
         Get.to(HomeIndex());
       } else if (decodeData['pageKey'] == 'order_history') {

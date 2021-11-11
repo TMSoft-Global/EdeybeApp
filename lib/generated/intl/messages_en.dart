@@ -224,7 +224,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "year" : MessageLookupByLibrary.simpleMessage("Year"),
     "yearIsInvalid" : MessageLookupByLibrary.simpleMessage("Expire year is invalid"),
     "yes" : MessageLookupByLibrary.simpleMessage("Yes"),
-    "yourQuestion" : MessageLookupByLibrary.simpleMessage("Your Question"),
-    "review": MessageLookupByLibrary.simpleMessage("Review and Ratings")
+    "yourQuestion" : MessageLookupByLibrary.simpleMessage("Your Question")
   };
 }

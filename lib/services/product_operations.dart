@@ -10,8 +10,10 @@ import 'package:edeybe/utils/helper.dart';
 
 class ProductOperation extends ServerOperations {
   final String productsWithFilter = '/products/withFilters?';
-  getAllProducts(Map<String, String> query,
-      void onResponse(List<ProductModel> response), void onError(DioError error)) {
+  getAllProducts(
+      Map<String, String> query,
+      void onResponse(List<ProductModel> response),
+      void onError(DioError error)) {
     String strQuery = Helper.encodeMap(query);
     dynamicRequest(
       path: "$productsWithFilter$strQuery",
@@ -20,7 +22,8 @@ class ProductOperation extends ServerOperations {
       onError: onError,
       onResponse: (res) {
         var data = (res["results"] as List<dynamic>)
-            .map((dynamic i) => ProductModel.fromJson(i as Map<String, dynamic>))
+            .map(
+                (dynamic i) => ProductModel.fromJson(i as Map<String, dynamic>))
             .toList();
         onResponse(data);
       },
@@ -50,33 +53,14 @@ class ProductOperation extends ServerOperations {
       path: "/ratings-comments/$productId",
       method: "GET",
       schema: "",
-      onResponse: (onResponse){
-        // var data = jsonDecode(onResponse);
-        print(onResponse['ratings']);
-      var data =  (onResponse["ratings"] as List<dynamic>)
-            .map((dynamic i) => Ratings.fromJson(i as Map<String, dynamic>))
-            .toList();
-           var rs =  BreakDownRatings(
-             star1: onResponse['breakDownRatings']['star1'],
-             star2: onResponse['breakDownRatings']['star2'],
-             star3: onResponse['breakDownRatings']['star3'],
-             star4: onResponse['breakDownRatings']['star4'],
-             star5: onResponse['breakDownRatings']['star5'],
-           );
-        RatingCommentModel ratingCommentModel = RatingCommentModel(
-          ratings: data,
-          productRating: onResponse['productRating'],
-          breakDownRatings: rs,
-          totalRating: onResponse['totalRating'],
-          totalRatingWithoutComment: onResponse['totalRatingWithoutComment'],
-        );
-        print(ratingCommentModel);
-        onResponse(ratingCommentModel);
+      onResponse: (onResponse) {
+        var data = RatingCommentModel.fromJson(jsonDecode(onResponse));
+
+        onResponse(data);
       },
       showDialog: false,
     );
   }
-
 
   getTotalPossible(Map<String, String> query, void onResponse(int response),
       void onError(DioError error)) {
@@ -124,10 +108,11 @@ class ProductOperation extends ServerOperations {
         //     photo: res['success']['storeProfilePicture'],
         //     details: res['success']['storeDescription'],
         //     phone: res['success']['phone']);
-        var data =
-            (res['success']['merchantProducts']['results'] as List<dynamic>)
-                .map((dynamic i) => ProductModel.fromJson(i as Map<String, dynamic>))
-                .toList();
+        var data = (res['success']['merchantProducts']['results']
+                as List<dynamic>)
+            .map(
+                (dynamic i) => ProductModel.fromJson(i as Map<String, dynamic>))
+            .toList();
         onResponse(data);
       },
     );
@@ -166,8 +151,10 @@ class ProductOperation extends ServerOperations {
     );
   }
 
-  getAllProductByCategoryId(Map<String, String> category,
-      void onResponse(List<ProductModel> response), void onError(DioError error)) {
+  getAllProductByCategoryId(
+      Map<String, String> category,
+      void onResponse(List<ProductModel> response),
+      void onError(DioError error)) {
     String strQuery = Helper.encodeMap(category);
     dynamicRequest(
       path: "/products/bycategory/${category["id"]}?$strQuery",
@@ -175,15 +162,18 @@ class ProductOperation extends ServerOperations {
       onError: onError,
       onResponse: (res) {
         var data = (res['results'] as List<dynamic>)
-            .map((dynamic i) => ProductModel.fromJson(i as Map<String, dynamic>))
+            .map(
+                (dynamic i) => ProductModel.fromJson(i as Map<String, dynamic>))
             .toList();
         onResponse(data);
       },
     );
   }
 
-  getAllProductsById(Map<String, String> category,
-      void onResponse(List<ProductModel> response), void onError(DioError error)) {
+  getAllProductsById(
+      Map<String, String> category,
+      void onResponse(List<ProductModel> response),
+      void onError(DioError error)) {
     String strQuery = Helper.encodeMap(category);
     dynamicRequest(
       path: "/category/${category["id"]}?$strQuery",
@@ -192,15 +182,18 @@ class ProductOperation extends ServerOperations {
       onResponse: (res) {
         // print(res);
         var data = (res as List<dynamic>)
-            .map((dynamic i) => ProductModel.fromJson(i as Map<String, dynamic>))
+            .map(
+                (dynamic i) => ProductModel.fromJson(i as Map<String, dynamic>))
             .toList();
         onResponse(data);
       },
     );
   }
 
-  getAllProductBySubcategoryId(Map<String, String> category,
-      void onResponse(List<ProductModel> response), void onError(DioError error)) {
+  getAllProductBySubcategoryId(
+      Map<String, String> category,
+      void onResponse(List<ProductModel> response),
+      void onError(DioError error)) {
     String strQuery = Helper.encodeMap(category);
     dynamicRequest(
       path: "/subcategory/${category["id"]}?$strQuery",
@@ -209,7 +202,8 @@ class ProductOperation extends ServerOperations {
       onResponse: (res) {
         // print(res);
         var data = (res as List<dynamic>)
-            .map((dynamic i) => ProductModel.fromJson(i as Map<String, dynamic>))
+            .map(
+                (dynamic i) => ProductModel.fromJson(i as Map<String, dynamic>))
             .toList();
         onResponse(data);
       },
