@@ -25,9 +25,9 @@ import 'package:edeybe/widgets/products_grid.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter/material.dart';
 import 'package:edeybe/index.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/rendering.dart';
-
 
 class ProductDetailsScreen extends StatefulWidget {
   ProductDetailsScreen({Key key}) : super(key: key);
@@ -66,7 +66,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       _productController.getProductVariantByID(
           _productController.productDetail.value.productId);
     });
-     _productController.getCommentAndRate("productID");
+    _productController.getCommentAndRate("productID");
     // _productController
     //     .getProductbyId(_productController.product.value.sku));
     super.initState();
@@ -539,8 +539,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     thickness: 5.h,
                     color: Colors.grey[200],
                   ),
-                  _buildProductAndSpecsDetails()
-                  ,
+                  _buildProductAndSpecsDetails(),
                   Padding(
                     padding: EdgeInsets.all(8.w),
                     child: Column(
@@ -617,7 +616,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     );
   }
 
-  // build delivery offer options   
+  // build delivery offer options
   Widget _buildDeliveryOffers(String icon, {String label}) {
     return Container(
       alignment: Alignment.centerLeft,
@@ -822,7 +821,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       ]));
     });
     return DefaultTabController(
-        length:2 ,
+        length: 2,
         child: Container(
           color: Colors.white,
           constraints:
@@ -860,11 +859,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     ),
                     SingleChildScrollView(
                       child: Container(
-                        padding: EdgeInsets.all(20.w),
-                        child: Container(
-                          child: _buildReviewComment(),
-                        )
-                      ),
+                          padding: EdgeInsets.all(20.w),
+                          child: Container(
+                            child: _buildReviewComment(),
+                          )),
                     ),
                   ],
                 ),
@@ -874,16 +872,104 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         ));
   }
 
-  Widget _buildReviewComment(){
+  Widget _buildReviewComment() {
     // return GetBuilder<UserController>(builder: (_user){
-     
-      return Column(
-        children: [
-          Text("data")
-          // for(var x in _productController.ratingReview.ratings)
-          // Text(x.productId)
-        ],
-      );
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Center(
+          child: RatingBarIndicator(
+            direction: Axis.horizontal,
+            itemCount: 5,
+            rating: double.tryParse(
+                "${_productController.ratingReview.value.productRating}"),
+            itemSize: 40,
+            itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+            itemBuilder: (context, _) => Icon(
+              Icons.star,
+              color: Colors.amber,
+              size: 3,
+            ),
+          ),
+        ),
+        Center(
+          child: Text(
+            "(${_productController.ratingReview.value.productRating})",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 10.0),
+          child: Text(
+              "Comments(${_productController.ratingReview.value.totalRating})"),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: CustomDivider(),
+        ),
+        for (var x in _productController.ratingReview.value.ratings)
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+                // height: 100,
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          CircleAvatar(
+                            backgroundColor: Colors.grey,
+                            child: Text(
+                              "AB",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 8),
+                          Text(
+                            x.user,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                            ),
+                          )
+                        ],
+                      ),
+                      RatingBarIndicator(
+                        direction: Axis.horizontal,
+                        itemCount: 5,
+                        rating: double.tryParse("${x.rating}"),
+                        itemSize: 20,
+                        itemPadding: EdgeInsets.symmetric(horizontal: 0.0),
+                        itemBuilder: (context, _) => Icon(
+                          Icons.star,
+                          color: Colors.amber,
+                          size: 3,
+                        ),
+                      )
+                    ],
+                  ),
+                  Container(
+                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      // width: MediaQuery.of(context).size.width/2.5,
+                      child: Text(
+                        x.comment,
+                      )),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  CustomDivider()
+                ])),
+          )
+      ],
+    );
     // });
   }
 
@@ -978,10 +1064,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                     x);
 
                                 setState(() {
+                                  _productController
+                                      .productDetail.value.variants
+                                      .forEach((element) =>
+                                          element.variantSelected = false);
                                   _productController.productDetail.value
-                                    .variants.forEach((element) =>element.variantSelected=false);
-                                    _productController
-                                        .productDetail.value.variants[x].variantSelected = true;
+                                      .variants[x].variantSelected = true;
                                 });
                               },
                               child: Padding(

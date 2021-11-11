@@ -63,16 +63,16 @@ class ProductController extends GetxController implements HTTPErrorHandler {
 
   void getCommentAndRate(String productID) {
     operations.getratingAndComment(
-        "5e9c4fe443ee9d3428830539_615edee057d5ae23d4bd1bd6", (response) {
-      print("------------------$response");
-      ratingReview.value = response;
+        "5e9c4fe443ee9d3428830539_615edee057d5ae23d4bd1bd6", (callback) {
+      print("------------------$callback");
+      ratingReview.value = callback;
       update();
     });
   }
 
   void postCommentAndRate(
       String productID, String comment, double rating, String transID) {
-    print("$productID $comment $rating $transID");
+    // print("$productID $comment $rating $transID");
     operations.ratingAndComment(productID, comment, rating, transID, (val) {
       print("------------------$val");
     });
@@ -187,7 +187,7 @@ class ProductController extends GetxController implements HTTPErrorHandler {
 
   void getProductVariantByID(String id) {
     operations.getProductByID(id, (val) {
-      print(val);
+      // print(val);
       productDetail.value = val;
       update();
     }, handleError);

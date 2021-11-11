@@ -48,15 +48,16 @@ class ProductOperation extends ServerOperations {
     );
   }
 
-  getratingAndComment(String productId, onResponse(RatingCommentModel res)) {
+  getratingAndComment(String productId, callback(RatingCommentModel res)) {
     dynamicRequest(
       path: "/ratings-comments/$productId",
       method: "GET",
       schema: "",
       onResponse: (onResponse) {
-        var data = RatingCommentModel.fromJson(jsonDecode(onResponse));
-
-        onResponse(data);
+        Map<String, dynamic> mappedData = onResponse;
+        var data = RatingCommentModel.fromJson(mappedData);
+        print(data.breakDownRatings.star2);
+        callback(data);
       },
       showDialog: false,
     );

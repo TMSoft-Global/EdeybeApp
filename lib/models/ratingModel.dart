@@ -16,14 +16,16 @@ class RatingCommentModel {
     productRating = json['productRating'];
     totalRating = json['totalRating'];
     if (json['ratings'] != null) {
-      ratings = new List<Ratings>();
+      ratings = <Ratings>[];
       json['ratings'].forEach((v) {
         ratings.add(new Ratings.fromJson(v));
       });
+    }else{
+      Ratings();
     }
     breakDownRatings = json['breakDownRatings'] != null
         ? new BreakDownRatings.fromJson(json['breakDownRatings'])
-        : null;
+        : BreakDownRatings();
     totalRatingWithoutComment = json['totalRatingWithoutComment'];
   }
 
