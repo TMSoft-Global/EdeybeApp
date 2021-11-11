@@ -6,6 +6,7 @@ import 'package:edeybe/models/deliveryModel.dart';
 import 'package:edeybe/models/order.dart';
 import 'package:edeybe/models/product.dart';
 import 'package:edeybe/models/productModel.dart';
+import 'package:edeybe/models/ratingModel.dart';
 import 'package:edeybe/models/shippingAddress.dart';
 import 'package:edeybe/models/user.dart';
 import 'package:edeybe/screens/otp/otp.dart';
@@ -111,8 +112,8 @@ class UserOperations extends ServerOperations {
     );
   }
 
-  getAllCartItems(
-      void onResponse(List<ProductModel> response), void onError(DioError error)) {
+  getAllCartItems(void onResponse(List<ProductModel> response),
+      void onError(DioError error)) {
     dynamicRequest(
       path: "/getcart",
       schema: "",
@@ -121,7 +122,8 @@ class UserOperations extends ServerOperations {
         print(res);
         if (res.containsKey("items")) {
           var data = (res["items"] as List<dynamic>)
-              .map((dynamic i) => ProductModel.fromJson(i as Map<String, dynamic>))
+              .map((dynamic i) =>
+                  ProductModel.fromJson(i as Map<String, dynamic>))
               // .sortedByNum((element) => element.id)
               .toList();
           onResponse(data);
@@ -230,7 +232,6 @@ class UserOperations extends ServerOperations {
       showDialog: true,
     );
   }
-
   verifyOtp(
       {String otp,
       String registerID,

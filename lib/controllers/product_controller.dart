@@ -4,6 +4,7 @@ import 'package:edeybe/index.dart';
 import 'package:edeybe/interface/HTTPErrorHandler.dart';
 import 'package:edeybe/models/product.dart';
 import 'package:edeybe/models/productModel.dart';
+import 'package:edeybe/models/ratingModel.dart';
 import 'package:edeybe/models/user.dart';
 import 'package:edeybe/services/product_operations.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,8 @@ import 'package:flutter/material.dart';
 class ProductController extends GetxController implements HTTPErrorHandler {
   User user;
   var operations = ProductOperation();
+  var ratingReview = RatingCommentModel().obs;
+
   // var product = ProductModel().obs;
   var products = <ProductModel>[].obs;
   var productDetail = ProductModel().obs;
@@ -56,6 +59,23 @@ class ProductController extends GetxController implements HTTPErrorHandler {
     loadingMore.value = false;
     hasMore.value = true;
     update();
+  }
+
+  void getCommentAndRate(String productID) {
+    operations.getratingAndComment(
+        "5e9c4fe443ee9d3428830539_615edee057d5ae23d4bd1bd6", (callback) {
+      print("------------------$callback");
+      ratingReview.value = callback;
+      update();
+    });
+  }
+
+  void postCommentAndRate(
+      String productID, String comment, double rating, String transID) {
+    // print("$productID $comment $rating $transID");
+    operations.ratingAndComment(productID, comment, rating, transID, (val) {
+      print("------------------$val");
+    });
   }
 
   void getAllProducts({Map<String, String> queryOption}) {
@@ -167,7 +187,7 @@ class ProductController extends GetxController implements HTTPErrorHandler {
 
   void getProductVariantByID(String id) {
     operations.getProductByID(id, (val) {
-      print(val);
+      // print(val);
       productDetail.value = val;
       update();
     }, handleError);
