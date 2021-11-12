@@ -2,6 +2,7 @@ import 'package:edeybe/controllers/address_controller.dart';
 import 'package:edeybe/controllers/cart_controller.dart';
 import 'package:edeybe/controllers/user_controller.dart';
 import 'package:edeybe/index.dart';
+import 'package:edeybe/screens/finance_product_screen/kyc_form.dart';
 import 'package:edeybe/screens/splash_screen/splash_screen.dart';
 import 'package:edeybe/utils/AppTheme.dart';
 import 'package:edeybe/variants/variantsImage.dart';
@@ -46,8 +47,8 @@ class _EdeybeAppState extends State<EdeybeApp> {
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
             ],
-            home: SplashScreen(),
-            // home: VariantsImage(),
+            // home: SplashScreen(),
+            home: KYCForm(),
             supportedLocales: S.delegate.supportedLocales,
             // locale: DevicePreview.of(context).locale, // <--- Add the locale
             // builder: DevicePreview.appBuilder,
