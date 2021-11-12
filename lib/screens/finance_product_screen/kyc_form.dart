@@ -178,6 +178,9 @@ class KYCForm extends StatelessWidget {
                 onPressed: () {},
                 child: Text(
                   "Submit",
+                  style: TextStyle(
+                      color: Colors.white,
+                    )
                 ),
               ),
             )
