@@ -873,8 +873,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   }
 
   Widget _buildReviewComment() {
-    // return GetBuilder<UserController>(builder: (_user){
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
