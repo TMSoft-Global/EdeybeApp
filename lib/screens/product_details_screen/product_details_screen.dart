@@ -883,7 +883,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             direction: Axis.horizontal,
             itemCount: 5,
             rating: double.tryParse(
-                "${_productController.ratingReview.value.productRating}"),
+                "${_productController.ratingReview.value.productRating} ?? 0"),
             itemSize: 40,
             itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
             itemBuilder: (context, _) => Icon(
@@ -896,10 +896,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         Center(
           child: Text(
             "(${_productController.ratingReview.value.productRating})",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 20
-            ),
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
           ),
         ),
         Padding(
@@ -911,63 +908,64 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           padding: const EdgeInsets.all(8.0),
           child: CustomDivider(),
         ),
-        for (var x in _productController.ratingReview.value.ratings)
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-                // height: 100,
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          CircleAvatar(
-                            backgroundColor: Colors.grey,
-                            child: Text(
-                              "AB",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
+        if (_productController.ratingReview != null)
+          for (var x in _productController.ratingReview.value.ratings)
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                  // height: 100,
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            CircleAvatar(
+                              backgroundColor: Colors.grey,
+                              child: Text(
+                                "AB",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
-                          ),
-                          SizedBox(width: 8),
-                          Text(
-                            x.user,
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                            ),
-                          )
-                        ],
-                      ),
-                      RatingBarIndicator(
-                        direction: Axis.horizontal,
-                        itemCount: 5,
-                        rating: double.tryParse("${x.rating}"),
-                        itemSize: 20,
-                        itemPadding: EdgeInsets.symmetric(horizontal: 0.0),
-                        itemBuilder: (context, _) => Icon(
-                          Icons.star,
-                          color: Colors.amber,
-                          size: 3,
+                            SizedBox(width: 8),
+                            Text(
+                              x.user,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                              ),
+                            )
+                          ],
                         ),
-                      )
-                    ],
-                  ),
-                  Container(
-                      padding: EdgeInsets.symmetric(horizontal: 15),
-                      // width: MediaQuery.of(context).size.width/2.5,
-                      child: Text(
-                        x.comment,
-                      )),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  CustomDivider()
-                ])),
-          )
+                        RatingBarIndicator(
+                          direction: Axis.horizontal,
+                          itemCount: 5,
+                          rating: double.tryParse("${x.rating}"),
+                          itemSize: 20,
+                          itemPadding: EdgeInsets.symmetric(horizontal: 0.0),
+                          itemBuilder: (context, _) => Icon(
+                            Icons.star,
+                            color: Colors.amber,
+                            size: 3,
+                          ),
+                        )
+                      ],
+                    ),
+                    Container(
+                        padding: EdgeInsets.symmetric(horizontal: 15),
+                        // width: MediaQuery.of(context).size.width/2.5,
+                        child: Text(
+                          x.comment,
+                        )),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    CustomDivider()
+                  ])),
+            )
       ],
     );
     // });
