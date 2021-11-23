@@ -92,7 +92,7 @@ Future<void> firebaseMessageHandler(RemoteMessage message) async {
   int msgId = int.tryParse(message.data["msgId"].toString()) ?? 0;
   // print(message["data"]);
   var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      'PROMO', 'PROMO', 'Edeybe Notifications',
+       'PROMO', 'Edeybe Notifications',
       color: Colors.blue.shade800,
       importance: Importance.max,
       priority: Priority.high,

@@ -109,7 +109,7 @@ class _PostGalleryState extends State<PostGallery> {
         maxScale: 5.0,
         // doubleTapScale: 2.0,
         resetDuration: Duration(milliseconds: 200),
-        image: Container(
+        child: Container(
           child: CachedNetworkImage(
             imageUrl: url,
             placeholder: (context, url) => LoadingWidget(),
