@@ -785,41 +785,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
   // product details and specifications builder
   Widget _buildProductAndSpecsDetails() {
-    Map<String, String> specs = {
-      "Colour": "Aura Glow",
-      "Display Type": "AMOLED",
-      "Screen Size": "6.8 inch",
-      "Internal Memory": "512 GB",
-      "Product Weight": "196 g",
-      "Battery Capacity": "4300 mAh",
-      "RAM": "12 GB",
-      "Operating System": "Android",
-      "Processor Speed": "2.73 GHz",
-      "SIM Count": "Single SIM",
-      "Model Number": "Note10plusglow",
-      "Model Name": "Note 10 Plus"
-    };
     List<TableRow> rows = [];
-    specs.forEach((key, value) {
-      rows.add(TableRow(children: <Widget>[
-        Container(
-          color: Colors.grey[100],
-          padding: EdgeInsets.all(8.w),
-          child: Text(
-            key,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(color: Colors.grey[400]),
-          ),
-        ),
-        Container(
-            padding: EdgeInsets.all(8.w),
-            child: Text(
-              value,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(color: Colors.grey[400]),
-            ))
-      ]));
-    });
+
     return DefaultTabController(
         length: 2,
         child: Container(
@@ -859,10 +826,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     ),
                     SingleChildScrollView(
                       child: Container(
-                          padding: EdgeInsets.all(20.w),
-                          child: Container(
-                            child: _buildReviewComment(),
-                          )),
+                        padding: EdgeInsets.all(20.w),
+                        child: _buildReviewComment(),
+                      ),
                     ),
                   ],
                 ),
@@ -883,7 +849,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             direction: Axis.horizontal,
             itemCount: 5,
             rating: double.tryParse(
-                "${_productController.ratingReview.value.productRating} ?? 0"),
+                    "${_productController.ratingReview.value.productRating}") ??
+                0,
             itemSize: 40,
             itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
             itemBuilder: (context, _) => Icon(
@@ -895,77 +862,82 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         ),
         Center(
           child: Text(
-            "(${_productController.ratingReview.value.productRating})",
+            "(${_productController.ratingReview.value.productRating ?? "0"})",
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
           ),
         ),
         Padding(
           padding: const EdgeInsets.only(left: 10.0),
           child: Text(
-              "Comments(${_productController.ratingReview.value.totalRating})"),
+              "Comments(${_productController.ratingReview.value.totalRating ?? "0"})"),
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: CustomDivider(),
         ),
-        if (_productController.ratingReview != null)
-          for (var x in _productController.ratingReview.value.ratings)
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                  // height: 100,
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
+        if (_productController.ratingReview.isBlank)
+          Column(
+            children: [
+              for (var x in _productController.ratingReview.value.ratings)
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                      // height: 100,
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            CircleAvatar(
-                              backgroundColor: Colors.grey,
-                              child: Text(
-                                "AB",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                CircleAvatar(
+                                  backgroundColor: Colors.grey,
+                                  child: Text(
+                                    "AB",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                                 ),
-                              ),
+                                SizedBox(width: 8),
+                                Text(
+                                  x.user,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                )
+                              ],
                             ),
-                            SizedBox(width: 8),
-                            Text(
-                              x.user,
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
+                            RatingBarIndicator(
+                              direction: Axis.horizontal,
+                              itemCount: 5,
+                              rating: double.tryParse("${x.rating}"),
+                              itemSize: 20,
+                              itemPadding:
+                                  EdgeInsets.symmetric(horizontal: 0.0),
+                              itemBuilder: (context, _) => Icon(
+                                Icons.star,
+                                color: Colors.amber,
+                                size: 3,
                               ),
                             )
                           ],
                         ),
-                        RatingBarIndicator(
-                          direction: Axis.horizontal,
-                          itemCount: 5,
-                          rating: double.tryParse("${x.rating}"),
-                          itemSize: 20,
-                          itemPadding: EdgeInsets.symmetric(horizontal: 0.0),
-                          itemBuilder: (context, _) => Icon(
-                            Icons.star,
-                            color: Colors.amber,
-                            size: 3,
-                          ),
-                        )
-                      ],
-                    ),
-                    Container(
-                        padding: EdgeInsets.symmetric(horizontal: 15),
-                        // width: MediaQuery.of(context).size.width/2.5,
-                        child: Text(
-                          x.comment,
-                        )),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    CustomDivider()
-                  ])),
-            )
+                        Container(
+                            padding: EdgeInsets.symmetric(horizontal: 15),
+                            // width: MediaQuery.of(context).size.width/2.5,
+                            child: Text(
+                              x.comment,
+                            )),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        CustomDivider()
+                      ])),
+                ),
+            ],
+          )
       ],
     );
     // });
