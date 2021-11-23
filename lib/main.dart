@@ -38,7 +38,7 @@ class _EdeybeAppState extends State<EdeybeApp> {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
         designSize: Size(375, 812),
-        allowFontScaling: true,
+        // allowFontScaling: true,
         builder: () => GetMaterialApp(
             darkTheme: AppTheme.themeLight,
             theme: AppTheme.themeLight,
