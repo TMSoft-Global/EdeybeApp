@@ -32,6 +32,8 @@ class ProductModel {
   int quantity = 1;
   String selectedVariant;
   bool isVariant = false;
+  bool selectedProduct = false;
+
   // ProductCost productCost;
 
   ProductModel({
@@ -66,6 +68,7 @@ class ProductModel {
     this.quantity =1,
     this.selectedVariant,
     this.isVariant =  false,
+    this.selectedProduct = false,
   });
 
   ProductModel.fromJson(Map<String, dynamic> json) {

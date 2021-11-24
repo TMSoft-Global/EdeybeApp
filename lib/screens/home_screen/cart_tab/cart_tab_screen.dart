@@ -6,6 +6,7 @@ import 'package:edeybe/models/productModel.dart';
 import 'package:edeybe/screens/address_screen/address_screen.dart';
 import 'package:edeybe/screens/auth_screen/login_screen.dart';
 import 'package:edeybe/screens/checkout_screen/checkout_screen.dart';
+import 'package:edeybe/screens/finance_product_screen/kyc_form.dart';
 import 'package:edeybe/screens/home_screen/cart_tab/cart_tab_bottom_bar/bottom_bar.dart';
 import 'package:edeybe/screens/home_screen/index.dart';
 import 'package:edeybe/screens/wishlist_screen/wishlist_screen.dart';
@@ -44,6 +45,7 @@ class _CartScreenTabState extends State<CartScreenTab>
 
   final _searchFieldController = TextEditingController();
   String _deliverto;
+  String _selectedProduct;
   List items = [0, 1, 3];
   bool showSearch = false;
   Debouncer debounce = Debouncer();
@@ -88,6 +90,11 @@ class _CartScreenTabState extends State<CartScreenTab>
     super.dispose();
   }
 
+  void _setProduct(value) {
+    print(value);
+    setState(() => _selectedProduct = value);
+  }
+
   // build card items i.e. wishlist , selected items
   Widget _buildCartItem(CartItemType type, List<ProductModel> products) {
     return Column(
@@ -111,8 +118,22 @@ class _CartScreenTabState extends State<CartScreenTab>
               .map<Widget>((e) => CartItem(
                     // index: e.variants[0].,
                     // variantId:e.discountPrice
+                    // onViewDetails: (){
+                    //   print("Asset Finance");
+                    // },
+                    onCkeck: Positioned(
+                        right: 5.w,
+                        top: 5.w,
+                        child: Radio(
+                          toggleable: true,
+                          activeColor: Get.theme.primaryColor,
+                          groupValue: _selectedProduct,
+                          onChanged: _setProduct,
+                          value: e.productId,
+                        )),
                     product: e,
                     type: type,
+                    isCheckOut: true,
                     onRemovePressed: () => Get.dialog(CustomDialog(
                       title: S.of(context).removeItem,
                       content: S.of(context).removeItemMessage,
@@ -537,6 +558,45 @@ class _CartScreenTabState extends State<CartScreenTab>
                                     onContinuePressed: () =>
                                         Get.off(CheckoutScreen()),
                                   ));
+                            // Get.dialog(Dialog(
+                            //   child: Container(
+                            //     constraints: BoxConstraints(
+                            //         minHeight: 100,
+                            //         minWidth: double.infinity,
+                            //         maxHeight: 250),
+                            //     child: Column(
+                            //       mainAxisAlignment: MainAxisAlignment.center,
+                            //       children: [
+                            //         Text("data"),
+                            //         TextButton(
+                            //             onPressed: () {
+                            //               !_userController.isLoggedIn()
+                            //                   ? Helper.signInRequired(
+                            //                       "You must sign in to checkout",
+                            //                       () =>
+                            //                           Get.offAll(LoginScreen()),
+                            //                     )
+                            //                   : Get.to(AddressScreen(
+                            //                       hasContinueButton: true,
+                            //                       onContinuePressed: () =>
+                            //                           Get.off(CheckoutScreen()),
+                            //                     ));
+                            //             },
+                            //             child: Text("Proceed to checkout")),
+                            //         TextButton(
+                            //             onPressed: () {
+                            //               Get.to(KYCForm());
+                            //             },
+                            //             child:
+                            //                 Text("Finance with Asset Finance")),
+                            //         TextButton(
+                            //             onPressed: () {},
+                            //             child:
+                            //                 Text("Proceed with Hire purchase"))
+                            //       ],
+                            //     ),
+                            //   ),
+                            // ));
                           },
                         )
                       : null,
