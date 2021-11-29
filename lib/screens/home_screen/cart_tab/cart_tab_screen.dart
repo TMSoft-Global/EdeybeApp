@@ -19,9 +19,11 @@ import 'package:edeybe/widgets/Shimmer.dart';
 import 'package:edeybe/widgets/cart_dialog.dart';
 import 'package:edeybe/widgets/cart_item.dart';
 import 'package:edeybe/widgets/custom_dialog.dart';
+import 'package:edeybe/widgets/custom_divider.dart';
 import 'package:edeybe/widgets/empty_list_widget.dart';
 import 'package:edeybe/widgets/money_widget.dart';
 import 'package:edeybe/widgets/search_result_widget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:edeybe/index.dart';
 import 'package:intl/intl.dart';
@@ -548,55 +550,154 @@ class _CartScreenTabState extends State<CartScreenTab>
                           // ),
                           quantity: _cartController.cartCost.numberOfItems,
                           onGoToCheckout: () {
-                            !_userController.isLoggedIn()
-                                ? Helper.signInRequired(
-                                    "You must sign in to checkout",
-                                    () => Get.offAll(LoginScreen()),
-                                  )
-                                : Get.to(AddressScreen(
-                                    hasContinueButton: true,
-                                    onContinuePressed: () =>
-                                        Get.off(CheckoutScreen()),
-                                  ));
-                            // Get.dialog(Dialog(
-                            //   child: Container(
-                            //     constraints: BoxConstraints(
-                            //         minHeight: 100,
-                            //         minWidth: double.infinity,
-                            //         maxHeight: 250),
-                            //     child: Column(
-                            //       mainAxisAlignment: MainAxisAlignment.center,
-                            //       children: [
-                            //         Text("data"),
-                            //         TextButton(
-                            //             onPressed: () {
-                            //               !_userController.isLoggedIn()
-                            //                   ? Helper.signInRequired(
-                            //                       "You must sign in to checkout",
-                            //                       () =>
-                            //                           Get.offAll(LoginScreen()),
-                            //                     )
-                            //                   : Get.to(AddressScreen(
-                            //                       hasContinueButton: true,
-                            //                       onContinuePressed: () =>
-                            //                           Get.off(CheckoutScreen()),
-                            //                     ));
-                            //             },
-                            //             child: Text("Proceed to checkout")),
-                            //         TextButton(
-                            //             onPressed: () {
-                            //               Get.to(KYCForm());
-                            //             },
-                            //             child:
-                            //                 Text("Finance with Asset Finance")),
-                            //         TextButton(
-                            //             onPressed: () {},
-                            //             child:
-                            //                 Text("Proceed with Hire purchase"))
-                            //       ],
-                            //     ),
-                            //   ),
-                            // ));
+                            // !_userController.isLoggedIn()
+                            //     ? Helper.signInRequired(
+                            //         "You must sign in to checkout",
+                            //         () => Get.offAll(LoginScreen()),
+                            //       )
+                            //     : Get.to(AddressScreen(
+                            //         hasContinueButton: true,
+                            //         onContinuePressed: () =>
+                            //             Get.off(CheckoutScreen()),
+                            //       ));
+                            Get.dialog(Dialog(
+                              child: Container(
+                                constraints: BoxConstraints(
+                                    minHeight: 100.h,
+                                    minWidth: double.infinity,
+                                    maxHeight: 240.h),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text("Proceed",
+                                        style: TextStyle(fontSize: 20)),
+                                    CustomDivider(),
+                                    SizedBox(
+                                      height: 4,
+                                    ),
+                                    TextButton(
+                                        // style: TextButton.styleFrom(
+                                        //   shape: RoundedRectangleBorder(
+                                        //       side: BorderSide(
+                                        //           color:
+                                        //               Get.theme.primaryColor),
+                                        //       borderRadius:
+                                        //           BorderRadius.circular(4.w)),
+                                        // ),
+                                        onPressed: () {
+                                          Get.back();
+                                          !_userController.isLoggedIn()
+                                              ? Helper.signInRequired(
+                                                  "You must sign in to checkout",
+                                                  () =>
+                                                      Get.offAll(LoginScreen()),
+                                                )
+                                              : Get.to(AddressScreen(
+                                                  hasContinueButton: true,
+                                                  onContinuePressed: () =>
+                                                      Get.off(CheckoutScreen()),
+                                                ));
+                                        },
+                                        child: Text("To Checkout")),
+                                    SizedBox(
+                                      height: 4,
+                                    ),
+                                    TextButton(
+                                        onPressed: () {
+                                          Get.back();
+                                          !_userController.isLoggedIn()
+                                              ? Helper.signInRequired(
+                                                  "You must sign in to checkout",
+                                                  () =>
+                                                      Get.offAll(LoginScreen()),
+                                                )
+                                              : showModalBottomSheet(
+                                                  context: context,
+                                                  isScrollControlled: true,
+                                                  isDismissible: false,
+                                                  builder: (context) {
+                                                    return FractionallySizedBox(
+                                                      heightFactor: 0.9,
+                                                      child: Container(
+                                                        child: Column(
+                                                          children: [
+                                                            for (int x = 0;
+                                                                x < 5;
+                                                                x++)
+                                                              ListTile(
+                                                                onTap: () {
+                                                                  Get.to(
+                                                                      KYCForm(
+                                                                    firstName:
+                                                                        _userController
+                                                                            .user
+                                                                            .firstname,
+                                                                    lastName:
+                                                                        _userController
+                                                                            .user
+                                                                            .lastname,
+                                                                    email: _userController
+                                                                        .user
+                                                                        .email,
+                                                                  ));
+                                                                },
+                                                                leading: Icon(
+                                                                    Icons
+                                                                        .house),
+                                                                title: Text(
+                                                                    "Ghana Water Company"),
+                                                                subtitle:
+                                                                    Column(
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .start,
+                                                                  children: [
+                                                                    Text(
+                                                                        "Location: Nungua"),
+                                                                    Text(
+                                                                        "Tel: 0541544404")
+                                                                  ],
+                                                                ),
+                                                                trailing: Icon(
+                                                                  Icons
+                                                                      .arrow_forward_ios,
+                                                                  size: 15,
+                                                                ),
+                                                              )
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    );
+                                                  });
+                                          // Navigator.of(context).push(
+                                          //     new CupertinoPageRoute<Null>(
+                                          //         builder:
+                                          //             (BuildContext context) {
+                                          //           return KYCForm();
+                                          //         },
+                                          //         fullscreenDialog: true));
+
+                                          // transition: Transition.cupertinoDialog);
+                                        },
+                                        child: Text("With Asset Finance")),
+                                    SizedBox(
+                                      height: 4,
+                                    ),
+                                    TextButton(
+                                        onPressed: () {
+                                          !_userController.isLoggedIn()
+                                              ? Helper.signInRequired(
+                                                  "You must sign in to checkout",
+                                                  () =>
+                                                      Get.offAll(LoginScreen()),
+                                                )
+                                              : Get.back();
+                                        },
+                                        child: Text("With Hire Purchase"))
+                                  ],
+                                ),
+                              ),
+                            ));
                           },
                         )
                       : null,
