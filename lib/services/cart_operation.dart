@@ -30,6 +30,10 @@ class CartOperation extends ServerOperations {
     );
   }
 
+  // getDeliveryCost(String log, String lat, onResponse()){
+
+  // }
+
   updateCart(
       Map<String, dynamic> data,
       void onResponse(List<ProductModel> response),
@@ -95,6 +99,7 @@ class CartOperation extends ServerOperations {
       onError: onError,
       showDialog: true,
       onResponse: (res) {
+        print(res);
         onResponse(DeliveryCost.fromJson(res));
       },
     );

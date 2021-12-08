@@ -61,7 +61,6 @@ class CartController extends GetxController implements HTTPErrorHandler {
     print(items);
   }
 
-
   getCartITems() {
     resetErrorState();
     operations.getAllCartItems(
@@ -165,11 +164,11 @@ class CartController extends GetxController implements HTTPErrorHandler {
   }
 
   void getDeliveryCost() {
-    // operations.getDeliveryCost(addressCtl.selectedAddress.deliveryAddresses.t,
-    //     (cost) {
-    //   deliveryCost = cost;
-    //   update();
-    // }, handleError);
+    operations.getDeliveryCost({"lat": "5.6352689", "long": "-0.1588709"},
+        (cost) {
+      deliveryCost = cost;
+      update();
+    }, handleError);
   }
 
   void checkout(Map<String, dynamic> data, void callback(dynamic data)) {

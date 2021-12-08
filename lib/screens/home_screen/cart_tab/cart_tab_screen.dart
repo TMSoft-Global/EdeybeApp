@@ -6,7 +6,7 @@ import 'package:edeybe/models/productModel.dart';
 import 'package:edeybe/screens/address_screen/address_screen.dart';
 import 'package:edeybe/screens/auth_screen/login_screen.dart';
 import 'package:edeybe/screens/checkout_screen/checkout_screen.dart';
-import 'package:edeybe/screens/finance_product_screen/kyc_form.dart';
+import 'package:edeybe/screens/finance_product_screen/assetFinancerList.dart';
 import 'package:edeybe/screens/home_screen/cart_tab/cart_tab_bottom_bar/bottom_bar.dart';
 import 'package:edeybe/screens/home_screen/index.dart';
 import 'package:edeybe/screens/wishlist_screen/wishlist_screen.dart';
@@ -618,67 +618,16 @@ class _CartScreenTabState extends State<CartScreenTab>
                                                   builder: (context) {
                                                     return FractionallySizedBox(
                                                       heightFactor: 0.9,
-                                                      child: Container(
-                                                        child: Column(
-                                                          children: [
-                                                            for (int x = 0;
-                                                                x < 5;
-                                                                x++)
-                                                              ListTile(
-                                                                onTap: () {
-                                                                  Get.to(
-                                                                      KYCForm(
-                                                                    firstName:
-                                                                        _userController
-                                                                            .user
-                                                                            .firstname,
-                                                                    lastName:
-                                                                        _userController
-                                                                            .user
-                                                                            .lastname,
-                                                                    email: _userController
-                                                                        .user
-                                                                        .email,
-                                                                  ));
-                                                                },
-                                                                leading: Icon(
-                                                                    Icons
-                                                                        .house),
-                                                                title: Text(
-                                                                    "Ghana Water Company"),
-                                                                subtitle:
-                                                                    Column(
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment
-                                                                          .start,
-                                                                  children: [
-                                                                    Text(
-                                                                        "Location: Nungua"),
-                                                                    Text(
-                                                                        "Tel: 0541544404")
-                                                                  ],
-                                                                ),
-                                                                trailing: Icon(
-                                                                  Icons
-                                                                      .arrow_forward_ios,
-                                                                  size: 15,
-                                                                ),
-                                                              )
-                                                          ],
-                                                        ),
-                                                      ),
+                                                      child:
+                                                          AssetFinancersList(
+                                                            email: _userController.user.email,
+                                                            firstName: _userController.user.firstname,
+                                                            lastName: _userController.user.lastname,
+                                                          ),
+                                                      
                                                     );
                                                   });
-                                          // Navigator.of(context).push(
-                                          //     new CupertinoPageRoute<Null>(
-                                          //         builder:
-                                          //             (BuildContext context) {
-                                          //           return KYCForm();
-                                          //         },
-                                          //         fullscreenDialog: true));
-
-                                          // transition: Transition.cupertinoDialog);
-                                        },
+                                              },
                                         child: Text("With Asset Finance")),
                                     SizedBox(
                                       height: 4,

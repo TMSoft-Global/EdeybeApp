@@ -6,6 +6,7 @@ import 'package:edeybe/utils/imageUploadWidget.dart';
 import 'package:edeybe/widgets/custom_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:edeybe/index.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
 class KYCForm extends StatefulWidget {
@@ -17,6 +18,12 @@ class KYCForm extends StatefulWidget {
   State<KYCForm> createState() => _KYCFormState();
 }
 
+enum AppState {
+  free,
+  picked,
+  cropped,
+}
+
 class _KYCFormState extends State<KYCForm> {
   final FocusNode _firstname = FocusNode();
 
@@ -24,41 +31,13 @@ class _KYCFormState extends State<KYCForm> {
 
   final FocusNode _emailF = FocusNode();
 
-  final ImagePicker _picker = ImagePicker();
+  AppState state;
+  File imageFile;
 
-  List<XFile> _imageFileList;
-  XFile _image;
-
-  set _imageFile(XFile value) {
-    _imageFileList = value == null ? null : [value];
-  }
-
-  dynamic _pickImageError;
-
-  void _onImageButtonPressed(ImageSource source,
-      {BuildContext context,
-      bool isMultiImage = false,
-      bool isCamera = false}) async {
-    if (isMultiImage) {
-      try {
-        final pickedFileList = await _picker.pickMultiImage();
-        setState(() {
-          _imageFileList = pickedFileList;
-        });
-      } catch (e) {
-        setState(() {
-          _pickImageError = e;
-        });
-      }
-    } else {
-      final pickedFile = await _picker.pickImage(
-          source: isCamera ? ImageSource.camera : source,
-          maxWidth: 300,
-          maxHeight: 200);
-      setState(() {
-        _image = pickedFile;
-      });
-    }
+  @override
+  void initState() {
+    super.initState();
+    state = AppState.free;
   }
 
   @override
@@ -177,11 +156,9 @@ class _KYCFormState extends State<KYCForm> {
                               // minimumSize: Size(50, 30),
                               alignment: Alignment.centerLeft),
                           onPressed: () {
-                            setState(() {
-                              _image = null;
-                            });
+                            _clearImage();
                           },
-                          child: Text("Clear Image"))
+                          child: Text("Clear Image", style: TextStyle(color: Get.theme.primaryColorDark),))
                     ],
                   ),
                   SizedBox(
@@ -193,17 +170,19 @@ class _KYCFormState extends State<KYCForm> {
                     decoration: BoxDecoration(
                         border: Border.all(
                             width: 0.5, color: Get.theme.dividerColor)),
-                    child: _image != null
+                    child: imageFile != null
                         ? Image.file(
-                            File(_image.path),
+                            File(imageFile.path),
                             fit: BoxFit.contain,
                           )
                         : Center(
                             child: IconButton(
                               icon: Icon(Icons.camera_alt),
                               onPressed: () {
-                                _onImageButtonPressed(ImageSource.gallery,
-                                    context: context);
+                                // if (state == AppState.free)
+                                  _pickImage().whenComplete(()=>_cropImage()
+                                  );
+                                // else if (state == AppState.picked)
                                 // Get.to(ImageUpload());
                               },
                             ),
@@ -273,5 +252,63 @@ class _KYCFormState extends State<KYCForm> {
         ),
       ),
     );
+  }
+
+  
+
+  Future<Null> _pickImage() async {
+    final pickedImage =
+        await ImagePicker().getImage(source: ImageSource.gallery);
+    imageFile = pickedImage != null ? File(pickedImage.path) : null;
+    if (imageFile != null) {
+      setState(() {
+        state = AppState.picked;
+      });
+    }
+  }
+
+  Future<Null> _cropImage() async {
+    File croppedFile = await ImageCropper.cropImage(
+        sourcePath: imageFile.path,
+        aspectRatioPresets: Platform.isAndroid
+            ? [
+                // CropAspectRatioPreset.square,
+                // CropAspectRatioPreset.ratio3x2,
+                CropAspectRatioPreset.original,
+                // CropAspectRatioPreset.ratio4x3,
+                CropAspectRatioPreset.ratio16x9
+              ]
+            : [
+                CropAspectRatioPreset.original,
+                // CropAspectRatioPreset.square,
+                // CropAspectRatioPreset.ratio3x2,
+                // CropAspectRatioPreset.ratio4x3,
+                // CropAspectRatioPreset.ratio5x3,
+                // CropAspectRatioPreset.ratio5x4,
+                // CropAspectRatioPreset.ratio7x5,
+                CropAspectRatioPreset.ratio16x9
+              ],
+        androidUiSettings: AndroidUiSettings(
+            toolbarTitle: 'Crop',
+            toolbarColor: Get.theme.primaryColor,
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false),
+        iosUiSettings: IOSUiSettings(
+          title: 'Cropper',
+        ));
+    if (croppedFile != null) {
+      imageFile = croppedFile;
+      setState(() {
+        state = AppState.cropped;
+      });
+    }
+  }
+
+  void _clearImage() {
+    imageFile = null;
+    setState(() {
+      state = AppState.free;
+    });
   }
 }

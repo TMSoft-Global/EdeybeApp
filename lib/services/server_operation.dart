@@ -8,11 +8,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 
-// final String domain = "https://ce49-197-251-220-74.ngrok.io";
+// final String domain = "https://3b05-197-251-220-74.ngrok.io";
 final String domain = "https://api.edeybe.com";
 // 
 abstract class ServerOperations {
-  // final String _domain = "https://ce49-197-251-220-74.ngrok.io";
+  // final String _domain = "https://3b05-197-251-220-74.ngrok.io";
   final String _domain = "https://api.edeybe.com";
   // final String _domain = "api.edeybe.com";
   final String accessToken =
