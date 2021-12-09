@@ -655,11 +655,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           fontWeight: FontWeight.w700,
                           currencyFirst: true,
                           children: [
+                            // totalDiscount
                             TextSpan(
                                 text: formatCurrency.format(double.parse(
                                         _cartController
-                                            .deliveryCost.overallCost) -
-                                    totalDiscount),
+                                            .deliveryCost.overallCost ) 
+                                    ),
                                 style: TextStyle(
                                     fontWeight: FontWeight.w800,
                                     color: Colors.black,

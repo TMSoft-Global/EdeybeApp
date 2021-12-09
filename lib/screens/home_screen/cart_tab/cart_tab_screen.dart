@@ -7,6 +7,7 @@ import 'package:edeybe/screens/address_screen/address_screen.dart';
 import 'package:edeybe/screens/auth_screen/login_screen.dart';
 import 'package:edeybe/screens/checkout_screen/checkout_screen.dart';
 import 'package:edeybe/screens/finance_product_screen/assetFinancerList.dart';
+import 'package:edeybe/screens/finance_product_screen/kyc_form.dart';
 import 'package:edeybe/screens/home_screen/cart_tab/cart_tab_bottom_bar/bottom_bar.dart';
 import 'package:edeybe/screens/home_screen/index.dart';
 import 'package:edeybe/screens/wishlist_screen/wishlist_screen.dart';
@@ -123,16 +124,7 @@ class _CartScreenTabState extends State<CartScreenTab>
                     // onViewDetails: (){
                     //   print("Asset Finance");
                     // },
-                    onCkeck: Positioned(
-                        right: 5.w,
-                        top: 5.w,
-                        child: Radio(
-                          toggleable: true,
-                          activeColor: Get.theme.primaryColor,
-                          groupValue: _selectedProduct,
-                          onChanged: _setProduct,
-                          value: e.productId,
-                        )),
+                    onCkeck: Container(),
                     product: e,
                     type: type,
                     isCheckOut: true,
@@ -575,74 +567,119 @@ class _CartScreenTabState extends State<CartScreenTab>
                                     SizedBox(
                                       height: 4,
                                     ),
-                                    TextButton(
-                                        // style: TextButton.styleFrom(
-                                        //   shape: RoundedRectangleBorder(
-                                        //       side: BorderSide(
-                                        //           color:
-                                        //               Get.theme.primaryColor),
-                                        //       borderRadius:
-                                        //           BorderRadius.circular(4.w)),
-                                        // ),
-                                        onPressed: () {
-                                          Get.back();
-                                          !_userController.isLoggedIn()
-                                              ? Helper.signInRequired(
-                                                  "You must sign in to checkout",
-                                                  () =>
-                                                      Get.offAll(LoginScreen()),
-                                                )
-                                              : Get.to(AddressScreen(
-                                                  hasContinueButton: true,
-                                                  onContinuePressed: () =>
-                                                      Get.off(CheckoutScreen()),
-                                                ));
-                                        },
-                                        child: Text("To Checkout")),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width -
+                                          100,
+                                      child: TextButton(
+                                          style: TextButton.styleFrom(
+                                              backgroundColor:
+                                                  Get.theme.primaryColor,
+                                              textStyle: TextStyle(
+                                                color: Colors.white,
+                                              )),
+                                          onPressed: () {
+                                            Get.back();
+                                            !_userController.isLoggedIn()
+                                                ? Helper.signInRequired(
+                                                    "You must sign in to checkout",
+                                                    () => Get.offAll(
+                                                        LoginScreen()),
+                                                  )
+                                                : Get.to(AddressScreen(
+                                                    hasContinueButton: true,
+                                                    onContinuePressed: () =>
+                                                        Get.off(
+                                                            CheckoutScreen()),
+                                                  ));
+                                          },
+                                          child: Text("To Checkout",
+                                              style: TextStyle(
+                                                  color: Colors.white))),
+                                    ),
                                     SizedBox(
                                       height: 4,
                                     ),
-                                    TextButton(
-                                        onPressed: () {
-                                          Get.back();
-                                          !_userController.isLoggedIn()
-                                              ? Helper.signInRequired(
-                                                  "You must sign in to checkout",
-                                                  () =>
-                                                      Get.offAll(LoginScreen()),
-                                                )
-                                              : showModalBottomSheet(
-                                                  context: context,
-                                                  isScrollControlled: true,
-                                                  isDismissible: false,
-                                                  builder: (context) {
-                                                    return FractionallySizedBox(
-                                                      heightFactor: 0.9,
-                                                      child:
-                                                          AssetFinancersList(
-                                                            email: _userController.user.email,
-                                                            firstName: _userController.user.firstname,
-                                                            lastName: _userController.user.lastname,
-                                                          ),
-                                                      
-                                                    );
-                                                  });
-                                              },
-                                        child: Text("With Asset Finance")),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width -
+                                          100,
+                                      child: TextButton(
+                                          style: TextButton.styleFrom(
+                                              backgroundColor:
+                                                  Get.theme.primaryColor,
+                                              textStyle: TextStyle(
+                                                color: Colors.white,
+                                              )),
+                                          onPressed: () {
+                                            Get.back();
+                                            !_userController.isLoggedIn()
+                                                ? Helper.signInRequired(
+                                                    "You must sign in to checkout",
+                                                    () => Get.offAll(
+                                                        LoginScreen()),
+                                                  )
+                                                : showModalBottomSheet(
+                                                    context: context,
+                                                    isScrollControlled: true,
+                                                    isDismissible: false,
+                                                    builder: (context) {
+                                                      return FractionallySizedBox(
+                                                        heightFactor: 0.9,
+                                                        child:
+                                                            AssetFinancersList(
+                                                          email: _userController
+                                                              .user.email,
+                                                          firstName:
+                                                              _userController
+                                                                  .user
+                                                                  .firstname,
+                                                          lastName:
+                                                              _userController
+                                                                  .user
+                                                                  .lastname,
+                                                        ),
+                                                      );
+                                                    });
+                                          },
+                                          child: Text("With Asset Finance",
+                                              style: TextStyle(
+                                                  color: Colors.white))),
+                                    ),
                                     SizedBox(
                                       height: 4,
                                     ),
-                                    TextButton(
-                                        onPressed: () {
-                                          !_userController.isLoggedIn()
-                                              ? Helper.signInRequired(
-                                                  "You must sign in to checkout",
-                                                  () =>
-                                                      Get.offAll(LoginScreen()),
-                                                )
-                                              : Get.back();
-                                        },
-                                        child: Text("With Hire Purchase"))
+                                    SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width -
+                                                100,
+                                        child: TextButton(
+                                            style: TextButton.styleFrom(
+                                                backgroundColor:
+                                                    Get.theme.primaryColor,
+                                                textStyle: TextStyle(
+                                                  color: Colors.white,
+                                                )),
+                                            onPressed: () {
+                                              !_userController.isLoggedIn()
+                                                  ? Helper.signInRequired(
+                                                      "You must sign in to checkout",
+                                                      () => Get.offAll(
+                                                          LoginScreen()),
+                                                    )
+                                                  : Get.to(KYCForm(
+                                                      email: _userController
+                                                          .user.email,
+                                                      firstName: _userController
+                                                          .user.firstname,
+                                                      lastName: _userController
+                                                          .user.lastname,
+                                                          type: "hire",
+                                                    ));
+                                            },
+                                            child: Text(
+                                              "With Hire Purchase",
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            )))
                                   ],
                                 ),
                               ),

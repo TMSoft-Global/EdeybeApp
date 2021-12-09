@@ -66,7 +66,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       _productController.getProductVariantByID(
           _productController.productDetail.value.productId);
     });
-    _productController.getCommentAndRate("productID");
+    _productController.getCommentAndRate(_productController.productDetail.value.productId);
     // _productController
     //     .getProductbyId(_productController.product.value.sku));
     super.initState();
@@ -391,27 +391,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                           fontSize: 13.w),
                                     ),
                                   ),
-                                  if (_productController.productDetail.value
-                                  .availableForHirePurchasing)
-                                Padding(
-                                  padding: const EdgeInsets.only(right:5.0),
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 4.w, vertical: 2.w),
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(3),
-                                        color: Get.theme.primaryColorLight
-                                            .withOpacity(0.5)),
-                                    child: Text(
-                                      "Hire Purchase",
-                                      style: TextStyle(
-                                        fontSize: 9,
-                                        color: Get.theme.primaryColorDark,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ),
-                                )
+                                SizedBox(
+                                  height: 10.h,
+                                ),
+                                if (_productController.productDetail.value
+                                    .availableForHirePurchasing)
+                                  banner
                               ],
                             ),
                           ),

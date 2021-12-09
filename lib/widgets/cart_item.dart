@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:edeybe/controllers/product_controller.dart';
 import 'package:edeybe/index.dart';
 import 'package:edeybe/models/order.dart';
+import 'package:edeybe/screens/product_details_screen/product_details_bottom_bar/bottom_bar.dart';
 import 'package:edeybe/screens/product_details_screen/product_details_screen.dart';
 import 'package:edeybe/utils/cart_item_type.dart';
 import 'package:edeybe/utils/helper.dart';
@@ -45,7 +46,7 @@ class CartItem extends StatelessWidget {
       this.onViewDetails,
       this.isComment = false,
       this.tappable = true,
-      this.onCkeck,
+     @required this.onCkeck,
       this.onRemovePressed})
       : super(key: key);
   final _productController = Get.find<ProductController>();
@@ -180,8 +181,8 @@ class CartItem extends StatelessWidget {
                                           child: Helper.textPlaceholder,
                                         )
                                       : Row(
-                                          // mainAxisAlignment:
-                                          // MainAxisAlignment.spaceBetween,
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                           children: <Widget>[
                                             if (product.variants != null)
                                               for (var x in product.variants)
@@ -256,15 +257,11 @@ class CartItem extends StatelessWidget {
                                                   ),
                                                 ],
                                               ),
+                                            if (product
+                                                .availableForHirePurchasing)
+                                              banner,
 
-                                            //   Text(
-                                            //     "${formatCurrency.format(product is Order ? double.parse(product.productTotal) : (product.price))}",
-                                            //     style: Get.textTheme.bodyText1
-                                            //         .copyWith(
-                                            //             fontSize: 14.w,
-                                            //             fontWeight: FontWeight.bold,
-                                            //             color: Colors.black),
-                                            //   ),
+                                         
                                             if (type == CartItemType.Checkout)
                                               Container(
                                                 child: Text(

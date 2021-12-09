@@ -10,9 +10,9 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
 class KYCForm extends StatefulWidget {
-  final String email, firstName, lastName, phone;
+  final String email, firstName, lastName, phone, type;
 
-  KYCForm({this.email, this.firstName, this.lastName, this.phone});
+  KYCForm({this.email, this.firstName, this.lastName, this.phone, this.type});
 
   @override
   State<KYCForm> createState() => _KYCFormState();
@@ -48,7 +48,7 @@ class _KYCFormState extends State<KYCForm> {
     print(widget.email);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Asset Finance"),
+        title: Text(widget.type == "asset" ? "Asset Finance": "Hire Purchase"),
         centerTitle: true,
         elevation: 2,
       ),
