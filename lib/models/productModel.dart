@@ -33,6 +33,7 @@ class ProductModel {
   String selectedVariant;
   bool isVariant = false;
   bool selectedProduct = false;
+  bool availableForHirePurchasing = false;
 
   // ProductCost productCost;
 
@@ -69,9 +70,11 @@ class ProductModel {
     this.selectedVariant,
     this.isVariant =  false,
     this.selectedProduct = false,
+    this.availableForHirePurchasing = false,
   });
 
   ProductModel.fromJson(Map<String, dynamic> json) {
+    print(json['availableForHirePurchasing']);
     sId = json['_id'];
     categoryId = json['categoryId'];
     subCategoryId = json['subCategoryId'];
@@ -127,6 +130,7 @@ class ProductModel {
       });
     }
     selectedVariant = json['selectedVariant'];
+    availableForHirePurchasing = json['availableForHirePurchasing'] == null ? false : json['availableForHirePurchasing'];
     quantity = json['quantity']== null ? 1 : json['quantity'];
   }
 
@@ -166,6 +170,7 @@ class ProductModel {
     data['percentageDiscount'] = this.percentageDiscount;
     data['selectedVariant'] = this.selectedVariant;
     data['updatedAt'] = this.updatedAt;
+    data['availableForHirePurchasing'] = availableForHirePurchasing;
     if (this.variants != null) {
       data['variants'] = this.variants.map((v) => v.toJson()).toList();
     }
@@ -305,10 +310,9 @@ class Variants {
       bool variantSelected});
 
   Variants.fromJson(Map<String, dynamic> json) {
-    print(json['images']);
     variantName = json['variantName'];
     if (json['variantAttributes'] != null) {
-      variantAttributes = new List<VariantAttributes>();
+      variantAttributes = <VariantAttributes>[];
       json['variantAttributes'].forEach((v) {
         variantAttributes.add(new VariantAttributes.fromJson(v));
       });

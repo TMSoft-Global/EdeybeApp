@@ -22,6 +22,7 @@ class ProductCardLandscape extends StatelessWidget {
       @required this.oldPrice,
       @required this.raters,
       @required this.discount,
+      this.isHirePurchase = false,
       @required this.onAddToWishList,
       @required this.onViewDetails})
       : super(key: key);
@@ -33,6 +34,7 @@ class ProductCardLandscape extends StatelessWidget {
   final bool isLoading;
   final double rating;
   final double width;
+  final bool isHirePurchase;
   final int raters;
   final int discount;
   final Function onViewDetails;
