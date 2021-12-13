@@ -28,7 +28,7 @@ class CustomDialog extends StatelessWidget {
           decoration: BoxDecoration(
               color: Colors.white, borderRadius: BorderRadius.circular(8.w)),
           width: Get.width / 1.4,
-          height: 145.w,
+          height: 160.w,
           child: Column(
             children: <Widget>[
               Expanded(
@@ -49,12 +49,12 @@ class CustomDialog extends StatelessWidget {
                     ),
                     Padding(
                       padding: EdgeInsets.only(
-                          top: 5.w, left: 20.w, right: 20.w, bottom: 5.w),
+                          top: 2.w, left: 20.w, right: 20.w, bottom: 5.w),
                       child: Text(
                         content,
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.ellipsis,
-                        maxLines: 3,
+                        maxLines: 4,
                         style: TextStyle(
                             fontFamily: 'Arabic',
                             fontSize: 14.w,

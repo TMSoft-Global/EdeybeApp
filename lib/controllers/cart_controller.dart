@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:edeybe/controllers/address_controller.dart';
 import 'package:edeybe/controllers/user_controller.dart';
@@ -8,6 +10,7 @@ import 'package:edeybe/models/deliveryCost.dart';
 import 'package:edeybe/models/productModel.dart';
 import 'package:edeybe/models/user.dart';
 import 'package:edeybe/services/cart_operation.dart';
+import 'package:edeybe/services/imageUpload.dart';
 import 'package:edeybe/utils/helper.dart';
 
 class CartController extends GetxController implements HTTPErrorHandler {
@@ -171,6 +174,26 @@ class CartController extends GetxController implements HTTPErrorHandler {
     }, handleError);
   }
 
+  uploadImageCard(File file, onResponse(String)) {
+    
+    ImageUpload.onSavePhoto(file, (v){
+      onResponse(v);
+      print("ghjklkjhjkjhj");
+    });
+  }
+
+  getProductBreakdown(List<Map<String, dynamic>> data, Function(dynamic)onResponse) {
+    operations.productBreakdown(
+        data:  [{"productId":"5e9c4fe443ee9d3428830539", "quantity": 2}],
+        onResponse: (val) {
+          onResponse(val);
+          // for(var x in val){
+          //   print(x['downPayment']);
+          // }
+        },
+        onError: handleError);
+  }
+
   void checkout(Map<String, dynamic> data, void callback(dynamic data)) {
     print(data);
     operations.checkoutRequest(
@@ -180,6 +203,12 @@ class CartController extends GetxController implements HTTPErrorHandler {
   void checkOrderStatus(
       Map<String, dynamic> data, void callback(Map<String, dynamic> data)) {
     operations.checkOrderStatus(data, callback, handleError);
+  }
+
+  void checkHirePurchaseProduct(List<String> data, void callback(dynamic)) {
+    operations.checkHirePurchase(data, (response) {
+      callback(response);
+    }, handleError);
   }
 
   searchCart() {}

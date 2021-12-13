@@ -2,8 +2,6 @@ import 'dart:io';
 
 import 'package:edeybe/screens/checkout_screen/index.dart';
 import 'package:edeybe/utils/helper.dart';
-import 'package:edeybe/utils/imageUploadWidget.dart';
-import 'package:edeybe/widgets/custom_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:edeybe/index.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -26,18 +24,24 @@ enum AppState {
 
 class _KYCFormState extends State<KYCForm> {
   final FocusNode _firstname = FocusNode();
-
   final FocusNode _lastname = FocusNode();
-
   final FocusNode _emailF = FocusNode();
 
   AppState state;
   File imageFile;
+  CartController _cartController = Get.put(CartController());
+  String imgeUrl;
+  var breakDown = [];
 
   @override
   void initState() {
     super.initState();
     state = AppState.free;
+    _cartController.getProductBreakdown([], (value) {
+      setState(() {
+        breakDown = value;
+      });
+    });
   }
 
   @override
@@ -48,7 +52,7 @@ class _KYCFormState extends State<KYCForm> {
     print(widget.email);
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.type == "asset" ? "Asset Finance": "Hire Purchase"),
+        title: Text(widget.type == "asset" ? "Asset Finance" : "Hire Purchase"),
         centerTitle: true,
         elevation: 2,
       ),
@@ -158,7 +162,10 @@ class _KYCFormState extends State<KYCForm> {
                           onPressed: () {
                             _clearImage();
                           },
-                          child: Text("Clear Image", style: TextStyle(color: Get.theme.primaryColorDark),))
+                          child: Text(
+                            "Clear Image",
+                            style: TextStyle(color: Get.theme.primaryColorDark),
+                          ))
                     ],
                   ),
                   SizedBox(
@@ -179,11 +186,15 @@ class _KYCFormState extends State<KYCForm> {
                             child: IconButton(
                               icon: Icon(Icons.camera_alt),
                               onPressed: () {
-                                // if (state == AppState.free)
-                                  _pickImage().whenComplete(()=>_cropImage()
-                                  );
-                                // else if (state == AppState.picked)
-                                // Get.to(ImageUpload());
+                                _pickImage().whenComplete(_cropImage).then((d) {
+                                  print("object..................");
+                                  _cartController.uploadImageCard(imageFile,
+                                      (val) {
+                                    setState(() {
+                                      imgeUrl = val;
+                                    });
+                                  });
+                                });
                               },
                             ),
                           ),
@@ -195,33 +206,45 @@ class _KYCFormState extends State<KYCForm> {
                   SizedBox(
                     height: 12.h,
                   ),
-                  Text("Product Details"),
+                  Text("Breakdown Details"),
+                  CustomDivider(),
                   Container(
                     child: Column(
                       children: [
-                        Row(
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Container(
-                              height: 150.h,
-                              width: 150.h,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: Get.theme.dividerColor, width: 0.5),
+                            for (var x in breakDown) ...[
+                              Row(
+                                children: [
+                                  Text("Downpayment: ",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w700)),
+                                  Text("              GHS${x['downPayment']}"),
+                                ],
                               ),
-                            ),
-                            SizedBox(
-                              width: 8,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text("SKU: 12354560145df"),
-                                Text("Product: 32Inc Curved TV"),
-                                Text("Price: GHS 1,000"),
-                                Text("Initial Payment: GHS 200"),
-                                Text("Monthly Payment: GHS 200"),
-                              ],
-                            )
+                              Row(
+                                children: [
+                                  Text("Interval Payment: ",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w700)),
+                                  Text("         GHS${x['intervalPayment']}"),
+                                ],
+                              ),
+                               Row(
+                                children: [
+                                  Text("Payment Duration: ", style: TextStyle(fontWeight: FontWeight.w700)),
+                                  Text("       ${x['paymentDuration']} Month"),
+                                ],
+                              )   ,
+
+                               Row(
+                                children: [
+                                  Text("Interest: ", style: TextStyle(fontWeight: FontWeight.w700)),
+                                  Text("                           ${x['interest']}%"),
+                                ],
+                              )   
+                                ]
                           ],
                         )
                       ],
@@ -233,19 +256,22 @@ class _KYCFormState extends State<KYCForm> {
             SizedBox(
               height: 20,
             ),
-            SizedBox(
-              width: 200.w,
-              child: TextButton(
-                style: TextButton.styleFrom(
-                    backgroundColor: Get.theme.primaryColor,
-                    textStyle: TextStyle(
-                      color: Colors.white,
-                    )),
-                onPressed: () {},
-                child: Text("Submit",
-                    style: TextStyle(
-                      color: Colors.white,
-                    )),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: SizedBox(
+                width: double.infinity,
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                      backgroundColor: Get.theme.primaryColor,
+                      textStyle: TextStyle(
+                        color: Colors.white,
+                      )),
+                  onPressed: () {},
+                  child: Text("Submit",
+                      style: TextStyle(
+                        color: Colors.white,
+                      )),
+                ),
               ),
             )
           ],
@@ -253,8 +279,6 @@ class _KYCFormState extends State<KYCForm> {
       ),
     );
   }
-
-  
 
   Future<Null> _pickImage() async {
     final pickedImage =
@@ -299,6 +323,7 @@ class _KYCFormState extends State<KYCForm> {
         ));
     if (croppedFile != null) {
       imageFile = croppedFile;
+
       setState(() {
         state = AppState.cropped;
       });

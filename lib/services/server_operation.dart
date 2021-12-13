@@ -1,16 +1,19 @@
 import 'dart:io';
 
+import 'package:get_storage/get_storage.dart';
 import 'package:edeybe/index.dart';
 import 'package:edeybe/utils/helper.dart';
 import 'package:edeybe/widgets/custom_dialog.dart';
 import 'package:edeybe/widgets/loading_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:dio/dio.dart';
+import 'package:dio/dio.dart' as Response;
+import 'package:http_parser/http_parser.dart';
 
 final String domain = "http://172.18.72.108:5002";
+
 // final String domain = "https://api.edeybe.com";
-// 
+//
 abstract class ServerOperations {
   final String _domain = "http://172.18.72.108:5002";
   // final String _domain = "https://api.edeybe.com";
@@ -26,7 +29,7 @@ abstract class ServerOperations {
   bool isLoading = false;
   bool forceUpdate = false;
 
-  Dio _dio = Dio();
+  Response.Dio _dio = Response.Dio();
 
   _getStore() async {
     // this._store = GetStorage().read("store") ?? "";
@@ -44,7 +47,7 @@ abstract class ServerOperations {
   }) async {
     var response = await _dio.post("$path",
         data: schema,
-        options: Options(method: 'POST', headers: {
+        options: Response.Options(method: 'POST', headers: {
           'apikey': '$accessToken',
           'Content-Type': 'application/json',
           'platform': "mobile/${Platform.operatingSystem}",
@@ -58,7 +61,7 @@ abstract class ServerOperations {
     String path,
     Map<String, dynamic> schema,
     @required void onResponse(dynamic response),
-    void onError(DioError error),
+    void onError(Response.DioError error),
   }) async {
     Get.dialog(
       LoadingWidget(),
@@ -67,14 +70,14 @@ abstract class ServerOperations {
     var response = await _dio
         .post("$_domain/api/payment/direct",
             data: schema,
-            options: Options(method: 'POST', headers: {
+            options: Response.Options(method: 'POST', headers: {
               'apikey': '$accessToken',
               'Content-Type': 'application/json',
               'platform': "mobile/${Platform.operatingSystem}",
               'token': _cookie
             }))
         .catchError((onerror) {
-      var err = onerror as DioError;
+      var err = onerror as Response.DioError;
       // print(err.response.data.toString());
       Get.dialog(CustomDialog(
         title: 'Timeout',
@@ -90,12 +93,48 @@ abstract class ServerOperations {
     }
   }
 
+  Future<dynamic> uploadFile(filePath) async {
+    print(filePath);
+    var headers = {
+      'apikey': '$accessToken',
+      'Content-Type': 'multipart/form-data',
+      'platform': "mobile/${Platform.operatingSystem}",
+    };
+    if (_cookie != "" && _cookie != null) headers["token"] = _cookie;
+
+    // try {
+    FormData formData = new FormData({
+      "photo": await Response.MultipartFile.fromFile(filePath,
+          filename: "imageFileName",
+          contentType: new MediaType('photo', 'jpg')),
+    });
+
+    Response.Response response =
+        await Response.Dio().post("http://172.18.72.108:5002/api/id-card-upload",
+            data: formData,
+            options: Response.Options(
+                headers: headers,
+                followRedirects: false,
+                validateStatus: (status) {
+                  return status < 500;
+                })
+            );
+    print(response.statusCode);
+    return response;
+
+    // } on Response.DioError catch (e) {
+    //   return e.response;
+    // } catch (e) {
+    //   print(e.message);
+    // }
+  }
+
   dynamicRequest(
       {@required String path,
       @required String schema,
       method = "POST",
       @required void onResponse(dynamic response),
-      void onError(DioError error),
+      void onError(Response.DioError error),
       bool showDialog = false}) async {
     // show loading dialog
     if (showDialog) {
@@ -107,7 +146,7 @@ abstract class ServerOperations {
         );
       }
     }
-    
+
     // get store config
     await _getStore();
 
@@ -121,14 +160,14 @@ abstract class ServerOperations {
     _dio
         .request(
       "$_domain/api$path",
-      options: Options(
+      options: Response.Options(
         method: method,
         headers: headers,
       ),
       data: schema != "" ? schema : null,
     )
         .catchError((onerror) {
-      var err = onerror as DioError;
+      var err = onerror as Response.DioError;
 
       if (showDialog) {
         isLoading = false;

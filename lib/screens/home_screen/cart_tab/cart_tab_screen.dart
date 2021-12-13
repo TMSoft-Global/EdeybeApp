@@ -57,6 +57,7 @@ class _CartScreenTabState extends State<CartScreenTab>
   Animation _animation;
   AnimationController controller;
   Animation<double> animation;
+  List<String> _productSelectedForcheck = ["5e9c4fe443ee9d3428830539"];
 // state functions
   void _setDeliveryLocation(text) {
     setState(() {
@@ -659,21 +660,35 @@ class _CartScreenTabState extends State<CartScreenTab>
                                                   color: Colors.white,
                                                 )),
                                             onPressed: () {
+                                               Get.back();
                                               !_userController.isLoggedIn()
                                                   ? Helper.signInRequired(
                                                       "You must sign in to checkout",
                                                       () => Get.offAll(
                                                           LoginScreen()),
                                                     )
-                                                  : Get.to(KYCForm(
-                                                      email: _userController
-                                                          .user.email,
-                                                      firstName: _userController
-                                                          .user.firstname,
-                                                      lastName: _userController
-                                                          .user.lastname,
+                                                  : _cartController
+                                                      .checkHirePurchaseProduct(
+                                                      _productSelectedForcheck
+                                                    , (val) {
+                                                      print(val);
+                                                      if (val.contains(
+                                                          "success")) {
+                                                        Get.to(KYCForm(
+                                                          email: _userController
+                                                              .user.email,
+                                                          firstName:
+                                                              _userController
+                                                                  .user
+                                                                  .firstname,
+                                                          lastName:
+                                                              _userController
+                                                                  .user
+                                                                  .lastname,
                                                           type: "hire",
-                                                    ));
+                                                        ));
+                                                      }
+                                                    });
                                             },
                                             child: Text(
                                               "With Hire Purchase",
