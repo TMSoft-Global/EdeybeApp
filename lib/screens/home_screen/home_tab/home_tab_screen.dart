@@ -46,15 +46,12 @@ class _HomeScreenTabState extends State<HomeScreenTab>
   void initState() {
     super.initState();
     bannerUrl = [
-      "${bannersBaseURL}banner1.png",
-      "${bannersBaseURL}banner2.png",
-      "${bannersBaseURL}banner3.png",
-      "${bannersBaseURL}banner4.png",
+       "${bannersBaseURL}7.png",
+      "${bannersBaseURL}8.png",
+      "${bannersBaseURL}9.png",
+      "${bannersBaseURL}8.png",
     ];
-      // "${bannersBaseURL}7.png",
-      // "${bannersBaseURL}8.png",
-      // "${bannersBaseURL}9.png",
-      // "${bannersBaseURL}8.png",
+     
     _animationController =
         AnimationController(duration: Duration(milliseconds: 200), vsync: this);
     _animation = IntTween(begin: 5, end: 3).animate(_animationController);
