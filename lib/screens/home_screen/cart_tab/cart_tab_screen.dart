@@ -125,7 +125,8 @@ class _CartScreenTabState extends State<CartScreenTab>
                     // onViewDetails: (){
                     //   print("Asset Finance");
                     // },
-                    onCkeck: Container(),
+
+                    onCkeck: Checkbox(onChanged:(v){print(v);} ,value: false,),
                     product: e,
                     type: type,
                     isCheckOut: true,

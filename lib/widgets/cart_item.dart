@@ -62,9 +62,11 @@ class CartItem extends StatelessWidget {
               }
             },
       child: Container(
-          padding: EdgeInsets.symmetric(
-            horizontal: 10.w,
-            vertical: 5.w,
+          padding: EdgeInsets.only(
+            right: 10.w,
+            top: 5.w,
+            bottom: 5.w,
+            left: isCheckOut ? 0 : 10.w
           ),
           decoration: BoxDecoration(
               color: Colors.white,
@@ -73,17 +75,18 @@ class CartItem extends StatelessWidget {
                       color: Colors.grey.withOpacity(0.1), width: 5.w))),
           child: Stack(
             children: [
-              if (isCheckOut) onCkeck,
+             
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Padding(
-                    padding: EdgeInsets.all(5.w),
+                    padding: EdgeInsets.all(0.w),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
+                         if (isCheckOut) onCkeck,
                         Expanded(
                           flex: 2,
                           child: ShimmerLoading(
