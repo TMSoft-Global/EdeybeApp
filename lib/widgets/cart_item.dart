@@ -10,10 +10,8 @@ import 'package:edeybe/utils/helper.dart';
 import 'package:edeybe/utils/ratingDialog.dart';
 import 'package:edeybe/utils/ratingStars.dart';
 import 'package:edeybe/widgets/ShimmerLoader.dart';
-import 'package:edeybe/widgets/custom_dialog.dart';
 import 'package:edeybe/widgets/money_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:intl/intl.dart';
 
 class CartItem extends StatelessWidget {

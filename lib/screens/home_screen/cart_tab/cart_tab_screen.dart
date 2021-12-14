@@ -51,13 +51,15 @@ class _CartScreenTabState extends State<CartScreenTab>
   String _selectedProduct;
   List items = [0, 1, 3];
   bool showSearch = false;
+  bool _isChecked = true;
   Debouncer debounce = Debouncer();
   AnimationController _animationController;
   FocusNode _focus = new FocusNode();
   Animation _animation;
   AnimationController controller;
   Animation<double> animation;
-  List<String> _productSelectedForcheck = ["5e9c4fe443ee9d3428830539"];
+  List<String> _productSelectedForcheck = [];
+  // 5e9c4fe443ee9d3428830539
 // state functions
   void _setDeliveryLocation(text) {
     setState(() {
@@ -120,13 +122,19 @@ class _CartScreenTabState extends State<CartScreenTab>
     ]
           ..addAll(products // <-- should be a list of user selected items
               .map<Widget>((e) => CartItem(
-                    // index: e.variants[0].,
-                    // variantId:e.discountPrice
-                    // onViewDetails: (){
-                    //   print("Asset Finance");
-                    // },
-
-                    onCkeck: Checkbox(onChanged:(v){print(v);} ,value: false,),
+                    onCkeck: Checkbox(
+                      onChanged: (v) {
+                        _isChecked = v;
+                        if (val == true) {
+                          _productSelectedForcheck.add(e.productId);
+                        } else {
+                          _productSelectedForcheck.removeWhere(
+                              (element) => element.contains(e.productId));
+                        }
+                        print("...............$_productSelectedForcheck");
+                      },
+                      value: _isChecked,
+                    ),
                     product: e,
                     type: type,
                     isCheckOut: true,
@@ -661,7 +669,7 @@ class _CartScreenTabState extends State<CartScreenTab>
                                                   color: Colors.white,
                                                 )),
                                             onPressed: () {
-                                               Get.back();
+                                              Get.back();
                                               !_userController.isLoggedIn()
                                                   ? Helper.signInRequired(
                                                       "You must sign in to checkout",
@@ -670,8 +678,8 @@ class _CartScreenTabState extends State<CartScreenTab>
                                                     )
                                                   : _cartController
                                                       .checkHirePurchaseProduct(
-                                                      _productSelectedForcheck
-                                                    , (val) {
+                                                          _productSelectedForcheck,
+                                                          (val) {
                                                       print(val);
                                                       if (val.contains(
                                                           "success")) {
