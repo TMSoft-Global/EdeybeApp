@@ -2,6 +2,7 @@ import 'package:edeybe/utils/card_enum.dart';
 import 'package:edeybe/utils/strings.dart';
 import 'package:flutter/material.dart';
 
+// ignore: avoid_classes_with_only_static_members
 class CardUtils {
   static Widget getCardIcon(CardType cardType) {
     String img = "";
@@ -52,7 +53,6 @@ class CardUtils {
         );
         break;
       case CardType.TGO:
-        // TODO: Handle this case.
         break;
     }
 

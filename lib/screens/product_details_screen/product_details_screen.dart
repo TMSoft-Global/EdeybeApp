@@ -66,7 +66,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       _productController.getProductVariantByID(
           _productController.productDetail.value.productId);
     });
-    _productController.getCommentAndRate("productID");
+    _productController.getCommentAndRate(_productController.productDetail.value.productId);
     // _productController
     //     .getProductbyId(_productController.product.value.sku));
     super.initState();
@@ -390,7 +390,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                           color: Get.theme.primaryColor,
                                           fontSize: 13.w),
                                     ),
-                                  )
+                                  ),
+                                SizedBox(
+                                  height: 10.h,
+                                ),
+                                if (_productController.productDetail.value
+                                    .availableForHirePurchasing)
+                                  banner
                               ],
                             ),
                           ),

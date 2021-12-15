@@ -9,7 +9,7 @@ class AppInfo extends ServerOperations {
       method: "PUT",
       onResponse: (res) {
         Map<String, String> resData = jsonDecode(res);
-        print(resData);
+      
         return resData;
       },
     );

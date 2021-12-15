@@ -93,3 +93,23 @@ class ProductDetailsBottomBar extends StatelessWidget {
     );
   }
 }
+
+Widget get banner {
+  return Padding(
+    padding: const EdgeInsets.only(right: 5.0),
+    child: Container(
+      padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.w),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(3),
+          color: Get.theme.primaryColorLight.withOpacity(0.5)),
+      child: Text(
+        "Hire Purchase",
+        style: TextStyle(
+          fontSize: 9,
+          color: Get.theme.primaryColorDark,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    ),
+  );
+}

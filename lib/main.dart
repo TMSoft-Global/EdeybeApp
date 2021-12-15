@@ -46,7 +46,7 @@ class _EdeybeAppState extends State<EdeybeApp> {
               GlobalWidgetsLocalizations.delegate,
             ],
             home: SplashScreen(),
-            // home: KYCForm(),
+            // home: MyHomePage(),
             supportedLocales: S.delegate.supportedLocales,
             // locale: DevicePreview.of(context).locale, // <--- Add the locale
             // builder: DevicePreview.appBuilder,

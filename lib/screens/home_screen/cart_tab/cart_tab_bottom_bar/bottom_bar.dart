@@ -31,7 +31,7 @@ class CartBottomBar extends StatelessWidget {
               onSurface: Get.theme.primaryColor.withOpacity(0.5.w),
             ),
             child: Text(
-              "${S.of(context).buy.toUpperCase()} $quantity ${S.of(context).items.toUpperCase()} ${S.of(context).fortext.toUpperCase()} $totalAmount $currency",
+              "${S.of(context).continueText.toUpperCase()} ($quantity ${S.of(context).items.toUpperCase()} ${S.of(context).fortext.toUpperCase()} $currency$totalAmount)",
               style: TextStyle(color: Colors.white),
             ),
             onPressed: onGoToCheckout,

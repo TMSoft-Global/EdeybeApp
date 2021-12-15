@@ -48,7 +48,6 @@ class _SplashScreenState extends State<SplashScreen>
           _userController.getAnnonymousToken();
         }
         Get.offAll(HomeIndex());
-        // Get.off(ConfigurationScreen());
       }
     } catch (e) {
       // Set `_error` state to true if Firebase initialization fails

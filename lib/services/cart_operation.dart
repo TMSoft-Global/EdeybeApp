@@ -1,15 +1,18 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:edeybe/index.dart';
 import 'package:edeybe/models/deliveryCost.dart';
 import 'package:edeybe/models/productModel.dart';
+import 'package:edeybe/services/imageUpload.dart';
 import 'package:edeybe/services/server_operation.dart';
 import 'package:edeybe/widgets/custom_dialog.dart';
+import 'package:flutter/material.dart';
 
 class CartOperation extends ServerOperations {
   getAllCartItems(void onResponse(List<ProductModel> response),
-      void onError(DioError error),cartCost(ProductCost productCost)) {
+      void onError(DioError error), cartCost(ProductCost productCost)) {
     dynamicRequest(
       path: "/getcart",
       schema: "",
@@ -30,16 +33,57 @@ class CartOperation extends ServerOperations {
     );
   }
 
+  void productBreakdown(
+      {List<Map<String, dynamic>> data,
+      void onResponse(List<dynamic> response),
+      void onError(DioError error)}) {
+    dynamicRequest(
+        path: "/break-down-hire-purchase",
+        schema: jsonEncode({"products": data}),
+        onError: onError,
+        onResponse: (res) {
+          onResponse(res['data']);
+        });
+  }
+
+  void uploadImages(File pickedFile) async {
+    try {
+      if (pickedFile != null) {
+        var response = await uploadFile(pickedFile.path);
+
+        // if (response != null) {
+          print(response);
+        // }
+
+        // if (response.statusCode == 200) {
+        //   //get image url from api response
+        //   print(response.data['lg']);
+
+        //   Get.snackbar('Success', 'Image uploaded successfully',
+        //       margin: EdgeInsets.only(top: 5, left: 10, right: 10));
+        // } else {
+        //   Get.snackbar('Failed', 'Error Code: ${response.statusCode}',
+        //       margin: EdgeInsets.only(top: 5, left: 10, right: 10));
+        // }
+      } else {
+        Get.snackbar('Failed', 'Image not selected',
+            margin: EdgeInsets.only(top: 5, left: 10, right: 10));
+      }
+    } finally {
+      print("Error");
+    }
+  }
+
   updateCart(
       Map<String, dynamic> data,
       void onResponse(List<ProductModel> response),
       void onError(DioError error)) {
-        print(data);
+    print(data);
     dynamicRequest(
       path: "/updatecart",
       schema: jsonEncode(data),
       method: "PUT",
-      onError: (onError){
+      onError: (onError) {
         print(onError.message);
       },
       showDialog: true,
@@ -53,7 +97,7 @@ class CartOperation extends ServerOperations {
       },
     );
   }
- 
+
   placeOrder(
       Map<String, dynamic> data,
       void onResponse(Map<String, dynamic> response),
@@ -67,6 +111,31 @@ class CartOperation extends ServerOperations {
       showDialog: false,
       onResponse: (res) {
         onResponse(res);
+      },
+    );
+  }
+
+  checkHirePurchase(List<String> data, void onResponse(String response),
+      void onError(DioError error)) {
+    dynamicRequest(
+      path: "/validate-items/hire-purchase",
+      schema: jsonEncode({"products_id": data}),
+      onError: (onError) {
+        if (onError.response.statusCode == 400) {
+          Get.dialog(CustomDialog(
+            title: "Error",
+            confrimText: "Retry",
+            content: onError.response.data['error'][0],
+          ));
+        }
+      },
+      showDialog: true,
+      onResponse: (res) {
+        if (res.isEmpty) {
+          onResponse("success");
+        } else {
+          onResponse("failed");
+        }
       },
     );
   }
@@ -95,6 +164,7 @@ class CartOperation extends ServerOperations {
       onError: onError,
       showDialog: true,
       onResponse: (res) {
+        print(res);
         onResponse(DeliveryCost.fromJson(res));
       },
     );
