@@ -120,15 +120,7 @@ class CartOperation extends ServerOperations {
     dynamicRequest(
       path: "/validate-items/hire-purchase",
       schema: jsonEncode({"products_id": data}),
-      onError: (onError) {
-        if (onError.response.statusCode == 400) {
-          Get.dialog(CustomDialog(
-            title: "Error",
-            confrimText: "Retry",
-            content: onError.response.data['error'][0],
-          ));
-        }
-      },
+      onError: onError,
       showDialog: true,
       onResponse: (res) {
         if (res.isEmpty) {

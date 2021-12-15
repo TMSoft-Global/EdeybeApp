@@ -28,6 +28,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:edeybe/index.dart';
 import 'package:intl/intl.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
 
 class CartScreenTab extends StatefulWidget {
   CartScreenTab({Key key}) : super(key: key);
@@ -51,7 +52,7 @@ class _CartScreenTabState extends State<CartScreenTab>
   String _selectedProduct;
   List items = [0, 1, 3];
   bool showSearch = false;
-  bool _isChecked = true;
+  bool _isChecked = false;
   Debouncer debounce = Debouncer();
   AnimationController _animationController;
   FocusNode _focus = new FocusNode();
@@ -59,6 +60,7 @@ class _CartScreenTabState extends State<CartScreenTab>
   AnimationController controller;
   Animation<double> animation;
   List<String> _productSelectedForcheck = [];
+  // List<Map<String, dynamic>> _productModel = [];
   // 5e9c4fe443ee9d3428830539
 // state functions
   void _setDeliveryLocation(text) {
@@ -123,17 +125,24 @@ class _CartScreenTabState extends State<CartScreenTab>
           ..addAll(products // <-- should be a list of user selected items
               .map<Widget>((e) => CartItem(
                     onCkeck: Checkbox(
+                      activeColor: Get.theme.primaryColor,
                       onChanged: (v) {
-                        _isChecked = v;
-                        if (val == true) {
+                        setState(() {
+                          e.selectedProduct = v;
+                        });
+
+                        print(_cartController.productModel);
+                        if (e.selectedProduct) {
                           _productSelectedForcheck.add(e.productId);
+                          _cartController.addProductHirePurchase(
+                              e.productId, e.quantity);
                         } else {
                           _productSelectedForcheck.removeWhere(
                               (element) => element.contains(e.productId));
+                          _cartController.clearHirePurchaseProduct(e.productId);
                         }
-                        print("...............$_productSelectedForcheck");
                       },
-                      value: _isChecked,
+                      value: e.selectedProduct,
                     ),
                     product: e,
                     type: type,
@@ -157,30 +166,59 @@ class _CartScreenTabState extends State<CartScreenTab>
                       confrimText: S.of(context).yes,
                     )),
                     onDecreaseQunatity: e.quantity > 1
-                        ? () => type == CartItemType.Wishlist
-                            ? _wishlistController.setQuantity(
-                                products.indexWhere((element) =>
-                                    element.productId == e.productId),
-                                -1 + (e.quantity ?? 1))
-                            : _cartController.setQuantity(
-                                products.indexWhere((element) =>
-                                    element.productId == e.productId),
-                                -1 + (e.quantity ?? 1),
-                                e.productId,
-                                variantID: e.selectedVariant)
+                        ? () {
+                            type == CartItemType.Wishlist
+                                ? _wishlistController.setQuantity(
+                                    products.indexWhere((element) =>
+                                        element.productId == e.productId),
+                                    -1 + (e.quantity ?? 1))
+                                : _cartController.setQuantity(
+                                    products.indexWhere((element) =>
+                                        element.productId == e.productId),
+                                    -1 + (e.quantity ?? 1),
+                                    e.productId,
+                                    variantID: e.selectedVariant);
+                            if (e.selectedProduct) {
+                              _cartController.addProductHirePurchase(
+                                  e.productId, e.quantity);
+                              _cartController.productModel.clear();
+                            } else {
+                              if (_cartController.productModel
+                                  .contains(e.productId)) {
+                                _cartController.productModel.removeWhere(
+                                    (element) =>
+                                        element['productId'] == e.productId);
+                                _cartController.productModel.clear();
+                              }
+                            }
+                          }
                         : () {},
-                    onIncreaseQunatity: () => type == CartItemType.Wishlist
-                        ? _wishlistController.setQuantity(
-                            products.indexWhere(
-                                (element) => element.productId == e.productId),
-                            1 + (e.quantity ?? 1))
-                        : _cartController.setQuantity(
-                            products.indexWhere(
-                                (element) => element.productId == e.productId),
-                            1 + (e.quantity ?? 1),
-                            e.productId,
-                            variantID: e.selectedVariant,
-                          ),
+                    onIncreaseQunatity: () {
+                      type == CartItemType.Wishlist
+                          ? _wishlistController.setQuantity(
+                              products.indexWhere((element) =>
+                                  element.productId == e.productId),
+                              1 + (e.quantity ?? 1))
+                          : _cartController.setQuantity(
+                              products.indexWhere((element) =>
+                                  element.productId == e.productId),
+                              1 + (e.quantity ?? 1),
+                              e.productId,
+                              variantID: e.selectedVariant,
+                            );
+                      if (e.selectedProduct) {
+                        _cartController.addProductHirePurchase(
+                            e.productId, e.quantity);
+                        _cartController.productModel.clear();
+                      } else {
+                        if (_cartController.productModel
+                            .contains(e.productId)) {
+                          _cartController.productModel.removeWhere(
+                              (element) => element['productId'] == e.productId);
+                          _cartController.productModel.clear();
+                        }
+                      }
+                    },
                     onMovePressed: type == CartItemType.Wishlist
                         ? () {
                             _wishlistController.moveToCart(
@@ -595,12 +633,17 @@ class _CartScreenTabState extends State<CartScreenTab>
                                                     () => Get.offAll(
                                                         LoginScreen()),
                                                   )
-                                                : Get.to(AddressScreen(
-                                                    hasContinueButton: true,
-                                                    onContinuePressed: () =>
-                                                        Get.off(
-                                                            CheckoutScreen()),
-                                                  ));
+                                                : _productSelectedForcheck
+                                                            .length <
+                                                        1
+                                                    ? Get.snackbar("Required",
+                                                        "Please select an item to proceed")
+                                                    : Get.to(AddressScreen(
+                                                        hasContinueButton: true,
+                                                        onContinuePressed: () =>
+                                                            Get.off(
+                                                                CheckoutScreen()),
+                                                      ));
                                           },
                                           child: Text("To Checkout",
                                               style: TextStyle(
@@ -627,28 +670,36 @@ class _CartScreenTabState extends State<CartScreenTab>
                                                     () => Get.offAll(
                                                         LoginScreen()),
                                                   )
-                                                : showModalBottomSheet(
-                                                    context: context,
-                                                    isScrollControlled: true,
-                                                    isDismissible: false,
-                                                    builder: (context) {
-                                                      return FractionallySizedBox(
-                                                        heightFactor: 0.9,
-                                                        child:
-                                                            AssetFinancersList(
-                                                          email: _userController
-                                                              .user.email,
-                                                          firstName:
-                                                              _userController
-                                                                  .user
-                                                                  .firstname,
-                                                          lastName:
-                                                              _userController
-                                                                  .user
-                                                                  .lastname,
-                                                        ),
-                                                      );
-                                                    });
+                                                : _productSelectedForcheck
+                                                            .length <
+                                                        1
+                                                    ? Get.snackbar("Required",
+                                                        "Please select an item to proceed")
+                                                    : showModalBottomSheet(
+                                                        context: context,
+                                                        isScrollControlled:
+                                                            true,
+                                                        isDismissible: false,
+                                                        builder: (context) {
+                                                          return FractionallySizedBox(
+                                                            heightFactor: 0.9,
+                                                            child:
+                                                                AssetFinancersList(
+                                                              email:
+                                                                  _userController
+                                                                      .user
+                                                                      .email,
+                                                              firstName:
+                                                                  _userController
+                                                                      .user
+                                                                      .firstname,
+                                                              lastName:
+                                                                  _userController
+                                                                      .user
+                                                                      .lastname,
+                                                            ),
+                                                          );
+                                                        });
                                           },
                                           child: Text("With Asset Finance",
                                               style: TextStyle(
@@ -676,28 +727,57 @@ class _CartScreenTabState extends State<CartScreenTab>
                                                       () => Get.offAll(
                                                           LoginScreen()),
                                                     )
-                                                  : _cartController
-                                                      .checkHirePurchaseProduct(
-                                                          _productSelectedForcheck,
-                                                          (val) {
-                                                      print(val);
-                                                      if (val.contains(
-                                                          "success")) {
-                                                        Get.to(KYCForm(
-                                                          email: _userController
-                                                              .user.email,
-                                                          firstName:
-                                                              _userController
-                                                                  .user
-                                                                  .firstname,
-                                                          lastName:
-                                                              _userController
-                                                                  .user
-                                                                  .lastname,
-                                                          type: "hire",
-                                                        ));
-                                                      }
-                                                    });
+                                                  : _productSelectedForcheck
+                                                              .length <
+                                                          1
+                                                      ? Get.snackbar("Required",
+                                                          "Please select an item to proceed")
+                                                      : _cartController
+                                                          .checkHirePurchaseProduct(
+                                                              _productSelectedForcheck,
+                                                              (val) {
+                                                          if (val.contains(
+                                                                  "success") &&
+                                                              val != null &&
+                                                              val != "") {
+                                                            print(_cartController
+                                                                .productModel
+                                                                .value);
+                                                            if (_cartController
+                                                                .productModel
+                                                                .isNotEmpty) {
+                                                              Get.to(KYCForm(
+                                                                      email: _userController
+                                                                          .user
+                                                                          .email,
+                                                                      firstName: _userController
+                                                                          .user
+                                                                          .firstname,
+                                                                      lastName: _userController
+                                                                          .user
+                                                                          .lastname,
+                                                                      type:
+                                                                          "hire",
+                                                                      products: _cartController
+                                                                          .productModel
+                                                                          .value))
+                                                                  .whenComplete(
+                                                                      () {
+                                                                      
+                                                                _cartController
+                                                                    .productModel
+                                                                    .clear();
+                                                                setState(() {
+                                                                  _isChecked =
+                                                                      false;
+                                                                });
+                                                              });
+                                                            }else{
+                                                                print("another one");
+                                                            }
+                                                            // print();
+                                                          }
+                                                        });
                                             },
                                             child: Text(
                                               "With Hire Purchase",

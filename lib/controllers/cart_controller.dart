@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_use_of_protected_member
+
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -11,7 +13,7 @@ import 'package:edeybe/models/productModel.dart';
 import 'package:edeybe/models/user.dart';
 import 'package:edeybe/services/cart_operation.dart';
 import 'package:edeybe/services/imageUpload.dart';
-import 'package:edeybe/utils/helper.dart';
+import 'package:edeybe/widgets/custom_dialog.dart';
 
 class CartController extends GetxController implements HTTPErrorHandler {
   User user;
@@ -22,6 +24,8 @@ class CartController extends GetxController implements HTTPErrorHandler {
   var cartCost = ProductCost();
   var connectionError = false.obs;
   var serverError = false.obs;
+
+  var productModel = [Map<String, dynamic>()].obs;
   // var addressCtl = Get.find<AddressController>();
   var canceled = false.obs;
   @override
@@ -62,6 +66,21 @@ class CartController extends GetxController implements HTTPErrorHandler {
       callback(title: inList != null ? "Item removed from cart" : inList);
     }, handleError);
     print(items);
+  }
+
+  addProductHirePurchase(String productId, int qty) {
+    if (productModel.value.contains(productId)) {
+      productModel.clear();
+      productModel.add({"productId": productId, "quantity": qty});
+    } else {
+      productModel.add({"productId": productId, "quantity": qty});
+    }
+    update();
+  }
+
+  clearHirePurchaseProduct(String proId) {
+    productModel.remove(proId);
+    update();
   }
 
   getCartITems() {
@@ -175,16 +194,16 @@ class CartController extends GetxController implements HTTPErrorHandler {
   }
 
   uploadImageCard(File file, onResponse(String)) {
-    
-    ImageUpload.onSavePhoto(file, (v){
+    ImageUpload.onSavePhoto(file, (v) {
       onResponse(v);
       print("ghjklkjhjkjhj");
     });
   }
 
-  getProductBreakdown(List<Map<String, dynamic>> data, Function(dynamic)onResponse) {
+  getProductBreakdown(
+      List<Map<String, dynamic>> data, Function(dynamic) onResponse) {
     operations.productBreakdown(
-        data:  [{"productId":"5e9c4fe443ee9d3428830539", "quantity": 2}],
+        data: data,
         onResponse: (val) {
           onResponse(val);
           // for(var x in val){
@@ -208,7 +227,17 @@ class CartController extends GetxController implements HTTPErrorHandler {
   void checkHirePurchaseProduct(List<String> data, void callback(dynamic)) {
     operations.checkHirePurchase(data, (response) {
       callback(response);
-    }, handleError);
+    }, (handleError) {
+      if (handleError.response.statusCode == 400) {
+        Get.dialog(CustomDialog(
+          title: "Error",
+          confrimText: "Retry",
+          content: handleError.response.data['error'][0],
+        ));
+        productModel.clear();
+        print("This is the fault");
+      }
+    });
   }
 
   searchCart() {}

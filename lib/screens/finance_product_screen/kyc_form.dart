@@ -9,8 +9,16 @@ import 'package:image_picker/image_picker.dart';
 
 class KYCForm extends StatefulWidget {
   final String email, firstName, lastName, phone, type;
+  @required
+  var products;
 
-  KYCForm({this.email, this.firstName, this.lastName, this.phone, this.type});
+  KYCForm(
+      {this.email,
+      this.firstName,
+      this.lastName,
+      this.phone,
+      this.type,
+      this.products});
 
   @override
   State<KYCForm> createState() => _KYCFormState();
@@ -37,11 +45,13 @@ class _KYCFormState extends State<KYCForm> {
   void initState() {
     super.initState();
     state = AppState.free;
-    _cartController.getProductBreakdown([], (value) {
-      setState(() {
-        breakDown = value;
+    if (widget.products != null) {
+      _cartController.getProductBreakdown(widget.products , (value) {
+        setState(() {
+          breakDown = value;
+        });
       });
-    });
+    }
   }
 
   @override
@@ -49,7 +59,7 @@ class _KYCFormState extends State<KYCForm> {
     final emailCTRL = TextEditingController(text: widget.email);
     final firstNameCTRL = TextEditingController(text: widget.firstName);
     final lastNameCTRL = TextEditingController(text: widget.lastName);
-    print(widget.email);
+    print(widget.products);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.type == "asset" ? "Asset Finance" : "Hire Purchase"),
@@ -231,20 +241,24 @@ class _KYCFormState extends State<KYCForm> {
                                   Text("         GHS${x['intervalPayment']}"),
                                 ],
                               ),
-                               Row(
+                              Row(
                                 children: [
-                                  Text("Payment Duration: ", style: TextStyle(fontWeight: FontWeight.w700)),
+                                  Text("Payment Duration: ",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w700)),
                                   Text("       ${x['paymentDuration']} Month"),
                                 ],
-                              )   ,
-
-                               Row(
+                              ),
+                              Row(
                                 children: [
-                                  Text("Interest: ", style: TextStyle(fontWeight: FontWeight.w700)),
-                                  Text("                           ${x['interest']}%"),
+                                  Text("Interest: ",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w700)),
+                                  Text(
+                                      "                           ${x['interest']}%"),
                                 ],
-                              )   
-                                ]
+                              )
+                            ]
                           ],
                         )
                       ],

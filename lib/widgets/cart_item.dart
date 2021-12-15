@@ -84,7 +84,8 @@ class CartItem extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                         if (isCheckOut) onCkeck,
+                       if (isCheckOut) onCkeck,
+                        
                         Expanded(
                           flex: 2,
                           child: ShimmerLoading(
@@ -346,6 +347,7 @@ class CartItem extends StatelessWidget {
                             ),
                           ),
                         ),
+                      
                       ],
                     ),
                   ),

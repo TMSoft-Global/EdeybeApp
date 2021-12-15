@@ -8,8 +8,9 @@ class AppInfo extends ServerOperations {
       schema: "",
       method: "PUT",
       onResponse: (res) {
+        print(res);
         Map<String, String> resData = jsonDecode(res);
-      
+
         return resData;
       },
     );
