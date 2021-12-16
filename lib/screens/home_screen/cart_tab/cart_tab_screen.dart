@@ -28,7 +28,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:edeybe/index.dart';
 import 'package:intl/intl.dart';
-import 'package:animated_text_kit/animated_text_kit.dart';
 
 class CartScreenTab extends StatefulWidget {
   CartScreenTab({Key key}) : super(key: key);
