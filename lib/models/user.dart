@@ -6,6 +6,7 @@ class User {
     this.defaultBilling,
     this.email,
     this.addresses,
+    this.kycIDCard,
   });
 
   String firstname;
@@ -14,6 +15,7 @@ class User {
   Map<String, dynamic> defaultBilling;
   String email;
   List<Address> addresses;
+  String kycIDCard;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
         firstname: json["userDetails"]["firstName"],
@@ -21,6 +23,7 @@ class User {
         defaultShipping: json["shippingAddress"],
         defaultBilling: json["default_billing"],
         email: json["email"],
+        kycIDCard: json['kycIDCard']['lg'],
         addresses: json.containsKey("addresses")
             ? List<Address>.from(
                 json["addresses"].map((x) => Address.fromJson(x)))
@@ -33,6 +36,7 @@ class User {
         "default_shipping": defaultShipping,
         "default_billing": defaultBilling,
         "email": email,
+        "kycIDCard":kycIDCard,
         "addresses": List<dynamic>.from(addresses.map((x) => x.toJson())),
       };
 }

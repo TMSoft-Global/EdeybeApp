@@ -67,8 +67,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           _productController.productDetail.value.productId);
     });
     _productController.getCommentAndRate(_productController.productDetail.value.productId);
-    // _productController
-    //     .getProductbyId(_productController.product.value.sku));
     super.initState();
   }
 

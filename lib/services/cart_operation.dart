@@ -52,7 +52,7 @@ class CartOperation extends ServerOperations {
         var response = await uploadFile(pickedFile.path);
 
         // if (response != null) {
-          print(response);
+        print(response);
         // }
 
         // if (response.statusCode == 200) {
@@ -130,6 +130,14 @@ class CartOperation extends ServerOperations {
         }
       },
     );
+  }
+
+  submitHirePurchase(
+      Map<String, dynamic> data, void onResponse(String response)) {
+    dynamicRequest(
+        path: "/submit-kyc",
+        schema: jsonEncode(data),
+        onResponse: onResponse);
   }
 
   checkOrderStatus(

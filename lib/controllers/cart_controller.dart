@@ -9,6 +9,7 @@ import 'package:edeybe/controllers/wishlist_controller.dart';
 import 'package:edeybe/index.dart';
 import 'package:edeybe/interface/HTTPErrorHandler.dart';
 import 'package:edeybe/models/deliveryCost.dart';
+import 'package:edeybe/models/deliveryModel.dart';
 import 'package:edeybe/models/productModel.dart';
 import 'package:edeybe/models/user.dart';
 import 'package:edeybe/services/cart_operation.dart';
@@ -76,6 +77,21 @@ class CartController extends GetxController implements HTTPErrorHandler {
       productModel.add({"productId": productId, "quantity": qty});
     }
     update();
+  }
+
+  submitHirePurchase(String name, String phone, DeliveryAddress deliveryAddress,
+      String type, String financerId, dynamic idCard, String url) {
+    operations.submitHirePurchase({
+      "products_id": [
+        productModel
+      ],
+      "name": "$name",
+      "phone": "$phone",
+      "deliveryAddress": deliveryAddress,
+      "type": "HIRE_PURCHASE",
+      "financerId": "",
+      "idCard": {"url": "$url"}
+    }, (response) {});
   }
 
   clearHirePurchaseProduct(String proId) {

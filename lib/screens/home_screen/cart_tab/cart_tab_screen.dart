@@ -762,7 +762,6 @@ class _CartScreenTabState extends State<CartScreenTab>
                                                                           .value))
                                                                   .whenComplete(
                                                                       () {
-                                                                      
                                                                 _cartController
                                                                     .productModel
                                                                     .clear();
@@ -771,8 +770,9 @@ class _CartScreenTabState extends State<CartScreenTab>
                                                                       false;
                                                                 });
                                                               });
-                                                            }else{
-                                                                print("another one");
+                                                            } else {
+                                                              print(
+                                                                  "another one");
                                                             }
                                                             // print();
                                                           }
