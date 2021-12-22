@@ -1,4 +1,3 @@
-import 'package:edeybe/models/cartModel.dart';
 import 'package:edeybe/models/deliveryModel.dart';
 import 'package:edeybe/models/productModel.dart';
 
@@ -82,20 +81,20 @@ class Order {
     if (photos != null) {
       data['photos'] = photos.map((v) => v.toJson()).toList();
     }
-    data['canRate'] = this.canRate;
-    data['productId'] = this.productId;
-    data['productName'] = this.productName;
-    data['quantity'] = this.quantity;
-    data['productTotal'] = this.productTotal;
-    data['transactionId'] = this.transactionId;
-    if (this.deliveryAddress != null) {
-      data['deliveryAddress'] = this.deliveryAddress.toJson();
+    data['canRate'] = canRate;
+    data['productId'] = productId;
+    data['productName'] = productName;
+    data['quantity'] = quantity;
+    data['productTotal'] = productTotal;
+    data['transactionId'] = transactionId;
+    if (deliveryAddress != null) {
+      data['deliveryAddress'] = deliveryAddress.toJson();
     }
-    if (this.shippingAddress != null) {
-      data['shippingAddress'] = this.shippingAddress.toJson();
+    if (shippingAddress != null) {
+      data['shippingAddress'] = shippingAddress.toJson();
     }
-    data['paymentDate'] = this.paymentDate;
-    data['cartDeliveryCost'] = this.cartDeliveryCost;
+    data['paymentDate'] = paymentDate;
+    data['cartDeliveryCost'] = cartDeliveryCost;
     return data;
   }
 }

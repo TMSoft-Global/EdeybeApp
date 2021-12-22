@@ -12,6 +12,7 @@ import 'package:edeybe/models/deliveryCost.dart';
 import 'package:edeybe/models/deliveryModel.dart';
 import 'package:edeybe/models/productModel.dart';
 import 'package:edeybe/models/user.dart';
+import 'package:edeybe/screens/home_screen/index.dart';
 import 'package:edeybe/services/cart_operation.dart';
 import 'package:edeybe/services/imageUpload.dart';
 import 'package:edeybe/widgets/custom_dialog.dart';
@@ -69,33 +70,48 @@ class CartController extends GetxController implements HTTPErrorHandler {
     print(items);
   }
 
-  addProductHirePurchase(String productId, int qty) {
-    if (productModel.value.contains(productId)) {
-      productModel.clear();
-      productModel.add({"productId": productId, "quantity": qty});
-    } else {
-      productModel.add({"productId": productId, "quantity": qty});
-    }
+  addProductHirePurchase(ProductModel productId, int qty) {
+    // if (productModel.value.contains(productId)) {
+    //   productModel.add({"productId": productId.productId, "quantity": qty});
+    //   print("Item added $productModel");
+    // } else {
+    // productModel.clear();
+
+    productModel.add({"productId": productId.productId, "quantity": qty});
+    print("Not added $productModel");
+    // }
+
     update();
   }
 
   submitHirePurchase(String name, String phone, DeliveryAddress deliveryAddress,
-      String type, String financerId, dynamic idCard, String url) {
+      String type, String financerId, String url) {
     operations.submitHirePurchase({
-      "products_id": [
-        productModel
-      ],
+      "products": productModel,
       "name": "$name",
       "phone": "$phone",
-      "deliveryAddress": deliveryAddress,
+      "deliveryAddress": {},
       "type": "HIRE_PURCHASE",
       "financerId": "",
       "idCard": {"url": "$url"}
-    }, (response) {});
+    }, (response) {
+      if (response.contains("success")) {
+        Get.off(HomeIndex(
+          indexPage: 0,
+        ));
+        Get.snackbar("Success",
+            "Your request for hire purchase has successfully been submitted",
+            snackPosition: SnackPosition.BOTTOM);
+            
+      }
+    });
   }
 
   clearHirePurchaseProduct(String proId) {
-    productModel.remove(proId);
+    productModel.removeWhere((element) => element.containsValue(proId));
+
+    print(productModel);
+
     update();
   }
 
@@ -212,7 +228,6 @@ class CartController extends GetxController implements HTTPErrorHandler {
   uploadImageCard(File file, onResponse(String)) {
     ImageUpload.onSavePhoto(file, (v) {
       onResponse(v);
-      print("ghjklkjhjkjhj");
     });
   }
 
@@ -222,9 +237,6 @@ class CartController extends GetxController implements HTTPErrorHandler {
         data: data,
         onResponse: (val) {
           onResponse(val);
-          // for(var x in val){
-          //   print(x['downPayment']);
-          // }
         },
         onError: handleError);
   }
@@ -241,9 +253,12 @@ class CartController extends GetxController implements HTTPErrorHandler {
   }
 
   void checkHirePurchaseProduct(List<String> data, void callback(dynamic)) {
+    print(data);
     operations.checkHirePurchase(data, (response) {
       callback(response);
     }, (handleError) {
+      print(handleError.response.data);
+
       if (handleError.response.statusCode == 400) {
         Get.dialog(CustomDialog(
           title: "Error",

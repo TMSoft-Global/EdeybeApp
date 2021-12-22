@@ -783,7 +783,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                 ),
                                 Container(
                                   height: 40.w,
-                                  child: Text(S.of(context).addCard,
+                                  child: Text(S.of(context).addPaymentMethod,
                                       style: Get.textTheme.bodyText1
                                           .copyWith(fontSize: 16.w)),
                                 ),

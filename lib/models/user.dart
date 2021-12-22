@@ -23,7 +23,7 @@ class User {
         defaultShipping: json["shippingAddress"],
         defaultBilling: json["default_billing"],
         email: json["email"],
-        kycIDCard: json['kycIDCard']['lg'],
+        kycIDCard: json['kycIDCard'] != null ? json['kycIDCard']['lg'] : "",
         addresses: json.containsKey("addresses")
             ? List<Address>.from(
                 json["addresses"].map((x) => Address.fromJson(x)))
@@ -36,7 +36,7 @@ class User {
         "default_shipping": defaultShipping,
         "default_billing": defaultBilling,
         "email": email,
-        "kycIDCard":kycIDCard,
+        "kycIDCard": kycIDCard,
         "addresses": List<dynamic>.from(addresses.map((x) => x.toJson())),
       };
 }

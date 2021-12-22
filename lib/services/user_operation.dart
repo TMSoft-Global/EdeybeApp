@@ -74,16 +74,16 @@ class UserOperations extends ServerOperations {
     );
   }
 
-  // encryptUser() async{
-  //   dynamicRequest (
-  //     path: '/send',
-  //     schema: jsonEncode({"accountName": await encryptData("Bismark Amo")}),
-  //     onResponse: (res) {
-  //      print(res);
-  //     },
-
-  //   );
-  // }
+  loadUserInfo(Function(User) callback,) async{
+    dynamicRequest(
+      path: "/user",
+      schema: "",
+      onResponse: (res) {
+        User user = User.fromJson(res);
+        callback(user);
+      },
+    );
+  }
 
   _getUserInfo(
     Function(User) callback,

@@ -89,12 +89,12 @@ class UserDetails {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['firstName'] = this.firstName;
-    data['lastName'] = this.lastName;
-    data['email'] = this.email;
-    data['companyName'] = this.companyName;
-    data['storeDescription'] = this.storeDescription;
-    data['phone'] = this.phone;
+    data['firstName'] = firstName;
+    data['lastName'] = lastName;
+    data['email'] = email;
+    data['companyName'] = companyName;
+    data['storeDescription'] = storeDescription;
+    data['phone'] = phone;
     return data;
   }
 }

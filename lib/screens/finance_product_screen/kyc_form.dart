@@ -1,9 +1,10 @@
 import 'dart:io';
 
+import 'package:edeybe/controllers/user_controller.dart';
 import 'package:edeybe/screens/checkout_screen/index.dart';
+import 'package:edeybe/services/server_operation.dart';
 import 'package:edeybe/utils/helper.dart';
 import 'package:flutter/material.dart';
-import 'package:edeybe/index.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -38,6 +39,8 @@ class _KYCFormState extends State<KYCForm> {
   AppState state;
   File imageFile;
   CartController _cartController = Get.put(CartController());
+  var _userCtrl = Get.find<UserController>();
+  var _address = Get.find<AddressController>();
   String imgeUrl;
   var breakDown = [];
 
@@ -45,8 +48,9 @@ class _KYCFormState extends State<KYCForm> {
   void initState() {
     super.initState();
     state = AppState.free;
+
     if (widget.products != null) {
-      _cartController.getProductBreakdown(widget.products , (value) {
+      _cartController.getProductBreakdown(widget.products, (value) {
         setState(() {
           breakDown = value;
         });
@@ -187,27 +191,34 @@ class _KYCFormState extends State<KYCForm> {
                     decoration: BoxDecoration(
                         border: Border.all(
                             width: 0.5, color: Get.theme.dividerColor)),
-                    child: imageFile != null
-                        ? Image.file(
-                            File(imageFile.path),
-                            fit: BoxFit.contain,
-                          )
-                        : Center(
-                            child: IconButton(
-                              icon: Icon(Icons.camera_alt),
-                              onPressed: () {
-                                _pickImage().whenComplete(_cropImage).then((d) {
-                                  print("object..................");
-                                  _cartController.uploadImageCard(imageFile,
-                                      (val) {
-                                    setState(() {
-                                      imgeUrl = val;
+                    child: imageFile == null &&
+                            _userCtrl.user.kycIDCard.isNotEmpty &&
+                            _userCtrl.user.kycIDCard != null
+                        ? Image.network(
+                            "$domain/api/images/${_userCtrl.user.kycIDCard}")
+                        : imageFile != null
+                            ? Image.file(
+                                File(imageFile.path),
+                                fit: BoxFit.contain,
+                              )
+                            : Center(
+                                child: IconButton(
+                                  icon: Icon(Icons.camera_alt),
+                                  onPressed: () {
+                                    _pickImage()
+                                        .whenComplete(_cropImage)
+                                        .then((d) {
+                                      _cartController.uploadImageCard(imageFile,
+                                          (val) {
+                                        print(val);
+                                        setState(() {
+                                          imgeUrl = val;
+                                        });
+                                      });
                                     });
-                                  });
-                                });
-                              },
-                            ),
-                          ),
+                                  },
+                                ),
+                              ),
                   ),
                   SizedBox(
                     height: 12.h,
@@ -271,7 +282,7 @@ class _KYCFormState extends State<KYCForm> {
               height: 20,
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              padding: EdgeInsets.symmetric(horizontal: 10.0),
               child: SizedBox(
                 width: double.infinity,
                 child: TextButton(
@@ -280,7 +291,21 @@ class _KYCFormState extends State<KYCForm> {
                       textStyle: TextStyle(
                         color: Colors.white,
                       )),
-                  onPressed: () {},
+                  onPressed: () {
+                    // print(_userCtrl.user.kycIDCard);
+                    _cartController.submitHirePurchase(
+                      "${widget.lastName} ${widget.firstName}",
+                      widget.phone,
+                      _address.delivery[0],
+                      "type",
+                      "financerId",
+                      _userCtrl.user.kycIDCard == "" &&
+                              _userCtrl.user.kycIDCard == null
+                          ? imgeUrl
+                          : _userCtrl.user.kycIDCard,
+                    );
+                    _userCtrl.getUserInfo();
+                  },
                   child: Text("Submit",
                       style: TextStyle(
                         color: Colors.white,
@@ -346,6 +371,7 @@ class _KYCFormState extends State<KYCForm> {
 
   void _clearImage() {
     imageFile = null;
+    _userCtrl.user.kycIDCard = "";
     setState(() {
       state = AppState.free;
     });

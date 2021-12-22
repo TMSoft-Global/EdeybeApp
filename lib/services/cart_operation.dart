@@ -123,6 +123,7 @@ class CartOperation extends ServerOperations {
       onError: onError,
       showDialog: true,
       onResponse: (res) {
+        print(res);
         if (res.isEmpty) {
           onResponse("success");
         } else {
@@ -133,11 +134,20 @@ class CartOperation extends ServerOperations {
   }
 
   submitHirePurchase(
-      Map<String, dynamic> data, void onResponse(String response)) {
+      Map<String, dynamic> data, void onResponses(String response)) {
+        print(data);
     dynamicRequest(
+      showDialog: true,
         path: "/submit-kyc",
         schema: jsonEncode(data),
-        onResponse: onResponse);
+        onResponse: (onResponse){
+          if(onResponse['data']['message']=="Successfull"){
+            onResponses("success");
+          }else{
+            onResponses("failed");
+
+          }
+        });
   }
 
   checkOrderStatus(

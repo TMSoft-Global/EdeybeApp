@@ -98,7 +98,6 @@ class _CartScreenTabState extends State<CartScreenTab>
   }
 
   void _setProduct(value) {
-    print(value);
     setState(() => _selectedProduct = value);
   }
 
@@ -129,12 +128,12 @@ class _CartScreenTabState extends State<CartScreenTab>
                         setState(() {
                           e.selectedProduct = v;
                         });
-
-                        print(_cartController.productModel);
-                        if (e.selectedProduct) {
+                        if (v) {
                           _productSelectedForcheck.add(e.productId);
                           _cartController.addProductHirePurchase(
-                              e.productId, e.quantity);
+                            e,
+                            e.quantity,
+                          );
                         } else {
                           _productSelectedForcheck.removeWhere(
                               (element) => element.contains(e.productId));
@@ -160,6 +159,9 @@ class _CartScreenTabState extends State<CartScreenTab>
                                     element.productId == e.productId),
                               );
                         Get.back();
+                        _productSelectedForcheck.removeWhere(
+                            (element) => element.contains(e.productId));
+                        _cartController.clearHirePurchaseProduct(e.productId);
                       },
                       cancelText: S.of(context).no,
                       confrimText: S.of(context).yes,
@@ -177,19 +179,22 @@ class _CartScreenTabState extends State<CartScreenTab>
                                     -1 + (e.quantity ?? 1),
                                     e.productId,
                                     variantID: e.selectedVariant);
-                            if (e.selectedProduct) {
-                              _cartController.addProductHirePurchase(
-                                  e.productId, e.quantity);
-                              _cartController.productModel.clear();
-                            } else {
-                              if (_cartController.productModel
-                                  .contains(e.productId)) {
-                                _cartController.productModel.removeWhere(
-                                    (element) =>
-                                        element['productId'] == e.productId);
-                                _cartController.productModel.clear();
-                              }
-                            }
+                            _cartController.productModel.clear();
+                            _productSelectedForcheck.clear();
+
+                            // if (e.selectedProduct) {
+                            //   _cartController.addProductHirePurchase(
+                            //       e, e.quantity);
+                            //   _cartController.productModel.clear();
+                            // } else {
+                            //   if (_cartController.productModel
+                            //       .contains(e.productId)) {
+                            //     _cartController.productModel.removeWhere(
+                            //         (element) =>
+                            //             element['productId'] == e.productId);
+                            //     _cartController.productModel.clear();
+                            //   }
+                            // }
                           }
                         : () {},
                     onIncreaseQunatity: () {
@@ -205,18 +210,8 @@ class _CartScreenTabState extends State<CartScreenTab>
                               e.productId,
                               variantID: e.selectedVariant,
                             );
-                      if (e.selectedProduct) {
-                        _cartController.addProductHirePurchase(
-                            e.productId, e.quantity);
-                        _cartController.productModel.clear();
-                      } else {
-                        if (_cartController.productModel
-                            .contains(e.productId)) {
-                          _cartController.productModel.removeWhere(
-                              (element) => element['productId'] == e.productId);
-                          _cartController.productModel.clear();
-                        }
-                      }
+                      _cartController.productModel.clear();
+                      _productSelectedForcheck.clear();
                     },
                     onMovePressed: type == CartItemType.Wishlist
                         ? () {
@@ -739,12 +734,13 @@ class _CartScreenTabState extends State<CartScreenTab>
                                                                   "success") &&
                                                               val != null &&
                                                               val != "") {
-                                                            print(_cartController
-                                                                .productModel
-                                                                .value);
                                                             if (_cartController
                                                                 .productModel
-                                                                .isNotEmpty) {
+                                                                .value[0]
+                                                                .isEmpty) {
+                                                              _cartController
+                                                                  .productModel
+                                                                  .removeAt(0);
                                                               Get.to(KYCForm(
                                                                       email: _userController
                                                                           .user
@@ -765,16 +761,34 @@ class _CartScreenTabState extends State<CartScreenTab>
                                                                 _cartController
                                                                     .productModel
                                                                     .clear();
-                                                                setState(() {
-                                                                  _isChecked =
-                                                                      false;
-                                                                });
+                                                                _productSelectedForcheck
+                                                                    .clear();
                                                               });
                                                             } else {
-                                                              print(
-                                                                  "another one");
+                                                              Get.to(KYCForm(
+                                                                      email: _userController
+                                                                          .user
+                                                                          .email,
+                                                                      firstName: _userController
+                                                                          .user
+                                                                          .firstname,
+                                                                      lastName: _userController
+                                                                          .user
+                                                                          .lastname,
+                                                                      type:
+                                                                          "hire",
+                                                                      products: _cartController
+                                                                          .productModel
+                                                                          .value))
+                                                                  .whenComplete(
+                                                                      () {
+                                                                _cartController
+                                                                    .productModel
+                                                                    .clear();
+                                                                _productSelectedForcheck
+                                                                    .clear();
+                                                              });
                                                             }
-                                                            // print();
                                                           }
                                                         });
                                             },

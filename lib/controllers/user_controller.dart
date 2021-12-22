@@ -1,11 +1,6 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
-import 'package:edeybe/controllers/address_controller.dart';
-import 'package:edeybe/index.dart';
 import 'package:edeybe/interface/HTTPErrorHandler.dart';
 import 'package:edeybe/models/order.dart';
-import 'package:edeybe/models/ratingModel.dart';
 import 'package:edeybe/models/user.dart';
 import 'package:edeybe/screens/checkout_screen/index.dart';
 import 'package:edeybe/screens/configuration_screen/config_screen.dart';
@@ -236,7 +231,11 @@ class UserController extends GetxController implements HTTPErrorHandler {
     });
   }
 
- 
+ void getUserInfo(){
+   _userOperations.loadUserInfo((p0){
+     user = p0;
+   });
+ }
  
 
   setHistory(List<Order> data, int count) {

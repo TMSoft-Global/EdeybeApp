@@ -31,15 +31,15 @@ class RatingCommentModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['productRating'] = this.productRating;
-    data['totalRating'] = this.totalRating;
-    if (this.ratings != null) {
-      data['ratings'] = this.ratings.map((v) => v.toJson()).toList();
+    data['productRating'] = productRating;
+    data['totalRating'] = totalRating;
+    if (ratings != null) {
+      data['ratings'] = ratings.map((v) => v.toJson()).toList();
     }
-    if (this.breakDownRatings != null) {
-      data['breakDownRatings'] = this.breakDownRatings.toJson();
+    if (breakDownRatings != null) {
+      data['breakDownRatings'] = breakDownRatings.toJson();
     }
-    data['totalRatingWithoutComment'] = this.totalRatingWithoutComment;
+    data['totalRatingWithoutComment'] = totalRatingWithoutComment;
     return data;
   }
 }
@@ -80,15 +80,15 @@ class Ratings {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
-    data['rating'] = this.rating;
-    data['comment'] = this.comment;
-    data['user'] = this.user;
-    data['productId'] = this.productId;
-    data['variantId'] = this.variantId;
-    data['isVariant'] = this.isVariant;
-    data['transactionId'] = this.transactionId;
-    data['flagged'] = this.flagged;
+    data['_id'] = sId;
+    data['rating'] = rating;
+    data['comment'] = comment;
+    data['user'] = user;
+    data['productId'] = productId;
+    data['variantId'] = variantId;
+    data['isVariant'] = isVariant;
+    data['transactionId'] = transactionId;
+    data['flagged'] = flagged;
     return data;
   }
 }
@@ -113,11 +113,11 @@ class BreakDownRatings {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['star_1'] = this.star1;
-    data['star_2'] = this.star2;
-    data['star_3'] = this.star3;
-    data['star_4'] = this.star4;
-    data['star_5'] = this.star5;
+    data['star_1'] = star1;
+    data['star_2'] = star2;
+    data['star_3'] = star3;
+    data['star_4'] = star4;
+    data['star_5'] = star5;
     return data;
   }
 }

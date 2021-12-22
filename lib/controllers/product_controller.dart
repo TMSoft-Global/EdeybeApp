@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:edeybe/controllers/user_controller.dart';
 import 'package:edeybe/index.dart';
 import 'package:edeybe/interface/HTTPErrorHandler.dart';
-import 'package:edeybe/models/product.dart';
 import 'package:edeybe/models/productModel.dart';
 import 'package:edeybe/models/ratingModel.dart';
 import 'package:edeybe/models/user.dart';

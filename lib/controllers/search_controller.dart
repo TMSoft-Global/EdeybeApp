@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:edeybe/index.dart';
 import 'package:edeybe/interface/HTTPErrorHandler.dart';
-import 'package:edeybe/models/product.dart';
 import 'package:edeybe/models/productModel.dart';
 import 'package:edeybe/services/search_operation.dart';
 import 'package:edeybe/widgets/product_card_landscape.dart';

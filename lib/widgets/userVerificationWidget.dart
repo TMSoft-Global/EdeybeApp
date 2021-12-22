@@ -70,7 +70,7 @@ Widget OptVerifyWidget({
                   ),
                   Center(
                     child: Text(
-                      "Verify phone number",
+                      "Verify your Email",
                       style: TextStyle(
                         fontSize: 23,
                         fontWeight: FontWeight.w700,

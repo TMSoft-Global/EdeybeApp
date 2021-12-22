@@ -1,3 +1,5 @@
+// ignore_for_file: curly_braces_in_flow_control_structures
+
 import 'package:edeybe/utils/card_utils.dart';
 import 'package:edeybe/utils/card_enum.dart';
 
