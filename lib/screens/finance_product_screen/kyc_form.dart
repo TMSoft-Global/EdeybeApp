@@ -1,6 +1,9 @@
 import 'dart:io';
 
+import 'package:edeybe/controllers/assetFinanceController.dart';
 import 'package:edeybe/controllers/user_controller.dart';
+import 'package:edeybe/models/AssetFinanceBreakdownModel.dart';
+import 'package:edeybe/models/AssetFinancersModel.dart';
 import 'package:edeybe/screens/checkout_screen/index.dart';
 import 'package:edeybe/services/server_operation.dart';
 import 'package:edeybe/utils/helper.dart';
@@ -9,9 +12,10 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
 class KYCForm extends StatefulWidget {
-  final String email, firstName, lastName, phone, type;
+  final String email, firstName, lastName, phone, type, financerID;
   @required
   var products;
+  bool isAssestFinance;
 
   KYCForm(
       {this.email,
@@ -19,6 +23,8 @@ class KYCForm extends StatefulWidget {
       this.lastName,
       this.phone,
       this.type,
+      this.financerID,
+      @required this.isAssestFinance = false,
       this.products});
 
   @override
@@ -39,6 +45,8 @@ class _KYCFormState extends State<KYCForm> {
   AppState state;
   File imageFile;
   CartController _cartController = Get.put(CartController());
+  AssetFinanceController _assetController = Get.put(AssetFinanceController());
+  final newAssest = AssetsFinanceBreakdown();
   var _userCtrl = Get.find<UserController>();
   var _address = Get.find<AddressController>();
   String imgeUrl;
@@ -49,13 +57,15 @@ class _KYCFormState extends State<KYCForm> {
     super.initState();
     state = AppState.free;
 
-    if (widget.products != null) {
-      _cartController.getProductBreakdown(widget.products, (value) {
-        setState(() {
-          breakDown = value;
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if (widget.products != null) {
+        _cartController.getProductBreakdown(widget.products, (value) {
+          setState(() {
+            breakDown = value;
+          });
         });
-      });
-    }
+      }
+    });
   }
 
   @override
@@ -178,7 +188,9 @@ class _KYCFormState extends State<KYCForm> {
                           },
                           child: Text(
                             "Clear Image",
-                            style: TextStyle(color: Get.theme.primaryColorDark),
+                            style: TextStyle(
+                                color: Get.theme.primaryColorDark,
+                                fontSize: 15.sp),
                           ))
                     ],
                   ),
@@ -194,8 +206,9 @@ class _KYCFormState extends State<KYCForm> {
                     child: imageFile == null &&
                             _userCtrl.user.kycIDCard.isNotEmpty &&
                             _userCtrl.user.kycIDCard != null
-                        ? Image.network(
-                            "$domain/api/images/${_userCtrl.user.kycIDCard}")
+                        ? CachedNetworkImage(
+                            imageUrl:
+                                "$domain/api/images/${_userCtrl.user.kycIDCard}")
                         : imageFile != null
                             ? Image.file(
                                 File(imageFile.path),
@@ -229,52 +242,104 @@ class _KYCFormState extends State<KYCForm> {
                   ),
                   Text("Breakdown Details"),
                   CustomDivider(),
-                  Container(
-                    child: Column(
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            for (var x in breakDown) ...[
-                              Row(
-                                children: [
-                                  Text("Downpayment: ",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w700)),
-                                  Text("              GHS${x['downPayment']}"),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Text("Interval Payment: ",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w700)),
-                                  Text("         GHS${x['intervalPayment']}"),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Text("Payment Duration: ",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w700)),
-                                  Text("       ${x['paymentDuration']} Month"),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Text("Interest: ",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w700)),
-                                  Text(
-                                      "                           ${x['interest']}%"),
-                                ],
-                              )
-                            ]
-                          ],
-                        )
-                      ],
+                  if (!widget.isAssestFinance)
+                    Container(
+                      child: Column(
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              for (var x in breakDown) ...[
+                                Row(
+                                  children: [
+                                    Text("Downpayment: ",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w700)),
+                                    Text(
+                                        "              GHS${x['downPayment']}"),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Text("Interval Payment: ",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w700)),
+                                    Text("         GHS${x['intervalPayment']}"),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Text("Payment Duration: ",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w700)),
+                                    Text(
+                                        "       ${x['paymentDuration']} Month"),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Text("Interest: ",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w700)),
+                                    Text(
+                                        "                           ${x['interest']}%"),
+                                  ],
+                                )
+                              ]
+                            ],
+                          )
+                        ],
+                      ),
                     ),
-                  )
+                  if (widget.isAssestFinance)
+                    Column(children: [
+                      for (var x in _assetController.assetFinanceBreakDown) ...[
+                        Container(
+                          child: Row(
+                            children: [
+                              Expanded(
+                                  flex: 1,
+                                  child: CachedNetworkImage(
+                                    imageUrl:
+                                        "$domain/api/images/${x.productImage}",
+                                    width: 80,
+                                    height: 80,
+                                  )),
+                              Expanded(
+                                flex: 2,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Product Name: ${x.productName}",
+                                      softWrap: true,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 2,
+                                    ),
+                                    Text("Interest: ${x.interest}%"),
+                                    Text(
+                                        "Payable: GHS ${x.paymentWithInterest}"),
+                                  ],
+                                ),
+                              )
+
+                              // Column(
+                              //   children: [
+                              //
+
+                              //       Text("Product Name: ${x.productName}"),
+                              //       Text("Interest: ${x.interest}%"),
+                              //       Text("Amount Name: ${x.}"),
+                              //       Text("Product Name: ${x.productName}"),
+                              //       Text("Product Name: ${x.productName}"),
+                              //     ]
+                              //   ],
+                              // ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ])
                 ],
               ),
             ),
@@ -292,13 +357,14 @@ class _KYCFormState extends State<KYCForm> {
                         color: Colors.white,
                       )),
                   onPressed: () {
-                    // print(_userCtrl.user.kycIDCard);
                     _cartController.submitHirePurchase(
                       "${widget.lastName} ${widget.firstName}",
                       widget.phone,
                       _address.delivery[0],
-                      "type",
-                      "financerId",
+                      widget.isAssestFinance
+                          ? "ASSET_FINANCE"
+                          : "HIRE_PURCHASE",
+                      "${widget.financerID}",
                       _userCtrl.user.kycIDCard == "" &&
                               _userCtrl.user.kycIDCard == null
                           ? imgeUrl

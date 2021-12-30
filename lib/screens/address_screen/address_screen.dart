@@ -124,7 +124,7 @@ class _AddressScreenState extends State<AddressScreen> {
                               ),
                               label: Text(S.of(context).addAddress),
                               onPressed: () {
-                                Get.to(AddorEditScreen());
+                                Get.to(()=>AddorEditScreen());
                               },
                             ));
                       }
@@ -134,7 +134,7 @@ class _AddressScreenState extends State<AddressScreen> {
                       return AddressCard(
                         // onCardPressed: (){},
                         onEditAddress: () {
-                          Get.to(AddorEditScreen(
+                          Get.to(()=>AddorEditScreen(
                             address: delivery,
                           ));
                         },

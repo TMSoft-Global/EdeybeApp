@@ -49,7 +49,7 @@ class Financers {
     sId = json['_id'];
     userDetails = json['userDetails'] != null
         ? new UserDetails.fromJson(json['userDetails'])
-        : null;
+        : UserDetails();
   }
 
   Map<String, dynamic> toJson() {

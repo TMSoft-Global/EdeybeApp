@@ -62,6 +62,8 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen>
                               .map<Widget>((e) =>
                                   // Text(e.canRate .toString()),)
                                   CartItem(
+                                    isCheckOut: false,
+                                    onCkeck: Container(),
                                       isComment: false,
                                       onRateComment: () => {},
                                       product: e,

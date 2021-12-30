@@ -91,8 +91,8 @@ class CartController extends GetxController implements HTTPErrorHandler {
       "name": "$name",
       "phone": "$phone",
       "deliveryAddress": {},
-      "type": "HIRE_PURCHASE",
-      "financerId": "",
+      "type": type,
+      "financerId": financerId,
       "idCard": {"url": "$url"}
     }, (response) {
       if (response.contains("success")) {
@@ -109,9 +109,7 @@ class CartController extends GetxController implements HTTPErrorHandler {
 
   clearHirePurchaseProduct(String proId) {
     productModel.removeWhere((element) => element.containsValue(proId));
-
     print(productModel);
-
     update();
   }
 

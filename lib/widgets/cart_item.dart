@@ -92,7 +92,7 @@ class CartItem extends StatelessWidget {
                                       color: Colors.black,
                                     )
                                   : CachedNetworkImage(
-                                      imageUrl: product.isVariant != null && product.isVariant
+                                      imageUrl: product.hasVariants != null && product.hasVariants
                                           ? product.variants[0].images[0].sm
                                           : product.photos[0].sm,
                                       // alignment: Alignment.center,

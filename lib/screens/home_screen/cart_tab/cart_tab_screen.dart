@@ -9,6 +9,7 @@ import 'package:edeybe/screens/checkout_screen/checkout_screen.dart';
 import 'package:edeybe/screens/finance_product_screen/assetFinancerList.dart';
 import 'package:edeybe/screens/finance_product_screen/kyc_form.dart';
 import 'package:edeybe/screens/home_screen/cart_tab/cart_tab_bottom_bar/bottom_bar.dart';
+import 'package:edeybe/screens/home_screen/cart_tab/checkout_asset_hireP.dart';
 import 'package:edeybe/screens/home_screen/index.dart';
 import 'package:edeybe/screens/wishlist_screen/wishlist_screen.dart';
 import 'package:edeybe/utils/Debouncer.dart';
@@ -144,7 +145,7 @@ class _CartScreenTabState extends State<CartScreenTab>
                     ),
                     product: e,
                     type: type,
-                    isCheckOut: true,
+                    isCheckOut: false,
                     onRemovePressed: () => Get.dialog(CustomDialog(
                       title: S.of(context).removeItem,
                       content: S.of(context).removeItemMessage,
@@ -627,17 +628,12 @@ class _CartScreenTabState extends State<CartScreenTab>
                                                     () => Get.offAll(
                                                         LoginScreen()),
                                                   )
-                                                : _productSelectedForcheck
-                                                            .length <
-                                                        1
-                                                    ? Get.snackbar("Required",
-                                                        "Please select an item to proceed")
-                                                    : Get.to(AddressScreen(
-                                                        hasContinueButton: true,
-                                                        onContinuePressed: () =>
-                                                            Get.off(
-                                                                CheckoutScreen()),
-                                                      ));
+                                                : Get.to(AddressScreen(
+                                                    hasContinueButton: true,
+                                                    onContinuePressed: () =>
+                                                        Get.off(
+                                                            CheckoutScreen()),
+                                                  ));
                                           },
                                           child: Text("To Checkout",
                                               style: TextStyle(
@@ -664,36 +660,11 @@ class _CartScreenTabState extends State<CartScreenTab>
                                                     () => Get.offAll(
                                                         LoginScreen()),
                                                   )
-                                                : _productSelectedForcheck
-                                                            .length <
-                                                        1
-                                                    ? Get.snackbar("Required",
-                                                        "Please select an item to proceed")
-                                                    : showModalBottomSheet(
-                                                        context: context,
-                                                        isScrollControlled:
-                                                            true,
-                                                        isDismissible: false,
-                                                        builder: (context) {
-                                                          return FractionallySizedBox(
-                                                            heightFactor: 0.9,
-                                                            child:
-                                                                AssetFinancersList(
-                                                              email:
-                                                                  _userController
-                                                                      .user
-                                                                      .email,
-                                                              firstName:
-                                                                  _userController
-                                                                      .user
-                                                                      .firstname,
-                                                              lastName:
-                                                                  _userController
-                                                                      .user
-                                                                      .lastname,
-                                                            ),
-                                                          );
-                                                        });
+                                                : Get.to(
+                                                    CheckoutWithAsset_HireP(
+                                                        false,
+                                                        "Asset Finance"));
+                                                        
                                           },
                                           child: Text("With Asset Finance",
                                               style: TextStyle(
@@ -721,76 +692,12 @@ class _CartScreenTabState extends State<CartScreenTab>
                                                       () => Get.offAll(
                                                           LoginScreen()),
                                                     )
-                                                  : _productSelectedForcheck
-                                                              .length <
-                                                          1
-                                                      ? Get.snackbar("Required",
-                                                          "Please select an item to proceed")
-                                                      : _cartController
-                                                          .checkHirePurchaseProduct(
-                                                              _productSelectedForcheck,
-                                                              (val) {
-                                                          if (val.contains(
-                                                                  "success") &&
-                                                              val != null &&
-                                                              val != "") {
-                                                            if (_cartController
-                                                                .productModel
-                                                                .value[0]
-                                                                .isEmpty) {
-                                                              _cartController
-                                                                  .productModel
-                                                                  .removeAt(0);
-                                                              Get.to(KYCForm(
-                                                                      email: _userController
-                                                                          .user
-                                                                          .email,
-                                                                      firstName: _userController
-                                                                          .user
-                                                                          .firstname,
-                                                                      lastName: _userController
-                                                                          .user
-                                                                          .lastname,
-                                                                      type:
-                                                                          "hire",
-                                                                      products: _cartController
-                                                                          .productModel
-                                                                          .value))
-                                                                  .whenComplete(
-                                                                      () {
-                                                                _cartController
-                                                                    .productModel
-                                                                    .clear();
-                                                                _productSelectedForcheck
-                                                                    .clear();
-                                                              });
-                                                            } else {
-                                                              Get.to(KYCForm(
-                                                                      email: _userController
-                                                                          .user
-                                                                          .email,
-                                                                      firstName: _userController
-                                                                          .user
-                                                                          .firstname,
-                                                                      lastName: _userController
-                                                                          .user
-                                                                          .lastname,
-                                                                      type:
-                                                                          "hire",
-                                                                      products: _cartController
-                                                                          .productModel
-                                                                          .value))
-                                                                  .whenComplete(
-                                                                      () {
-                                                                _cartController
-                                                                    .productModel
-                                                                    .clear();
-                                                                _productSelectedForcheck
-                                                                    .clear();
-                                                              });
-                                                            }
-                                                          }
-                                                        });
+                                                  : Get.to(
+                                                      CheckoutWithAsset_HireP(
+                                                          true,
+                                                          "Hire Purchase"));
+                                                        
+
                                             },
                                             child: Text(
                                               "With Hire Purchase",

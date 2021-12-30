@@ -19,6 +19,8 @@ class Order {
   bool canRate;
 
   String selectedVariant;
+  bool availableForHirePurchasing = false;
+
 
   Order({
     this.hasDiscount = false,
@@ -36,7 +38,7 @@ class Order {
     this.variants,
     this.hasVariants = false,
     this.canRate = false,
-
+    this.availableForHirePurchasing = false,
     this.selectedVariant,
   });
 
@@ -72,6 +74,8 @@ class Order {
       });
     }
     hasVariants = false;
+    availableForHirePurchasing = json['availableForHirePurchasing'] == null ? false : json['availableForHirePurchasing'];
+
    
   }
 
@@ -81,6 +85,7 @@ class Order {
     if (photos != null) {
       data['photos'] = photos.map((v) => v.toJson()).toList();
     }
+    data['availableForHirePurchasing'] = availableForHirePurchasing;
     data['canRate'] = canRate;
     data['productId'] = productId;
     data['productName'] = productName;

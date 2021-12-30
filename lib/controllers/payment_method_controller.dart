@@ -75,7 +75,7 @@ class PaymentMethodController extends GetxController {
         if (val != null) {
           // print(val);
           if (val.containsKey('success')) {
-            Get.to(SimpleWebview(
+            Get.to(()=>SimpleWebview(
               url: val['success']['cardVerifyLink'],
             ));
           } else {
@@ -90,7 +90,7 @@ class PaymentMethodController extends GetxController {
     } else {
       payementServer.sendVerification(card.number, () {
         // if (val.containsKey('success')) {
-          Get.to(
+          Get.to(()=>
             Otp(
                 data: card.number,
                 time: 180,
