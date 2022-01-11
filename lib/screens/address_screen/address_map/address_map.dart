@@ -5,8 +5,8 @@ import 'package:edeybe/index.dart';
 import 'package:edeybe/screens/address_screen/address_map/map_widget_bottom_bar/map_wiget_bottom_bar.dart';
 import 'package:edeybe/utils/app_geolocation.dart';
 import 'package:edeybe/utils/constant.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -50,10 +50,9 @@ class _AddressMapWidgetState extends State<AddressMapWidget> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: AppBar(
-          brightness: Brightness.dark,
           iconTheme: Get.theme.iconTheme.copyWith(color: Colors.white),
           title: Text(S.of(context).addAddress,
-              style: TextStyle(color: Colors.white))),
+              style: TextStyle(color: Colors.white)), systemOverlayStyle: SystemUiOverlayStyle.dark),
       bottomNavigationBar: MapWidgetBottomBar(
         onConfirmLocation: () {
           if (widget.setAddress != null)

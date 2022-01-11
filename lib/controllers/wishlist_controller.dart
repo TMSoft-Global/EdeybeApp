@@ -7,7 +7,6 @@ import 'package:edeybe/interface/HTTPErrorHandler.dart';
 import 'package:edeybe/models/productModel.dart';
 import 'package:edeybe/services/wishlist_operaitons.dart';
 import 'package:intl/intl.dart';
-import 'package:edeybe/models/product.dart';
 import 'package:edeybe/models/user.dart';
 
 // import 'package:edeybe/services/user_operation.dart';

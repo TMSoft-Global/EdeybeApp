@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_use_of_protected_member
+
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -7,11 +9,13 @@ import 'package:edeybe/controllers/wishlist_controller.dart';
 import 'package:edeybe/index.dart';
 import 'package:edeybe/interface/HTTPErrorHandler.dart';
 import 'package:edeybe/models/deliveryCost.dart';
+import 'package:edeybe/models/deliveryModel.dart';
 import 'package:edeybe/models/productModel.dart';
 import 'package:edeybe/models/user.dart';
+import 'package:edeybe/screens/home_screen/index.dart';
 import 'package:edeybe/services/cart_operation.dart';
 import 'package:edeybe/services/imageUpload.dart';
-import 'package:edeybe/utils/helper.dart';
+import 'package:edeybe/widgets/custom_dialog.dart';
 
 class CartController extends GetxController implements HTTPErrorHandler {
   User user;
@@ -22,6 +26,8 @@ class CartController extends GetxController implements HTTPErrorHandler {
   var cartCost = ProductCost();
   var connectionError = false.obs;
   var serverError = false.obs;
+
+  var productModel = [Map<String, dynamic>()].obs;
   // var addressCtl = Get.find<AddressController>();
   var canceled = false.obs;
   @override
@@ -62,6 +68,49 @@ class CartController extends GetxController implements HTTPErrorHandler {
       callback(title: inList != null ? "Item removed from cart" : inList);
     }, handleError);
     print(items);
+  }
+
+  addProductHirePurchase(ProductModel productId, int qty) {
+    // if (productModel.value.contains(productId)) {
+    //   productModel.add({"productId": productId.productId, "quantity": qty});
+    //   print("Item added $productModel");
+    // } else {
+    // productModel.clear();
+
+    productModel.add({"productId": productId.productId, "quantity": qty});
+    print("Not added $productModel");
+    // }
+
+    update();
+  }
+
+  submitHirePurchase(String name, String phone, DeliveryAddress deliveryAddress,
+      String type, String financerId, String url) {
+    operations.submitHirePurchase({
+      "products": productModel,
+      "name": "$name",
+      "phone": "$phone",
+      "deliveryAddress": {},
+      "type": type,
+      "financerId": financerId,
+      "idCard": {"url": "$url"}
+    }, (response) {
+      if (response.contains("success")) {
+        Get.off(HomeIndex(
+          indexPage: 0,
+        ));
+        Get.snackbar("Success",
+            "Your request for hire purchase has successfully been submitted",
+            snackPosition: SnackPosition.BOTTOM);
+            
+      }
+    });
+  }
+
+  clearHirePurchaseProduct(String proId) {
+    productModel.removeWhere((element) => element.containsValue(proId));
+    print(productModel);
+    update();
   }
 
   getCartITems() {
@@ -175,21 +224,17 @@ class CartController extends GetxController implements HTTPErrorHandler {
   }
 
   uploadImageCard(File file, onResponse(String)) {
-    
-    ImageUpload.onSavePhoto(file, (v){
+    ImageUpload.onSavePhoto(file, (v) {
       onResponse(v);
-      print("ghjklkjhjkjhj");
     });
   }
 
-  getProductBreakdown(List<Map<String, dynamic>> data, Function(dynamic)onResponse) {
+  getProductBreakdown(
+      List<Map<String, dynamic>> data, Function(dynamic) onResponse) {
     operations.productBreakdown(
-        data:  [{"productId":"5e9c4fe443ee9d3428830539", "quantity": 2}],
+        data: data,
         onResponse: (val) {
           onResponse(val);
-          // for(var x in val){
-          //   print(x['downPayment']);
-          // }
         },
         onError: handleError);
   }
@@ -206,9 +251,22 @@ class CartController extends GetxController implements HTTPErrorHandler {
   }
 
   void checkHirePurchaseProduct(List<String> data, void callback(dynamic)) {
+    print(data);
     operations.checkHirePurchase(data, (response) {
       callback(response);
-    }, handleError);
+    }, (handleError) {
+      print(handleError.response.data);
+
+      if (handleError.response.statusCode == 400) {
+        Get.dialog(CustomDialog(
+          title: "Error",
+          confrimText: "Retry",
+          content: handleError.response.data['error'][0],
+        ));
+        productModel.clear();
+        print("This is the fault");
+      }
+    });
   }
 
   searchCart() {}

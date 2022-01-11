@@ -1,4 +1,3 @@
-import 'package:edeybe/models/product.dart';
 import 'package:edeybe/models/productModel.dart';
 import 'package:edeybe/models/subcategory.dart';
 

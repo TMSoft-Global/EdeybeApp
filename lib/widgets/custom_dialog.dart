@@ -28,7 +28,7 @@ class CustomDialog extends StatelessWidget {
           decoration: BoxDecoration(
               color: Colors.white, borderRadius: BorderRadius.circular(8.w)),
           width: Get.width / 1.4,
-          height: 160.w,
+          height: 161.w,
           child: Column(
             children: <Widget>[
               Expanded(

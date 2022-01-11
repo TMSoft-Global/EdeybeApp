@@ -9,6 +9,7 @@ import 'package:edeybe/screens/checkout_screen/checkout_screen.dart';
 import 'package:edeybe/screens/finance_product_screen/assetFinancerList.dart';
 import 'package:edeybe/screens/finance_product_screen/kyc_form.dart';
 import 'package:edeybe/screens/home_screen/cart_tab/cart_tab_bottom_bar/bottom_bar.dart';
+import 'package:edeybe/screens/home_screen/cart_tab/checkout_asset_hireP.dart';
 import 'package:edeybe/screens/home_screen/index.dart';
 import 'package:edeybe/screens/wishlist_screen/wishlist_screen.dart';
 import 'package:edeybe/utils/Debouncer.dart';
@@ -51,13 +52,16 @@ class _CartScreenTabState extends State<CartScreenTab>
   String _selectedProduct;
   List items = [0, 1, 3];
   bool showSearch = false;
+  bool _isChecked = false;
   Debouncer debounce = Debouncer();
   AnimationController _animationController;
   FocusNode _focus = new FocusNode();
   Animation _animation;
   AnimationController controller;
   Animation<double> animation;
-  List<String> _productSelectedForcheck = ["5e9c4fe443ee9d3428830539"];
+  List<String> _productSelectedForcheck = [];
+  // List<Map<String, dynamic>> _productModel = [];
+  // 5e9c4fe443ee9d3428830539
 // state functions
   void _setDeliveryLocation(text) {
     setState(() {
@@ -95,7 +99,6 @@ class _CartScreenTabState extends State<CartScreenTab>
   }
 
   void _setProduct(value) {
-    print(value);
     setState(() => _selectedProduct = value);
   }
 
@@ -120,16 +123,29 @@ class _CartScreenTabState extends State<CartScreenTab>
     ]
           ..addAll(products // <-- should be a list of user selected items
               .map<Widget>((e) => CartItem(
-                    // index: e.variants[0].,
-                    // variantId:e.discountPrice
-                    // onViewDetails: (){
-                    //   print("Asset Finance");
-                    // },
-
-                    onCkeck: Checkbox(onChanged:(v){print(v);} ,value: false,),
+                    onCkeck: Checkbox(
+                      activeColor: Get.theme.primaryColor,
+                      onChanged: (v) {
+                        setState(() {
+                          e.selectedProduct = v;
+                        });
+                        if (v) {
+                          _productSelectedForcheck.add(e.productId);
+                          _cartController.addProductHirePurchase(
+                            e,
+                            e.quantity,
+                          );
+                        } else {
+                          _productSelectedForcheck.removeWhere(
+                              (element) => element.contains(e.productId));
+                          _cartController.clearHirePurchaseProduct(e.productId);
+                        }
+                      },
+                      value: e.selectedProduct,
+                    ),
                     product: e,
                     type: type,
-                    isCheckOut: true,
+                    isCheckOut: false,
                     onRemovePressed: () => Get.dialog(CustomDialog(
                       title: S.of(context).removeItem,
                       content: S.of(context).removeItemMessage,
@@ -144,35 +160,60 @@ class _CartScreenTabState extends State<CartScreenTab>
                                     element.productId == e.productId),
                               );
                         Get.back();
+                        _productSelectedForcheck.removeWhere(
+                            (element) => element.contains(e.productId));
+                        _cartController.clearHirePurchaseProduct(e.productId);
                       },
                       cancelText: S.of(context).no,
                       confrimText: S.of(context).yes,
                     )),
                     onDecreaseQunatity: e.quantity > 1
-                        ? () => type == CartItemType.Wishlist
-                            ? _wishlistController.setQuantity(
-                                products.indexWhere((element) =>
-                                    element.productId == e.productId),
-                                -1 + (e.quantity ?? 1))
-                            : _cartController.setQuantity(
-                                products.indexWhere((element) =>
-                                    element.productId == e.productId),
-                                -1 + (e.quantity ?? 1),
-                                e.productId,
-                                variantID: e.selectedVariant)
+                        ? () {
+                            type == CartItemType.Wishlist
+                                ? _wishlistController.setQuantity(
+                                    products.indexWhere((element) =>
+                                        element.productId == e.productId),
+                                    -1 + (e.quantity ?? 1))
+                                : _cartController.setQuantity(
+                                    products.indexWhere((element) =>
+                                        element.productId == e.productId),
+                                    -1 + (e.quantity ?? 1),
+                                    e.productId,
+                                    variantID: e.selectedVariant);
+                            _cartController.productModel.clear();
+                            _productSelectedForcheck.clear();
+
+                            // if (e.selectedProduct) {
+                            //   _cartController.addProductHirePurchase(
+                            //       e, e.quantity);
+                            //   _cartController.productModel.clear();
+                            // } else {
+                            //   if (_cartController.productModel
+                            //       .contains(e.productId)) {
+                            //     _cartController.productModel.removeWhere(
+                            //         (element) =>
+                            //             element['productId'] == e.productId);
+                            //     _cartController.productModel.clear();
+                            //   }
+                            // }
+                          }
                         : () {},
-                    onIncreaseQunatity: () => type == CartItemType.Wishlist
-                        ? _wishlistController.setQuantity(
-                            products.indexWhere(
-                                (element) => element.productId == e.productId),
-                            1 + (e.quantity ?? 1))
-                        : _cartController.setQuantity(
-                            products.indexWhere(
-                                (element) => element.productId == e.productId),
-                            1 + (e.quantity ?? 1),
-                            e.productId,
-                            variantID: e.selectedVariant,
-                          ),
+                    onIncreaseQunatity: () {
+                      type == CartItemType.Wishlist
+                          ? _wishlistController.setQuantity(
+                              products.indexWhere((element) =>
+                                  element.productId == e.productId),
+                              1 + (e.quantity ?? 1))
+                          : _cartController.setQuantity(
+                              products.indexWhere((element) =>
+                                  element.productId == e.productId),
+                              1 + (e.quantity ?? 1),
+                              e.productId,
+                              variantID: e.selectedVariant,
+                            );
+                      _cartController.productModel.clear();
+                      _productSelectedForcheck.clear();
+                    },
                     onMovePressed: type == CartItemType.Wishlist
                         ? () {
                             _wishlistController.moveToCart(
@@ -619,28 +660,11 @@ class _CartScreenTabState extends State<CartScreenTab>
                                                     () => Get.offAll(
                                                         LoginScreen()),
                                                   )
-                                                : showModalBottomSheet(
-                                                    context: context,
-                                                    isScrollControlled: true,
-                                                    isDismissible: false,
-                                                    builder: (context) {
-                                                      return FractionallySizedBox(
-                                                        heightFactor: 0.9,
-                                                        child:
-                                                            AssetFinancersList(
-                                                          email: _userController
-                                                              .user.email,
-                                                          firstName:
-                                                              _userController
-                                                                  .user
-                                                                  .firstname,
-                                                          lastName:
-                                                              _userController
-                                                                  .user
-                                                                  .lastname,
-                                                        ),
-                                                      );
-                                                    });
+                                                : Get.to(
+                                                    CheckoutWithAsset_HireP(
+                                                        false,
+                                                        "Asset Finance"));
+                                                        
                                           },
                                           child: Text("With Asset Finance",
                                               style: TextStyle(
@@ -661,35 +685,19 @@ class _CartScreenTabState extends State<CartScreenTab>
                                                   color: Colors.white,
                                                 )),
                                             onPressed: () {
-                                               Get.back();
+                                              Get.back();
                                               !_userController.isLoggedIn()
                                                   ? Helper.signInRequired(
                                                       "You must sign in to checkout",
                                                       () => Get.offAll(
                                                           LoginScreen()),
                                                     )
-                                                  : _cartController
-                                                      .checkHirePurchaseProduct(
-                                                      _productSelectedForcheck
-                                                    , (val) {
-                                                      print(val);
-                                                      if (val.contains(
-                                                          "success")) {
-                                                        Get.to(KYCForm(
-                                                          email: _userController
-                                                              .user.email,
-                                                          firstName:
-                                                              _userController
-                                                                  .user
-                                                                  .firstname,
-                                                          lastName:
-                                                              _userController
-                                                                  .user
-                                                                  .lastname,
-                                                          type: "hire",
-                                                        ));
-                                                      }
-                                                    });
+                                                  : Get.to(
+                                                      CheckoutWithAsset_HireP(
+                                                          true,
+                                                          "Hire Purchase"));
+                                                        
+
                                             },
                                             child: Text(
                                               "With Hire Purchase",

@@ -10,10 +10,8 @@ import 'package:edeybe/utils/helper.dart';
 import 'package:edeybe/utils/ratingDialog.dart';
 import 'package:edeybe/utils/ratingStars.dart';
 import 'package:edeybe/widgets/ShimmerLoader.dart';
-import 'package:edeybe/widgets/custom_dialog.dart';
 import 'package:edeybe/widgets/money_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:intl/intl.dart';
 
 class CartItem extends StatelessWidget {
@@ -46,7 +44,7 @@ class CartItem extends StatelessWidget {
       this.onViewDetails,
       this.isComment = false,
       this.tappable = true,
-     @required this.onCkeck,
+      @required this.onCkeck,
       this.onRemovePressed})
       : super(key: key);
   final _productController = Get.find<ProductController>();
@@ -63,11 +61,7 @@ class CartItem extends StatelessWidget {
             },
       child: Container(
           padding: EdgeInsets.only(
-            right: 10.w,
-            top: 5.w,
-            bottom: 5.w,
-            left: isCheckOut ? 0 : 10.w
-          ),
+              right: 10.w, top: 5.w, bottom: 5.w, left: isCheckOut ? 0 : 10.w),
           decoration: BoxDecoration(
               color: Colors.white,
               border: Border(
@@ -75,7 +69,6 @@ class CartItem extends StatelessWidget {
                       color: Colors.grey.withOpacity(0.1), width: 5.w))),
           child: Stack(
             children: [
-             
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -86,7 +79,7 @@ class CartItem extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                         if (isCheckOut) onCkeck,
+                        if (isCheckOut) onCkeck,
                         Expanded(
                           flex: 2,
                           child: ShimmerLoading(
@@ -99,7 +92,9 @@ class CartItem extends StatelessWidget {
                                       color: Colors.black,
                                     )
                                   : CachedNetworkImage(
-                                      imageUrl: product.photos[0].sm,
+                                      imageUrl: product.hasVariants != null && product.hasVariants
+                                          ? product.variants[0].images[0].sm
+                                          : product.photos[0].sm,
                                       // alignment: Alignment.center,
                                       fit: BoxFit.cover,
                                     ),
@@ -185,7 +180,7 @@ class CartItem extends StatelessWidget {
                                         )
                                       : Row(
                                           mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                              MainAxisAlignment.spaceBetween,
                                           children: <Widget>[
                                             if (product.variants != null)
                                               for (var x in product.variants)
@@ -263,8 +258,6 @@ class CartItem extends StatelessWidget {
                                             if (product
                                                 .availableForHirePurchasing)
                                               banner,
-
-                                         
                                             if (type == CartItemType.Checkout)
                                               Container(
                                                 child: Text(

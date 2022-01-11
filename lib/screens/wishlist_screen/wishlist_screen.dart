@@ -47,6 +47,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                 isLoading: true,
                 product: null,
                 type: type,
+
                 onRemovePressed: () => null,
                 onDecreaseQunatity: () {},
                 onIncreaseQunatity: () => null,
@@ -55,8 +56,13 @@ class _WishlistScreenState extends State<WishlistScreen> {
     } else if (list.isNotEmpty) {
       return list
           .map<Widget>((e) => CartItem(
-                product: e,
-                type: type,
+            isLoading: false,
+            
+            isComment: false,
+                onCkeck: Container(),
+                    product: e,
+                    type: type,
+                    isCheckOut: false,
                 onRemovePressed: () => Get.dialog(CustomDialog(
                   title: S.of(context).removeItem,
                   content: S.of(context).removeItemMessage,

@@ -52,7 +52,7 @@ class CartOperation extends ServerOperations {
         var response = await uploadFile(pickedFile.path);
 
         // if (response != null) {
-          print(response);
+        print(response);
         // }
 
         // if (response.statusCode == 200) {
@@ -120,17 +120,10 @@ class CartOperation extends ServerOperations {
     dynamicRequest(
       path: "/validate-items/hire-purchase",
       schema: jsonEncode({"products_id": data}),
-      onError: (onError) {
-        if (onError.response.statusCode == 400) {
-          Get.dialog(CustomDialog(
-            title: "Error",
-            confrimText: "Retry",
-            content: onError.response.data['error'][0],
-          ));
-        }
-      },
+      onError: onError,
       showDialog: true,
       onResponse: (res) {
+        print(res);
         if (res.isEmpty) {
           onResponse("success");
         } else {
@@ -138,6 +131,23 @@ class CartOperation extends ServerOperations {
         }
       },
     );
+  }
+
+  submitHirePurchase(
+      Map<String, dynamic> data, void onResponses(String response)) {
+        print(data);
+    dynamicRequest(
+      showDialog: true,
+        path: "/submit-kyc",
+        schema: jsonEncode(data),
+        onResponse: (onResponse){
+          if(onResponse['data']['message']=="Successfull"){
+            onResponses("success");
+          }else{
+            onResponses("failed");
+
+          }
+        });
   }
 
   checkOrderStatus(

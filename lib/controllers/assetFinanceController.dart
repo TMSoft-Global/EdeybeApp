@@ -1,6 +1,7 @@
 import 'package:dio/src/dio_error.dart';
 import 'package:edeybe/interface/HTTPErrorHandler.dart';
-import 'package:edeybe/models/AssetFinanceModel.dart';
+import 'package:edeybe/models/AssetFinanceBreakdownModel.dart';
+import 'package:edeybe/models/AssetFinancersModel.dart';
 import 'package:edeybe/services/assetFinance_operations.dart';
 
 import '../index.dart';
@@ -12,30 +13,31 @@ class AssetFinanceController extends GetxController
   var serverError = false.obs;
   var canceled = false.obs;
   var assetFinance = <Financers>[].obs;
+  var assetFinanceBreakDown = <Breakdown>[].obs;
 
   @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
     getAllAssetCompanies();
-    // getCartITems();
   }
-
-  // void getAllAssetCompanies() {
-  //   operations.getAllAssetFinanceCompanies((data) {
-  //     assetFinance.addAll(data);
-  //     update();
-  //   }, handleError);
-  // }
 
   getAllAssetCompanies() {
     operations.getAllAssetFinanceCompanies((response) {
-      // print(response.length);
       assetFinance.value = response;
-
       update();
     }, handleError);
   }
+
+   getAssetBreakDown(List<Map<String, dynamic>> data,String financerID, onRes(dynamic)) {
+    operations.breakdownAssetFinance(data,financerID,(response) {
+      assetFinanceBreakDown.value = response;
+      onRes("success");
+      update();
+    }, handleError);
+  }
+
+
 
   @override
   handleError(DioError error) {

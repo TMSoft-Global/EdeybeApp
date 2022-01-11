@@ -340,25 +340,28 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               ))),
                   _biuldPaymentMethod,
                   _buildCartItem,
-                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                    TextButton(
-                        onPressed: () => Get.to(CustomWebView(
-                              title: "Term and Conditions",
-                              url: 'https://edeybe.com/m/terms-conditions',
-                            )),
-                        child: Text(
-                          "Terms and conditions applied",
-                          style: Get.theme.textTheme.bodyText2,
-                        )),
-                    Checkbox(
-                        activeColor: Get.theme.toggleableActiveColor,
-                        value: acceptTnC,
-                        onChanged: (va) {
-                          setState(() {
-                            acceptTnC = !acceptTnC;
-                          });
-                        })
-                  ])
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal:10.0),
+                    child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                      TextButton(
+                          onPressed: () => Get.to(CustomWebView(
+                                title: "Term and Conditions",
+                                url: 'https://edeybe.com/m/terms-conditions',
+                              )),
+                          child: Text(
+                            "Terms and conditions applied",
+                            style: Get.theme.textTheme.bodyText2,
+                          )),
+                      Checkbox(
+                          activeColor: Get.theme.toggleableActiveColor,
+                          value: acceptTnC,
+                          onChanged: (va) {
+                            setState(() {
+                              acceptTnC = !acceptTnC;
+                            });
+                          })
+                    ]),
+                  )
                 ],
               ),
             )));
@@ -780,7 +783,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                 ),
                                 Container(
                                   height: 40.w,
-                                  child: Text(S.of(context).addCard,
+                                  child: Text(S.of(context).addPaymentMethod,
                                       style: Get.textTheme.bodyText1
                                           .copyWith(fontSize: 16.w)),
                                 ),
