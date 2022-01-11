@@ -364,13 +364,13 @@ class _AddorEditScreenState extends State<AddorEditScreen> {
                                   Get.to(
                                       AddressMapWidget(setAddress: (address) {
                                     print(address);
-                                    if (address["GPSName"].startsWith("GA")) {
+                                    if (address["GPSName"].startsWith("G")) {
                                       setState(() {
                                         locationAddress = address['Area'];
                                         locName = address['Street'];
                                         long = address["WLong"].toString();
                                         lat = address["NLat"].toString();
-                                        gpsAddress = address[''];
+                                        // gpsAddress = address['GPSName'];
                                         // locID
                                         // _address = {
                                         //   "lat": address["NLat"],
