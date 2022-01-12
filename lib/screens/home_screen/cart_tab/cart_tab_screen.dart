@@ -6,8 +6,6 @@ import 'package:edeybe/models/productModel.dart';
 import 'package:edeybe/screens/address_screen/address_screen.dart';
 import 'package:edeybe/screens/auth_screen/login_screen.dart';
 import 'package:edeybe/screens/checkout_screen/checkout_screen.dart';
-import 'package:edeybe/screens/finance_product_screen/assetFinancerList.dart';
-import 'package:edeybe/screens/finance_product_screen/kyc_form.dart';
 import 'package:edeybe/screens/home_screen/cart_tab/cart_tab_bottom_bar/bottom_bar.dart';
 import 'package:edeybe/screens/home_screen/cart_tab/checkout_asset_hireP.dart';
 import 'package:edeybe/screens/home_screen/index.dart';
