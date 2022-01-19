@@ -37,12 +37,13 @@ class CartOperation extends ServerOperations {
       {List<Map<String, dynamic>> data,
       void onResponse(List<dynamic> response),
       void onError(DioError error)}) {
+        print({"products": data});
     dynamicRequest(
         path: "/break-down-hire-purchase",
         schema: jsonEncode({"products": data}),
         onError: onError,
         onResponse: (res) {
-          onResponse(res['data']);
+          onResponse(res['breakDowns']);
         });
   }
 

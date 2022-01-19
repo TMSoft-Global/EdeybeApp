@@ -57,12 +57,9 @@ class _WishlistScreenState extends State<WishlistScreen> {
       return list
           .map<Widget>((e) => CartItem(
             isLoading: false,
-            
             isComment: false,
-                onCkeck: Container(),
                     product: e,
                     type: type,
-                    isCheckOut: false,
                 onRemovePressed: () => Get.dialog(CustomDialog(
                   title: S.of(context).removeItem,
                   content: S.of(context).removeItemMessage,

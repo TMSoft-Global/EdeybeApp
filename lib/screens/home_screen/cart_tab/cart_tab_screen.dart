@@ -6,6 +6,8 @@ import 'package:edeybe/models/productModel.dart';
 import 'package:edeybe/screens/address_screen/address_screen.dart';
 import 'package:edeybe/screens/auth_screen/login_screen.dart';
 import 'package:edeybe/screens/checkout_screen/checkout_screen.dart';
+import 'package:edeybe/screens/finance_product_screen/assetFinancerList.dart';
+import 'package:edeybe/screens/finance_product_screen/kyc_form.dart';
 import 'package:edeybe/screens/home_screen/cart_tab/cart_tab_bottom_bar/bottom_bar.dart';
 import 'package:edeybe/screens/home_screen/cart_tab/checkout_asset_hireP.dart';
 import 'package:edeybe/screens/home_screen/index.dart';
@@ -121,29 +123,8 @@ class _CartScreenTabState extends State<CartScreenTab>
     ]
           ..addAll(products // <-- should be a list of user selected items
               .map<Widget>((e) => CartItem(
-                    onCkeck: Checkbox(
-                      activeColor: Get.theme.primaryColor,
-                      onChanged: (v) {
-                        setState(() {
-                          e.selectedProduct = v;
-                        });
-                        if (v) {
-                          _productSelectedForcheck.add(e.productId);
-                          _cartController.addProductHirePurchase(
-                            e,
-                            e.quantity,
-                          );
-                        } else {
-                          _productSelectedForcheck.removeWhere(
-                              (element) => element.contains(e.productId));
-                          _cartController.clearHirePurchaseProduct(e.productId);
-                        }
-                      },
-                      value: e.selectedProduct,
-                    ),
                     product: e,
                     type: type,
-                    isCheckOut: false,
                     onRemovePressed: () => Get.dialog(CustomDialog(
                       title: S.of(context).removeItem,
                       content: S.of(context).removeItemMessage,
@@ -160,7 +141,6 @@ class _CartScreenTabState extends State<CartScreenTab>
                         Get.back();
                         _productSelectedForcheck.removeWhere(
                             (element) => element.contains(e.productId));
-                        _cartController.clearHirePurchaseProduct(e.productId);
                       },
                       cancelText: S.of(context).no,
                       confrimText: S.of(context).yes,
@@ -659,10 +639,49 @@ class _CartScreenTabState extends State<CartScreenTab>
                                                         LoginScreen()),
                                                   )
                                                 : Get.to(
-                                                    CheckoutWithAsset_HireP(
-                                                        false,
-                                                        "Asset Finance"));
-                                                        
+                                                    AddressScreen(
+                                                        hasContinueButton: true,
+                                                        onContinuePressed: () {
+                                                          _cartController
+                                                              .addProductHirePurchase();
+                                                          _cartController
+                                                              .checkHirePurchaseProduct(
+                                                                  (dynamic) {
+                                                                  //   print( _cartController
+                                                                  // .productModel.value);
+                                                            Get.to(KYCForm(
+                                                                    email: _userController
+                                                                        .user
+                                                                        .email,
+                                                                    firstName:
+                                                                        _userController
+                                                                            .user
+                                                                            .firstname,
+                                                                    lastName: _userController
+                                                                        .user
+                                                                        .lastname,
+                                                                    type:
+                                                                        "hire",
+                                                                    isAssestFinance:
+                                                                        false,
+                                                                    products: _cartController
+                                                                        .productModel
+                                                                        .value));
+                                                            //     .whenComplete(
+                                                            //         () {
+                                                              // _cartController
+                                                              //     .productModel
+                                                            //       .clear();
+                                                            // });
+                                                          });
+                                                        }
+                                                        //   Get.to(
+                                                        // CheckoutWithAsset_HireP(
+                                                        //     false,
+                                                        //     "Asset Finance"),
+                                                        // ),
+                                                        ),
+                                                  );
                                           },
                                           child: Text("With Asset Finance",
                                               style: TextStyle(
@@ -683,6 +702,9 @@ class _CartScreenTabState extends State<CartScreenTab>
                                                   color: Colors.white,
                                                 )),
                                             onPressed: () {
+                                              _cartController
+                                                  .addProductHirePurchase();
+
                                               Get.back();
                                               !_userController.isLoggedIn()
                                                   ? Helper.signInRequired(
@@ -690,12 +712,41 @@ class _CartScreenTabState extends State<CartScreenTab>
                                                       () => Get.offAll(
                                                           LoginScreen()),
                                                     )
-                                                  : Get.to(
-                                                      CheckoutWithAsset_HireP(
-                                                          true,
-                                                          "Hire Purchase"));
-                                                        
-
+                                                  : showModalBottomSheet(
+                                                      context: context,
+                                                      isScrollControlled: true,
+                                                      isDismissible: false,
+                                                      builder: (context) {
+                                                        if (_cartController
+                                                            .productModel
+                                                            .value[0]
+                                                            .isEmpty) {
+                                                          _cartController
+                                                              .productModel
+                                                              .removeAt(0);
+                                                        }
+                                                        return FractionallySizedBox(
+                                                          heightFactor: 0.9,
+                                                          child:
+                                                              AssetFinancersList(
+                                                            email:
+                                                                _userController
+                                                                    .user.email,
+                                                            firstName:
+                                                                _userController
+                                                                    .user
+                                                                    .firstname,
+                                                            lastName:
+                                                                _userController
+                                                                    .user
+                                                                    .lastname,
+                                                            products:
+                                                                _cartController
+                                                                    .productModel
+                                                                    .value,
+                                                          ),
+                                                        );
+                                                      });
                                             },
                                             child: Text(
                                               "With Hire Purchase",

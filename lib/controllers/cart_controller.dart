@@ -12,6 +12,7 @@ import 'package:edeybe/models/deliveryCost.dart';
 import 'package:edeybe/models/deliveryModel.dart';
 import 'package:edeybe/models/productModel.dart';
 import 'package:edeybe/models/user.dart';
+import 'package:edeybe/screens/finance_product_screen/kyc_form.dart';
 import 'package:edeybe/screens/home_screen/index.dart';
 import 'package:edeybe/services/cart_operation.dart';
 import 'package:edeybe/services/imageUpload.dart';
@@ -67,21 +68,15 @@ class CartController extends GetxController implements HTTPErrorHandler {
       update();
       callback(title: inList != null ? "Item removed from cart" : inList);
     }, handleError);
-    print(items);
+    print(cartItems);
   }
 
-  addProductHirePurchase(ProductModel productId, int qty) {
-    // if (productModel.value.contains(productId)) {
-    //   productModel.add({"productId": productId.productId, "quantity": qty});
-    //   print("Item added $productModel");
-    // } else {
-    // productModel.clear();
-
-    productModel.add({"productId": productId.productId, "quantity": qty});
-    print("Not added $productModel");
-    // }
-
-    update();
+  addProductHirePurchase() {
+    productModel.clear();
+    for (var x in cartItems) {
+      productModel.add({"productId": x.productId, "quantity": x.quantity});
+    }
+    print(productModel);
   }
 
   submitHirePurchase(String name, String phone, DeliveryAddress deliveryAddress,
@@ -102,16 +97,15 @@ class CartController extends GetxController implements HTTPErrorHandler {
         Get.snackbar("Success",
             "Your request for hire purchase has successfully been submitted",
             snackPosition: SnackPosition.BOTTOM);
-            
       }
     });
   }
 
-  clearHirePurchaseProduct(String proId) {
-    productModel.removeWhere((element) => element.containsValue(proId));
-    print(productModel);
-    update();
-  }
+  // clearHirePurchaseProduct(String proId) {
+  //   productModel.removeWhere((element) => element.containsValue(proId));
+  //   print(productModel);
+  //   update();
+  // }
 
   getCartITems() {
     resetErrorState();
@@ -231,6 +225,7 @@ class CartController extends GetxController implements HTTPErrorHandler {
 
   getProductBreakdown(
       List<Map<String, dynamic>> data, Function(dynamic) onResponse) {
+        // print(data);
     operations.productBreakdown(
         data: data,
         onResponse: (val) {
@@ -250,13 +245,15 @@ class CartController extends GetxController implements HTTPErrorHandler {
     operations.checkOrderStatus(data, callback, handleError);
   }
 
-  void checkHirePurchaseProduct(List<String> data, void callback(dynamic)) {
-    print(data);
-    operations.checkHirePurchase(data, (response) {
-      callback(response);
-    }, (handleError) {
-      print(handleError.response.data);
+  void checkHirePurchaseProduct(void callback(dynamic)) {
+    List<String> itemIDList = [];
+    for (var x in cartItems) {
+      itemIDList.add(x.productId);
+    }
 
+    operations.checkHirePurchase(itemIDList, (response) {
+      callback("success");
+    }, (handleError) {
       if (handleError.response.statusCode == 400) {
         Get.dialog(CustomDialog(
           title: "Error",
