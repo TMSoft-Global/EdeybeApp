@@ -18,8 +18,10 @@ class Siren {
   Siren() {
     _initPackageInfo();
   }
-  Future<Map<String, String>> getAppInfo() async {
-    return await AppInfo().getInfo();
+  Future<dynamic> getAppInfo(callback(dynamic)) async {
+    return await AppInfo().getInfo((val){
+        callback(val);
+    });
   }
 
   updateAvailable(String latest) {
