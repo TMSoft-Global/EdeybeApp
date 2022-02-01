@@ -613,7 +613,7 @@ class _CartScreenTabState extends State<CartScreenTab>
                                                             CheckoutScreen()),
                                                   ));
                                           },
-                                          child: Text("To Checkout",
+                                          child: Text("To Pay Now",
                                               style: TextStyle(
                                                   color: Colors.white))),
                                     ),
@@ -683,7 +683,7 @@ class _CartScreenTabState extends State<CartScreenTab>
                                                         ),
                                                   );
                                           },
-                                          child: Text("With Asset Finance",
+                                          child: Text("With Hire Purchase",
                                               style: TextStyle(
                                                   color: Colors.white))),
                                     ),
@@ -749,7 +749,7 @@ class _CartScreenTabState extends State<CartScreenTab>
                                                       });
                                             },
                                             child: Text(
-                                              "With Hire Purchase",
+                                              "With Asset Finance",
                                               style: TextStyle(
                                                   color: Colors.white),
                                             )))

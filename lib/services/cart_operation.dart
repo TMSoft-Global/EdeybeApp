@@ -5,7 +5,6 @@ import 'package:dio/dio.dart';
 import 'package:edeybe/index.dart';
 import 'package:edeybe/models/deliveryCost.dart';
 import 'package:edeybe/models/productModel.dart';
-import 'package:edeybe/services/imageUpload.dart';
 import 'package:edeybe/services/server_operation.dart';
 import 'package:edeybe/widgets/custom_dialog.dart';
 import 'package:flutter/material.dart';
