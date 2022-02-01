@@ -135,7 +135,7 @@ abstract class ServerOperations {
       method = "POST",
       @required void onResponse(dynamic response),
       void onError(Response.DioError error),
-      bool showDialog = false}) async {
+      bool showDialog = false, var header}) async {
     // show loading dialog
     if (showDialog) {
       isLoading = true;
@@ -162,7 +162,7 @@ abstract class ServerOperations {
       "$_domain/api$path",
       options: Response.Options(
         method: method,
-        headers: headers,
+        headers:header == null ?  headers: header,
       ),
       data: schema != "" ? schema : null,
     )

@@ -13,6 +13,8 @@ class Siren {
     final PackageInfo info = await PackageInfo.fromPlatform();
     print(info.version);
     packageInfo = info;
+
+    await AppInfo().updateVersion(packageInfo.version, packageInfo.buildNumber, (dynamic) => null);
   }
 
   Siren() {
