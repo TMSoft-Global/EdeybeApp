@@ -60,9 +60,12 @@ class _KYCFormState extends State<KYCForm> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if (widget.products != null) {
         _cartController.getProductBreakdown(widget.products, (value) {
-          setState(() {
-            breakDown = value;
-          });
+          print(value);
+          if (value != null) {
+            setState(() {
+              breakDown = value;
+            });
+          }
         });
       }
     });

@@ -24,7 +24,7 @@ class PaymentCard {
       this.month,
       this.year,
       this.cvv,
-      this.paytype,
+      this.paytype = 0,
       this.paymode});
   factory PaymentCard.fromJson(Map<String, dynamic> json) {
     print(json);

@@ -14,8 +14,8 @@ class AssetFinanceOperations extends ServerOperations {
       method: "GET",
       onError: onError,
       onResponse: (res) {
-        print(res);
-        var data = (res['data']['financers'] as List<dynamic>)
+        // print(res);
+        var data = (res['financers'] as List<dynamic>)
             .map((dynamic i) => Financers.fromJson(i as Map<String, dynamic>))
             .toList();
         onResponse(data);
@@ -34,7 +34,7 @@ class AssetFinanceOperations extends ServerOperations {
       onError: onError,
       onResponse: (res) {
         print(res);
-        var data = (res['data'] as List<dynamic>)
+        var data = (res['data']['breakDowns'] as List<dynamic>)
             .map((dynamic i) =>
                 Breakdown.fromJson(i as Map<String, dynamic>))
             .toList();

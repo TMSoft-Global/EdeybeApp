@@ -23,12 +23,10 @@ class CartItem extends StatelessWidget {
   final VoidCallback onTrackOrder;
   final VoidCallback onViewDetails;
   final VoidCallback onRateComment;
-  final Widget onCkeck;
   final dynamic product;
   final bool isLoading;
   final bool tappable;
   final bool isComment;
-  final bool isCheckOut;
   final formatCurrency = new NumberFormat.simpleCurrency(name: "");
   CartItem(
       {Key key,
@@ -37,14 +35,12 @@ class CartItem extends StatelessWidget {
       @required this.product,
       this.onMovePressed,
       this.isLoading = false,
-      this.isCheckOut = false,
       this.onTrackOrder,
       this.onIncreaseQunatity,
       this.onDecreaseQunatity,
       this.onViewDetails,
       this.isComment = false,
       this.tappable = true,
-      @required this.onCkeck,
       this.onRemovePressed})
       : super(key: key);
   final _productController = Get.find<ProductController>();
@@ -61,7 +57,7 @@ class CartItem extends StatelessWidget {
             },
       child: Container(
           padding: EdgeInsets.only(
-              right: 10.w, top: 5.w, bottom: 5.w, left: isCheckOut ? 0 : 10.w),
+              right: 10.w, top: 5.w, bottom: 5.w, left: 10.w),
           decoration: BoxDecoration(
               color: Colors.white,
               border: Border(
@@ -79,7 +75,6 @@ class CartItem extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        if (isCheckOut) onCkeck,
                         Expanded(
                           flex: 2,
                           child: ShimmerLoading(
@@ -92,7 +87,7 @@ class CartItem extends StatelessWidget {
                                       color: Colors.black,
                                     )
                                   : CachedNetworkImage(
-                                      imageUrl: product.hasVariants != null && product.hasVariants
+                                      imageUrl: product.hasVariants != null && product.hasVariants && product.variants[0].images != null
                                           ? product.variants[0].images[0].sm
                                           : product.photos[0].sm,
                                       // alignment: Alignment.center,

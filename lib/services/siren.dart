@@ -13,13 +13,17 @@ class Siren {
     final PackageInfo info = await PackageInfo.fromPlatform();
     print(info.version);
     packageInfo = info;
+
+    await AppInfo().updateVersion(packageInfo.version, packageInfo.buildNumber, (dynamic) => null);
   }
 
   Siren() {
     _initPackageInfo();
   }
-  Future<Map<String, String>> getAppInfo() async {
-    return await AppInfo().getInfo();
+  Future<dynamic> getAppInfo(callback(dynamic)) async {
+    return await AppInfo().getInfo((val){
+        callback(val);
+    });
   }
 
   updateAvailable(String latest) {

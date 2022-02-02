@@ -1,15 +1,12 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:edeybe/controllers/address_controller.dart';
 import 'package:edeybe/index.dart';
 import 'package:edeybe/models/deliveryModel.dart';
-import 'package:edeybe/screens/address_screen/address_screen.dart';
 import 'package:edeybe/services/server_operation.dart';
 import 'package:flutter/material.dart';
 
 class AddressOperations extends ServerOperations {
-  // final _addressController = Get.put(AddressController());
   String path = "/account/deliveryaddresses";
   addAddressRequest(Map data, Function(dynamic address) onResponse) {
     print(data);

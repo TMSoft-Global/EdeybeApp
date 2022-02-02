@@ -138,6 +138,8 @@ class _AddCardScreenState extends State<AddCardScreen> {
   }
 
   void savePaymentMethod() {
+    print(widget.card);
+    print("-----------------${_paymentCard.paytype}");
     final FormState form = _formKey.currentState;
     if (form.validate()) {
       form.save();

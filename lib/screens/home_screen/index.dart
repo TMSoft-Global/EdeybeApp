@@ -69,7 +69,7 @@ class _HomeIndexState extends State<HomeIndex> {
         cancelPressed: ()=>Navigator.pop(context),
       )),
       child: Scaffold(
-        body: PageView(
+        body:  PageView(
           onPageChanged: (i) => setState(() {
             current = i;
           }),

@@ -68,15 +68,18 @@ class _SplashScreenState extends State<SplashScreen>
     )..repeat(reverse: true);
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) async {
       var siren = new Siren();
-      var info = await siren.getAppInfo();
-      if (info.containsKey("success")) {
-        var data = info["success"] as Map;
-        var forceUpdate = siren.updateAvailable(
-            PlatformCheck.isIOS ? data["iosVersion"] : data["androidVersion"]);
-        if (forceUpdate) {
-          siren.forceUpdateAlert(context);
+      var info = await siren.getAppInfo((val) {
+        if (val.containsKey("success")) {
+          var data = val["success"] as Map;
+          var forceUpdate = siren.updateAvailable(PlatformCheck.isIOS
+              ? data["iosVersion"]
+              : data["androidVersion"]);
+          if (forceUpdate) {
+            siren.forceUpdateAlert(context);
+          }
         }
-      }
+      });
+      // print("=====================================${info['success']}");
     });
     super.initState();
   }
