@@ -24,7 +24,6 @@ class _SplashScreenState extends State<SplashScreen>
 // Set default `_initialized` and `_error` state to false
   bool _initialized = false;
   bool _error = false;
-  // String name = "Bismark";
 
   // Define an async function to initialize FlutterFire
   void initializeFlutterFire() async {
@@ -40,7 +39,6 @@ class _SplashScreenState extends State<SplashScreen>
 
       var _cookie = GetStorage().read("cookie");
       if (_cookie != null) {
-        // print(_cookie);
         _userController.loginFromBase();
       } else {
         var token = await GetStorage().read("anony-cookie");
@@ -79,7 +77,6 @@ class _SplashScreenState extends State<SplashScreen>
           }
         }
       });
-      // print("=====================================${info['success']}");
     });
     super.initState();
   }

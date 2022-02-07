@@ -52,9 +52,7 @@ Future<Map<String, dynamic>> setFirebase(
   _firebaseMessaging.getToken().then((String token) {
     dispatchService(token);
     noti(token);
-    // print("Push Messaging token: $token");
     sendToken(token);
-    // Push messaging to this token later
   });
   return completer.future;
 }
@@ -87,10 +85,10 @@ Future<String> onSelect(String data) async {
 
 //updated firebaseMessageHandler
 Future<void> firebaseMessageHandler(RemoteMessage message) async {
+  print(message.data);
   Map<String, dynamic> messageData = json.decode(message.data["data"]);
   print(messageData);
   int msgId = int.tryParse(message.data["msgId"].toString()) ?? 0;
-  // print(message["data"]);
   var androidPlatformChannelSpecifics = AndroidNotificationDetails(
        'PROMO', 'Edeybe Notifications',
       color: Colors.blue.shade800,

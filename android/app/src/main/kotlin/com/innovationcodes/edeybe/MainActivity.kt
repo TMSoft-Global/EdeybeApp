@@ -1,5 +1,5 @@
   
-package com.payswitch.edeybe
+package com.payswitch.edeybe.app
 
 import io.flutter.embedding.android.FlutterActivity
 
