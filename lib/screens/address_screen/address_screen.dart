@@ -49,7 +49,7 @@ class _AddressScreenState extends State<AddressScreen> {
                               backgroundColor: Get.theme.primaryColor,
                               // disabledColor: Constants.themeGreyLight,
                               onSurface:
-                                  Get.theme.primaryColor.withOpacity(0.5.w),
+                                  Get.theme.primaryColor.withOpacity(0.5),
                             ),
                             child: Text(
                               "${S.of(context).continueText.toUpperCase()}",

@@ -11,6 +11,8 @@ class ConfigurationScreen extends StatelessWidget {
   final _userController = Get.find<UserController>();
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -163,17 +165,21 @@ class ConfigurationScreen extends StatelessWidget {
             height: 12.h,
           ),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.w),
-            child: TextButton(
-              onPressed: () {
-                Get.to(LoginScreen());
-              },
-              style: TextButton.styleFrom(
-                textStyle: TextStyle(color: Colors.white),
-                backgroundColor: Get.theme.primaryColor,
-              ),
-              child: Text(
-                S.of(context).signIn,
+            padding: EdgeInsets.symmetric(horizontal: 20.w, ),
+            child: SizedBox(
+              height:size.width > 1000 ? 30.h : 45.h,
+              child: TextButton(
+                onPressed: () {
+                  Get.to(LoginScreen());
+                },
+                style: TextButton.styleFrom(
+                  textStyle: TextStyle(color: Colors.white),
+                  backgroundColor: Get.theme.primaryColor,
+                ),
+                child: Text(
+                  S.of(context).signIn,
+                  style: TextStyle(color: Colors.white,fontSize:size.width > 1000 ? 8.w : 15.w),
+                ),
               ),
             ),
           ),

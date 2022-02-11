@@ -123,48 +123,54 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           // ),
         ],
       ),
-      bottomNavigationBar: Obx(() => ProductDetailsBottomBar(
-            onSetQuantity: (value) {
-              setState(() {
-                _productController.setQuantity(value);
-              });
-            },
-            onAddToCart: _productController.productDetail != null
-                ? () {
-                    _cartController
-                        .addToCart(_productController.productDetail?.value, (
-                            {String title}) {
-                      if (Get.isDialogOpen) {
-                        Get.back();
-                      }
-                      Get.dialog(
-                        CartDialog(
-                            title: title,
-                            type: CartItemType.Cart,
-                            onGoForward: () => _userCtrler.isLoggedIn()
-                                ? Get.off(CheckoutScreen())
-                                : Get.offAll(LoginScreen()),
-                            productTitle: _productController
-                                .productDetail.value.productName,
-                            cartTotal: formatCurrency.format(
-                                _cartController.cartItems.fold(
-                                    0,
-                                    (previousValue, element) =>
-                                        discountedVarianAmount != 0
-                                            ? discountedVarianAmount
-                                            : variantAmount != 0
-                                                ? variantAmount
-                                                : element.hasDiscount
-                                                    ? element.discountPrice
-                                                    : element.price +
-                                                        previousValue))),
-                        barrierDismissible: true,
-                      );
-                    }, variantID: variantID);
-                  }
-                : null,
-            quantity: _productController.productDetail.value?.quantity,
-          )),
+      bottomNavigationBar: Container(
+        height: 100,
+        child: Obx(() =>     ProductDetailsBottomBar(
+              onSetQuantity: (value) {
+                setState(() {
+                  _productController.setQuantity(value);
+                });
+              },
+              onAddToCart: _productController.productDetail != null
+                  ? () {
+                      _cartController
+                          .addToCart(_productController.productDetail?.value, (
+                              {String title}) {
+                        if (Get.isDialogOpen) {
+                          Get.back();
+                        }
+                        Get.dialog(
+                          CartDialog(
+                              title: title,
+                              type: CartItemType.Cart,
+                              onGoForward: () => _userCtrler.isLoggedIn()
+                                  ? Get.off(CheckoutScreen())
+                                  : Get.offAll(LoginScreen()),
+                              productTitle: _productController
+                                  .productDetail.value.productName,
+                              cartTotal: formatCurrency.format(
+                                  _cartController.cartItems.fold(
+                                      0,
+                                      (previousValue, element) =>
+                                          discountedVarianAmount != 0
+                                              ? discountedVarianAmount
+                                              : variantAmount != 0
+                                                  ? variantAmount
+                                                  : element.hasDiscount
+                                                      ? element.discountPrice
+                                                      : element.price +
+                                                          previousValue))),
+                          barrierDismissible: true,
+                        );
+                      }, variantID: variantID);
+                    }
+                  : null,
+              quantity: _productController.productDetail.value?.quantity,
+            )),
+    
+      ),
+  
+  
       body: Shimmer(
           linearGradient: Constants.shimmerGradient,
           child: GetBuilder<ProductController>(
@@ -380,7 +386,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                     padding: EdgeInsets.fromLTRB(
                                         10.w, 2.w, 10.w, 2.w),
                                     color: Get.theme.primaryColor
-                                        .withOpacity(0.2.w),
+                                        .withOpacity(0.2),
                                     borderColor: Colors.transparent,
                                     child: Text(
                                       "${_productStl.productDetail.value.percentageDiscount} % ${S.of(context).off}",

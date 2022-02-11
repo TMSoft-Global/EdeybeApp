@@ -71,7 +71,7 @@ class ProductDetailsBottomBar extends StatelessWidget {
                   backgroundColor: Get.theme.primaryColor,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.w)),
-                  onSurface: Get.theme.primaryColor.withOpacity(.5.w),
+                  onSurface: Get.theme.primaryColor.withOpacity(0.5),
                 ),
                 child: Text(
                   S.of(context).addToCart.toUpperCase(),
@@ -80,6 +80,8 @@ class ProductDetailsBottomBar extends StatelessWidget {
                 onPressed: onAddToCart,
               ),
             )
+          
+          
           ],
         ),
       ),

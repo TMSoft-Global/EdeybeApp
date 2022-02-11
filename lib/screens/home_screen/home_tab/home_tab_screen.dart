@@ -119,6 +119,9 @@ class _HomeScreenTabState extends State<HomeScreenTab>
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    print(size.height);
+    print(size.width);
     return RefreshIndicator(
       onRefresh: refreshList,
       key: refreshKey,
@@ -362,7 +365,7 @@ class _HomeScreenTabState extends State<HomeScreenTab>
       onTap: _buyAirtime,
       child: Container(
         margin: EdgeInsets.only(bottom: 5.w),
-        width: Get.width.w,
+        width: MediaQuery.of(context).size.width,
         height: 50.w,
         decoration: BoxDecoration(
             boxShadow: [
@@ -373,7 +376,8 @@ class _HomeScreenTabState extends State<HomeScreenTab>
                   blurRadius: 3.0)
             ],
             image: DecorationImage(
-                image: AssetImage('assets/images/airtime_btn_background.png'))),
+              fit: BoxFit.fitWidth,
+                image: AssetImage('assets/images/airtime_btn_background.png',))),
       ),
     );
   }

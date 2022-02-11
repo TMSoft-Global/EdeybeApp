@@ -217,7 +217,7 @@ class _CartDialogState extends State<CartDialog>
                                             BorderRadius.circular(8.w)),
                                     backgroundColor: Get.theme.primaryColor,
                                     onSurface: Get.theme.primaryColor
-                                        .withOpacity(0.5.w),
+                                        .withOpacity(0.5),
                                   ),
                                   child: Text(
                                     widget.type == CartItemType.Wishlist

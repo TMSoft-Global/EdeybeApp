@@ -36,6 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Scaffold(
         body: KeyboardActions(
       config: _buildConfig(context),
@@ -56,6 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 S.of(context).welcome,
                 textAlign: TextAlign.center,
                 style: Get.textTheme.headline5,
+                // maxFontSize: size.width > 1000 ? 50:30,
                 maxLines: 1,
               ),
               AutoSizeText(
@@ -149,23 +151,29 @@ class _LoginScreenState extends State<LoginScreen> {
                       SizedBox(
                         height: 16.h,
                       ),
-                      TextButton(
-                        style: TextButton.styleFrom(
-                            backgroundColor: Get.theme.primaryColor,
-                            textStyle: TextStyle(
-                              color: Colors.white,
-                            )),
-                        onPressed: () {
-                          if (_key.currentState.validate()) {
-                            _key.currentState.save();
-                            userController.login(
-                              username: _mail,
-                              password: _password,
-                            );
-                          }
-                        },
-                        child: Text(
-                          S.of(context).signIn,
+                      SizedBox(
+                        height:size.width > 1000 ? 35.h : 45.h,
+                        child: TextButton(
+                          style: TextButton.styleFrom(
+                              backgroundColor: Get.theme.primaryColor,
+                              textStyle: TextStyle(
+                                color: Colors.white,
+                              )),
+                          onPressed: () {
+                            if (_key.currentState.validate()) {
+                              _key.currentState.save();
+                              userController.login(
+                                username: _mail,
+                                password: _password,
+                              );
+                            }
+                          },
+                          child: Text(
+                            S.of(context).signIn,
+                            style: TextStyle(fontSize:size.width > 1000 ? 12.w : 15,
+                             color: Colors.white,
+                            ),
+                          ),
                         ),
                       )
                     ],
@@ -175,34 +183,39 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(
                 height: 4.h,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  TextButton(
-                    onPressed: () {
-                      Get.to(ForgotPassword());
-                    },
-                    style: TextButton.styleFrom(
-                        textStyle: TextStyle(
-                      color: Get.theme.primaryColor,
-                    )),
-                    child: Text(
-                      S.of(context).forgetPassword,
+              Padding(
+                padding:  EdgeInsets.symmetric(horizontal:20.0.w),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    TextButton(
+                      onPressed: () {
+                        Get.to(ForgotPassword());
+                      },
+                      style: TextButton.styleFrom(
+                          textStyle: TextStyle(
+                        color: Get.theme.primaryColor,
+                        fontSize: 15.w
+                      )),
+                      child: Text(
+                        S.of(context).forgetPassword,
+                      ),
                     ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Get.off(RegisterScreen());
-                    },
-                    style: TextButton.styleFrom(
-                        textStyle: TextStyle(
-                      color: Get.theme.primaryColor,
-                    )),
-                    child: Text(
-                      S.of(context).createAccount,
-                    ),
-                  )
-                ],
+                    TextButton(
+                      onPressed: () {
+                        Get.off(RegisterScreen());
+                      },
+                      style: TextButton.styleFrom(
+                          textStyle: TextStyle(
+                        color: Get.theme.primaryColor,
+                         fontSize: 15.w
+                      )),
+                      child: Text(
+                        S.of(context).createAccount,
+                      ),
+                    )
+                  ],
+                ),
               ),
               TextButton(
                 onPressed: () {
@@ -210,6 +223,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 },
                 child: Text(
                   S.of(context).skip,
+                    style: TextStyle(
+                         fontSize: 15.w
+                      )
                 ),
               )
             ],

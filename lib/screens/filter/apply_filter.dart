@@ -32,7 +32,7 @@ class ApplyFillterBottomBar extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.w)),
                   backgroundColor: Get.theme.primaryColor,
-                  onSurface: Get.theme.primaryColor.withOpacity(0.5.w),
+                  onSurface: Get.theme.primaryColor.withOpacity(0.5),
                 ),
                 child: Center(
                   child: Text(

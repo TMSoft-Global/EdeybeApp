@@ -124,7 +124,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   backgroundColor: canPlaceOrder()
                       ? Get.theme.primaryColor
                       : Constants.themeGreyLight,
-                  onSurface: Get.theme.primaryColor.withOpacity(0.5.w),
+                  onSurface: Get.theme.primaryColor.withOpacity(0.5),
                 ),
                 child: Text(
                   S.of(context).placeOrder.toUpperCase(),
@@ -935,13 +935,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             padding: EdgeInsets.only(left: 8.0.w, top: 8.0.w),
             child: ButtonTheme(
               minWidth: Get.width,
-              height: 35.w,
+              height: 45.w,
               child: TextButton(
                 style: TextButton.styleFrom(
                   backgroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                       side: BorderSide(color: Get.theme.primaryColor),
-                      borderRadius: BorderRadius.circular(8.w)),
+                      borderRadius: BorderRadius.circular(8)),
                 ),
                 child: Text(
                   state != null

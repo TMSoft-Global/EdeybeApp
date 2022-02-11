@@ -43,6 +43,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       body: KeyboardActions(
           config: _buildConfig(context),
@@ -236,24 +237,31 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           SizedBox(
                             height: 16.h,
                           ),
-                          TextButton(
-                            style: TextButton.styleFrom(
-                                backgroundColor: Get.theme.primaryColor,
-                                textStyle: TextStyle(color: Colors.white)),
-                            onPressed: () {
-                              if (_key.currentState.validate()) {
-                                _key.currentState.save();
-                                userController.register(
-                                  firstName: _firstName,
-                                  lastName: _lastName,
-                                  email: _email,
-                                  password: _password,
-                                  confirmPass: _confirmPass
-                                );
-                              }
-                            },
-                            child: Text(
-                              S.of(context).signup,
+                          SizedBox(
+                            height:size.width > 1000 ? 35.h : 45.h,
+                            child: TextButton(
+                              style: TextButton.styleFrom(
+                                  backgroundColor: Get.theme.primaryColor,
+                                  textStyle: TextStyle(color: Colors.white)),
+                              onPressed: () {
+                                if (_key.currentState.validate()) {
+                                  _key.currentState.save();
+                                  userController.register(
+                                    firstName: _firstName,
+                                    lastName: _lastName,
+                                    email: _email,
+                                    password: _password,
+                                    confirmPass: _confirmPass
+                                  );
+                                }
+                              },
+                              child: Text(
+                                S.of(context).signup,
+                                style: TextStyle(
+                                  fontSize:size.width > 1000 ? 12.w: 15.w,
+                                  color: Colors.white
+                                ),
+                              ),
                             ),
                           )
                         ],
@@ -266,7 +274,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      AutoSizeText(S.of(context).haveAnAccount),
+                      AutoSizeText(S.of(context).haveAnAccount, ),
                       TextButton(
                         onPressed: () {
                           Get.off(LoginScreen());
@@ -277,6 +285,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         )),
                         child: Text(
                           S.of(context).signIn,
+                          style: TextStyle(
+                                  fontSize:size.width > 1000 ? 7.w: 15.w,
+                                
+                                ),
                         ),
                       )
                     ],
