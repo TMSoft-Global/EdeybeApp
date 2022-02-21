@@ -131,7 +131,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   _productController.setQuantity(value);
                 });
               },
-              onAddToCart: _productController.productDetail != null
+              notAvailable: !_productController.productDetail.value.status.instock,
+              onAddToCart: _productController.productDetail != null && _productController.productDetail.value.status.instock
                   ? () {
                       _cartController
                           .addToCart(_productController.productDetail?.value, (

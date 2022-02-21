@@ -2,6 +2,7 @@ import 'package:edeybe/index.dart';
 import 'package:edeybe/models/productModel.dart' as Pro;
 // import 'package:edeybe/models/product.dart' as ProductModel;
 import 'package:edeybe/utils/constant.dart';
+import 'package:edeybe/utils/encryption.dart';
 import 'package:edeybe/widgets/ShimmerLoader.dart';
 import 'package:edeybe/widgets/money_widget.dart';
 import 'package:edeybe/widgets/capsule.dart';
@@ -37,7 +38,7 @@ class ProductCard extends StatelessWidget {
   final double width;
   final double padding;
   final int raters;
-   var discount;
+  var discount;
   final Function onViewDetails;
   final VoidCallback onAddToWishList;
   final formatCurrency = new NumberFormat.simpleCurrency(name: "");
@@ -159,19 +160,61 @@ class ProductCard extends StatelessWidget {
                                   )
                                 : Row(
                                     children: <Widget>[
-                                      Text(
-                                        formatCurrency.format(price),
-                                        maxLines: 2,
-                                        style: TextStyle(
-                                            fontSize: 16.w,
-                                            fontWeight: FontWeight.w800),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
                                       MoneyWidget(
-                                        offset: Offset(4, 2),
-                                        scalefactor: 0.7,
-                                        fontWeight: FontWeight.w500,
-                                      )
+                                        offset: Offset(5, 0.1),
+                                        scalefactor: 0.9,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15,
+                                        currencyFirst: true,
+                                      ),
+                                      // if (price.toString().contains("."))
+                                      //   Row(
+                                      //     children: [
+                                      //       Text(
+                                      //         price.toString(),
+                                      //         maxLines: 2,
+                                      //         style: TextStyle(
+                                      //             fontSize: 16.w,
+                                      //             fontWeight: FontWeight.w800),
+                                      //         overflow: TextOverflow.ellipsis,
+                                      //       ),
+                                      //       Padding(
+                                      //         padding: const EdgeInsets.only(
+                                      //             bottom: 8.0, top: 3),
+                                      //         child: Text(
+                                      //           "${hasDecimal(price.toString())}",
+                                      //           style: TextStyle(
+                                      //               fontSize: 10.w,
+                                      //               fontWeight:
+                                      //                   FontWeight.w800),
+                                      //           overflow: TextOverflow.ellipsis,
+                                      //         ),
+                                      //       ),
+                                      //     ],
+                                      //   ),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            hasDecimalMain(price.toString()),
+                                            maxLines: 2,
+                                            style: TextStyle(
+                                                fontSize: 16.w,
+                                                fontWeight: FontWeight.w800),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 8.0, top: 3),
+                                            child: Text(
+                                              "${hasDecimal(price.toString())}",
+                                              style: TextStyle(
+                                                  fontSize: 10.w,
+                                                  fontWeight: FontWeight.w800),
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ],
                                   )),
                         if (hasDiscount)
@@ -215,7 +258,6 @@ class ProductCard extends StatelessWidget {
                           child: Text(
                             "$discount % ${S.of(context).off}",
                             overflow: TextOverflow.ellipsis,
-                            
                             style: Get.textTheme.bodyText1.copyWith(
                                 color: Constants.lightGreen, fontSize: 10.w),
                           ),

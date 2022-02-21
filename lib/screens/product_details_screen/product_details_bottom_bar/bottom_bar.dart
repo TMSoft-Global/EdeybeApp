@@ -5,11 +5,13 @@ class ProductDetailsBottomBar extends StatelessWidget {
   final Function onSetQuantity;
   final Function onAddToCart;
   final int quantity;
+  bool notAvailable = false;
   ProductDetailsBottomBar({
     Key key,
     @required this.onAddToCart,
     @required this.onSetQuantity,
     @required this.quantity,
+    @required this.notAvailable
   }) : super(key: key);
   final List quatityList = [1, 2, 3, 4, 5, 6];
   @override
@@ -20,7 +22,7 @@ class ProductDetailsBottomBar extends StatelessWidget {
       child: Center(
         child: Row(
           children: <Widget>[
-            Expanded(
+          !notAvailable?  Expanded(
               flex: 1,
               child: Container(
                 constraints: BoxConstraints(minHeight: 30.w, maxHeight: 55.w),
@@ -63,7 +65,7 @@ class ProductDetailsBottomBar extends StatelessWidget {
                   ],
                 ),
               ),
-            ),
+            ): Container(height: 60.w,),
             Expanded(
               flex: 4,
               child: TextButton(
@@ -74,7 +76,7 @@ class ProductDetailsBottomBar extends StatelessWidget {
                   onSurface: Get.theme.primaryColor.withOpacity(0.5),
                 ),
                 child: Text(
-                  S.of(context).addToCart.toUpperCase(),
+                 notAvailable ? "🚫  Not Available": S.of(context).addToCart.toUpperCase(),
                   style: TextStyle(color: Colors.white),
                 ),
                 onPressed: onAddToCart,

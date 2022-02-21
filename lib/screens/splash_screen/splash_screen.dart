@@ -1,8 +1,6 @@
 import 'package:edeybe/controllers/search_controller.dart';
 import 'package:edeybe/controllers/user_controller.dart';
-import 'package:edeybe/encryption/encryptData.dart';
 import 'package:edeybe/index.dart';
-import 'package:edeybe/screens/configuration_screen/config_screen.dart';
 import 'package:edeybe/screens/home_screen/index.dart';
 import 'package:edeybe/services/firebase_notification.dart';
 import 'package:edeybe/services/siren.dart';
@@ -58,26 +56,29 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void initState() {
     initializeFlutterFire();
-    // MyEncryptionDecryption.encryptData();
-    // MyEncryptionDecryption.decryptAES(MyEncryptionDecryption.encryptAES(name));
-    _animation = AnimationController(
-      vsync: this,
-      duration: Duration(seconds: 1),
-    )..repeat(reverse: true);
-    SchedulerBinding.instance.addPostFrameCallback((timeStamp) async {
+     SchedulerBinding.instance.addPostFrameCallback((timeStamp) async {
       var siren = new Siren();
-      var info = await siren.getAppInfo((val) {
+      await siren.getAppInfo((val) {
+        print(val);
         if (val.containsKey("success")) {
-          var data = val["success"] as Map;
+          var data = val["success"];
           var forceUpdate = siren.updateAvailable(PlatformCheck.isIOS
               ? data["iosVersion"]
               : data["androidVersion"]);
+          print(forceUpdate);
           if (forceUpdate) {
-            siren.forceUpdateAlert(context);
+            // if (mounted) {
+              siren.forceUpdateAlert(context);
+            // }
           }
         }
       });
     });
+     _animation = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 1),
+    )..repeat(reverse: true);
+  
     super.initState();
   }
 

@@ -232,6 +232,7 @@ class _HomeScreenTabState extends State<HomeScreenTab>
               itemCount: bannerUrl.length,
               autoPlay: true,
               containerHeight: 150.w,
+              
               itemBuilder: (context, ind) => Image(
                 width: Get.width.w,
                 image: CachedNetworkImageProvider(

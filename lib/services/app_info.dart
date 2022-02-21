@@ -10,9 +10,9 @@ class AppInfo extends ServerOperations {
       method: "GET",
       onResponse: (res) {
         print(res);
-        Map<String, String> resData = {};
+        Map resData = {};
         if (res.isNotEmpty) {
-          resData = jsonDecode(res);
+          resData = res;
           callback(res);
         }
         return resData;

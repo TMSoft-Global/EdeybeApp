@@ -1,9 +1,9 @@
 class RatingCommentModel {
-  double productRating;
-  int totalRating;
+  var productRating;
+  var totalRating;
   List<Ratings> ratings;
   BreakDownRatings breakDownRatings;
-  int totalRatingWithoutComment;
+  var totalRatingWithoutComment;
 
   RatingCommentModel(
       {this.productRating,

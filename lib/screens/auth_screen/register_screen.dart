@@ -96,7 +96,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             validator: (value) {
                               return (value.isNotEmpty)
                                   ? null
-                                  : S.of(context).invalidMail;
+                                  : "Firtsname required";
                             },
                             onSaved: (newValue) => _firstName = newValue,
                             style: TextStyle(fontSize: 15.w),
@@ -121,7 +121,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             validator: (value) {
                               return (value.isNotEmpty)
                                   ? null
-                                  : S.of(context).invalidMail;
+                                  : "Lastname required";
                             },
                             onSaved: (newValue) => _lastName = newValue,
                             style: TextStyle(fontSize: 14.w),

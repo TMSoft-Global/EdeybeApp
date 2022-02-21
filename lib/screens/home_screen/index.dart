@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:edeybe/controllers/address_controller.dart';
 import 'package:edeybe/controllers/cart_controller.dart';
 import 'package:edeybe/controllers/category_controller.dart';
@@ -8,6 +10,7 @@ import 'package:edeybe/controllers/wishlist_controller.dart';
 import 'package:edeybe/screens/home_screen/cart_tab/cart_tab_screen.dart';
 import 'package:edeybe/screens/home_screen/home_tab/home_tab_screen.dart';
 import 'package:edeybe/screens/home_screen/profile_screen_tab/profile_screen.dart';
+import 'package:edeybe/screens/promoBanner.dart';
 import 'package:edeybe/widgets/custom_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:edeybe/index.dart';
@@ -31,11 +34,13 @@ class _HomeIndexState extends State<HomeIndex> {
   var _userCtrl = Get.find<UserController>();
   var categoryContoller = Get.put(CategoryController());
   List<Widget> children = [];
+  bool hasBanner = true;
   PageController pageController = PageController();
   @override
   void initState() {
     super.initState();
     current = widget.indexPage;
+    if (hasBanner) _showDiscountBanner();
   }
 
   @override
@@ -55,6 +60,17 @@ class _HomeIndexState extends State<HomeIndex> {
     _userCtrl.page.value = 1;
   }
 
+  _showDiscountBanner() {
+    Timer(Duration(seconds: 10), () {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        Get.dialog(
+          PromoBanner(),
+          barrierDismissible: false,
+        );
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -66,10 +82,10 @@ class _HomeIndexState extends State<HomeIndex> {
           Navigator.of(context).pop(true);
           return true;
         },
-        cancelPressed: ()=>Navigator.pop(context),
+        cancelPressed: () => Navigator.pop(context),
       )),
       child: Scaffold(
-        body:  PageView(
+        body: PageView(
           onPageChanged: (i) => setState(() {
             current = i;
           }),

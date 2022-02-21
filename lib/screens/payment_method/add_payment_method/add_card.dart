@@ -39,6 +39,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
   PaymentCard _paymentCard = new PaymentCard();
   TextStyle style = TextStyle(fontSize: 14.w);
   bool checkoutInProgress = false;
+  bool hideButton = false;
   String _voucherCode;
   String _selectedCard;
   int _payMethod = 0;
@@ -140,14 +141,21 @@ class _AddCardScreenState extends State<AddCardScreen> {
   void savePaymentMethod() {
     print(widget.card);
     print("-----------------${_paymentCard.paytype}");
+
     final FormState form = _formKey.currentState;
     if (form.validate()) {
+      setState(() {
+        hideButton = true;
+      });
       form.save();
       widget.card == null
           ? _paymentMethodController.verify(_paymentCard)
           : _paymentMethodController.eidtPaymentMethod(_paymentCard);
       if (widget.callback != null) {
         widget.callback();
+        setState(() {
+          hideButton = false;
+        });
       } else {
         Get.back();
       }
@@ -356,7 +364,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
                           // onFieldSubmitted: (String text) {
                           //   onDone();
                           // },
-                          
+
                           onSaved: _setCardExpireDate,
                           validator: CardUtils.validateDate,
                           decoration: InputDecoration(
@@ -401,7 +409,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
                               //   onDone();
                               // },
                               onSaved: _setCardCVV,
-                          
+
                               validator: CardUtils.validateCVV,
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(
@@ -454,11 +462,13 @@ class _AddCardScreenState extends State<AddCardScreen> {
                 backgroundColor: Get.theme.primaryColor,
                 onSurface: Get.theme.primaryColor.withOpacity(0.5.w),
               ),
-              child: Text(
-                "${S.of(context).savePayementMethod.toUpperCase()}",
-                style: TextStyle(color: Colors.white),
-              ),
-              onPressed: savePaymentMethod,
+              child: hideButton
+                  ? CircularProgressIndicator( color: Get.theme.indicatorColor,)
+                  : Text(
+                      "${S.of(context).savePayementMethod.toUpperCase()}",
+                      style: TextStyle(color: Colors.white),
+                    ),
+              onPressed: hideButton ? null : savePaymentMethod,
             ),
           ),
         ),
@@ -592,7 +602,9 @@ class _AddCardScreenState extends State<AddCardScreen> {
                                   ),
                                   borderRadius: BorderRadius.circular(5.w)),
                               contentPadding: EdgeInsets.all(10.w),
-                              hintText: _payMethod==1 ? S.of(context).cardHolderName : "Name",
+                              hintText: _payMethod == 1
+                                  ? S.of(context).cardHolderName
+                                  : "Name",
                               floatingLabelBehavior:
                                   FloatingLabelBehavior.never,
                               hintStyle: TextStyle(fontSize: 14.w),

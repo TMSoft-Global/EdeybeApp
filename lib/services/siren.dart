@@ -44,7 +44,7 @@ class Siren {
                 Icon(Icons.info),
                 Padding(
                   padding: EdgeInsets.only(left: 5),
-                  child: Text("App Version Update"),
+                  child: Text("App Version Update", style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),),
                 )
               ]),
             ),

@@ -2,6 +2,7 @@ import 'package:edeybe/controllers/address_controller.dart';
 import 'package:edeybe/controllers/cart_controller.dart';
 import 'package:edeybe/controllers/user_controller.dart';
 import 'package:edeybe/index.dart';
+import 'package:edeybe/screens/promoBanner.dart';
 import 'package:edeybe/screens/splash_screen/splash_screen.dart';
 import 'package:edeybe/utils/AppTheme.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +47,7 @@ class _EdeybeAppState extends State<EdeybeApp> {
               GlobalWidgetsLocalizations.delegate,
             ],
             home: SplashScreen(),
-            // home: MyHomePage(),
+            // home: PromoBanner(),
             supportedLocales: S.delegate.supportedLocales,
             // locale: DevicePreview.of(context).locale, // <--- Add the locale
             // builder: DevicePreview.appBuilder,
