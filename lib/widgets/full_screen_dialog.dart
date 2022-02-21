@@ -49,7 +49,7 @@ class FullScreenDialog extends StatelessWidget {
           Expanded(
               flex: 1,
               child: Container(
-                width: state == null ? Get.width / 1.6.w : (Get.width - 40).w,
+                width: Get.width / 1.6,
                 padding: EdgeInsets.all(20.w),
                 alignment: Alignment.topCenter,
                 child: message,

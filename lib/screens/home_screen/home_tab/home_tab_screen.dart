@@ -46,16 +46,11 @@ class _HomeScreenTabState extends State<HomeScreenTab>
   void initState() {
     super.initState();
     bannerUrl = [
-      // "${bannersBaseURL}banner1.png",
-      // "${bannersBaseURL}banner2.png",
-      // "${bannersBaseURL}banner3.png",
-      // "${bannersBaseURL}banner4.png",
       "${bannersBaseURL}7.png",
       "${bannersBaseURL}8.png",
       "${bannersBaseURL}9.png",
       "${bannersBaseURL}8.png",
     ];
-
     _animationController =
         AnimationController(duration: Duration(milliseconds: 200), vsync: this);
     _animation = IntTween(begin: 5, end: 3).animate(_animationController);
@@ -124,6 +119,9 @@ class _HomeScreenTabState extends State<HomeScreenTab>
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    print(size.height);
+    print(size.width);
     return RefreshIndicator(
       onRefresh: refreshList,
       key: refreshKey,
@@ -367,7 +365,7 @@ class _HomeScreenTabState extends State<HomeScreenTab>
       onTap: _buyAirtime,
       child: Container(
         margin: EdgeInsets.only(bottom: 5.w),
-        width: Get.width.w,
+        width: MediaQuery.of(context).size.width,
         height: 50.w,
         decoration: BoxDecoration(
             boxShadow: [
@@ -378,7 +376,8 @@ class _HomeScreenTabState extends State<HomeScreenTab>
                   blurRadius: 3.0)
             ],
             image: DecorationImage(
-                image: AssetImage('assets/images/airtime_btn_background.png'))),
+              fit: BoxFit.fitWidth,
+                image: AssetImage('assets/images/airtime_btn_background.png',))),
       ),
     );
   }

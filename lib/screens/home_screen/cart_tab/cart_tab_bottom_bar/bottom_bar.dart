@@ -28,7 +28,7 @@ class CartBottomBar extends StatelessWidget {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.w)),
               backgroundColor: Get.theme.primaryColor,
-              onSurface: Get.theme.primaryColor.withOpacity(0.5.w),
+              onSurface: Get.theme.primaryColor.withOpacity(0.5),
             ),
             child: Text(
               "${S.of(context).continueText.toUpperCase()} ($quantity ${S.of(context).items.toUpperCase()} ${S.of(context).fortext.toUpperCase()} $currency$totalAmount)",
