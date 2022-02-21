@@ -35,11 +35,11 @@ import 'package:pointycastle/export.dart';
 
 Future<String> encryptData(String data) async {
   final publicPem = await rootBundle.loadString('assets/public.pem');
-  final privPem = await rootBundle.loadString('assets/private.pem');
+  // final privPem = await rootBundle.loadString('assets/private.pem');
   final publicKey = RSAKeyParser().parse(publicPem) as RSAPublicKey;
-  final privtKey = RSAKeyParser().parse(privPem) as RSAPrivateKey;
+  // final privtKey = RSAKeyParser().parse(privPem) as RSAPrivateKey;
 
-  final encrypter = Encrypter(RSA(publicKey: publicKey, privateKey: privtKey));
+  final encrypter = Encrypter(RSA(publicKey: publicKey));
   final encrypted = encrypter.encrypt(data);
   // final decrypted = encrypter.decrypt(encrypted);
 
