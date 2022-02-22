@@ -3,13 +3,13 @@ import 'dart:io';
 import 'package:edeybe/controllers/assetFinanceController.dart';
 import 'package:edeybe/controllers/user_controller.dart';
 import 'package:edeybe/models/AssetFinanceBreakdownModel.dart';
-import 'package:edeybe/models/AssetFinancersModel.dart';
 import 'package:edeybe/screens/checkout_screen/index.dart';
 import 'package:edeybe/services/server_operation.dart';
 import 'package:edeybe/utils/helper.dart';
 import 'package:flutter/material.dart';
-import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:image_cropper/image_cropper.dart';
+
 
 class KYCForm extends StatefulWidget {
   final String email, firstName, lastName, phone, type, financerID;
@@ -400,7 +400,7 @@ class _KYCFormState extends State<KYCForm> {
   }
 
   Future<Null> _cropImage() async {
-    File croppedFile = await ImageCropper.cropImage(
+    File croppedFile = await ImageCropper().cropImage(
         sourcePath: imageFile.path,
         aspectRatioPresets: Platform.isAndroid
             ? [
