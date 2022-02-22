@@ -40,7 +40,7 @@ class _HomeIndexState extends State<HomeIndex> {
   void initState() {
     super.initState();
     current = widget.indexPage;
-    if (hasBanner) _showDiscountBanner();
+    // if (hasBanner) _showDiscountBanner();
   }
 
   @override
@@ -60,16 +60,16 @@ class _HomeIndexState extends State<HomeIndex> {
     _userCtrl.page.value = 1;
   }
 
-  _showDiscountBanner() {
-    Timer(Duration(seconds: 10), () {
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        Get.dialog(
-          PromoBanner(),
-          barrierDismissible: false,
-        );
-      });
-    });
-  }
+  // _showDiscountBanner() {
+  //   Timer(Duration(seconds: 10), () {
+  //     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+  //       Get.dialog(
+  //         PromoBanner(),
+  //         barrierDismissible: false,
+  //       );
+  //     });
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
