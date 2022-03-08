@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 class AddressOperations extends ServerOperations {
   String path = "/account/deliveryaddresses";
   addAddressRequest(Map data, Function(dynamic address) onResponse) {
-    print(data);
+    // print(data);
     dynamicRequest(
       showDialog: true,
       method: "POST",
@@ -18,7 +18,7 @@ class AddressOperations extends ServerOperations {
       onResponse: (val) {
         if (val.containsKey("success")) {
           // _addressController.getAllDeliveryAddresses();
-          print(val);
+          // print(val);
           Get.back();
           onResponse(val);
         } else {

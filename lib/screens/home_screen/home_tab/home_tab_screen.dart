@@ -20,6 +20,8 @@ import 'package:edeybe/widgets/search_result_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:edeybe/index.dart';
 
+import '../../product_details_screen/product_details_screen.dart';
+
 class HomeScreenTab extends StatefulWidget {
   @override
   _HomeScreenTabState createState() => _HomeScreenTabState();
@@ -45,12 +47,20 @@ class _HomeScreenTabState extends State<HomeScreenTab>
   @override
   void initState() {
     super.initState();
-    bannerUrl = [
-      "${bannersBaseURL}7.png",
-      "${bannersBaseURL}8.png",
-      "${bannersBaseURL}9.png",
-      "${bannersBaseURL}8.png",
-    ];
+
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   for (var x in homeController.banner.value.success.firstSlider) {
+    //     bannerUrl.add("$bannersBaseURL/${x.imageUrl}");
+    //   }
+    //   print(bannerUrl);
+    //   //     bannerUrl = [
+    //   //   "${bannersBaseURL}7.png",
+    //   //   "${bannersBaseURL}8.png",
+    //   //   "${bannersBaseURL}9.png",
+    //   //   "${bannersBaseURL}8.png",
+    //   // ];
+    // });
+
     _animationController =
         AnimationController(duration: Duration(milliseconds: 200), vsync: this);
     _animation = IntTween(begin: 5, end: 3).animate(_animationController);
@@ -93,12 +103,7 @@ class _HomeScreenTabState extends State<HomeScreenTab>
     refreshKey.currentState?.show(atTop: false);
     await Future.delayed(Duration(seconds: 3));
     print("Refresh");
-    bannerUrl = [
-      "${bannersBaseURL}banner1.png",
-      "${bannersBaseURL}banner2.png",
-      "${bannersBaseURL}banner3.png",
-      "${bannersBaseURL}banner4.png",
-    ];
+    homeController.getBanner();
     homeController.getAvailableSlugs();
     homeController.getAvailableCatsCollection();
 
@@ -119,9 +124,8 @@ class _HomeScreenTabState extends State<HomeScreenTab>
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    print(size.height);
-    print(size.width);
+    // final size = MediaQuery.of(context).size;
+  
     return RefreshIndicator(
       onRefresh: refreshList,
       key: refreshKey,
@@ -228,21 +232,44 @@ class _HomeScreenTabState extends State<HomeScreenTab>
           children.add(Container(
             height: 150.w,
             width: Get.width.w,
-            child: CarouselSlider(
-              itemCount: bannerUrl.length,
-              autoPlay: true,
-              containerHeight: 150.w,
-              
-              itemBuilder: (context, ind) => Image(
-                width: Get.width.w,
-                image: CachedNetworkImageProvider(
-                  bannerUrl[ind],
-                ),
-                alignment: Alignment.center,
-                fit: BoxFit.cover,
-              ),
-            ),
+            child: homeController.loadingBanner.value
+                ? Shimmer(
+                    linearGradient: Constants.shimmerGradient,
+                    child: Container(
+                      height: 150.w,
+                      // child: Center(
+                      //   child: Text("Loading..."),
+                      // ),
+                    ))
+                : CarouselSlider(
+                    itemCount:
+                        homeController.banner.value.success.firstSlider.length,
+                    autoPlay: true,
+                    containerHeight: 150.w,
+                    itemBuilder: (context, ind) => InkWell(
+                      onTap: () {
+                        // print(homeController
+                        //     .banner.value.success.firstSlider[ind].productId);
+                        _productController.getProductbyId(
+                            homeController.banner.value.success.firstSlider[ind]
+                                .productId, onResponse: (va) {
+                          // print(va);
+                          _productController.setInViewProduct(va);
+                          Get.to(ProductDetailsScreen());
+                        });
+                      },
+                      child: Image(
+                        width: Get.width.w,
+                        image: CachedNetworkImageProvider(
+                          "$domain/api/${homeController.banner.value.success.firstSlider[ind].imageUrl}",
+                        ),
+                        alignment: Alignment.center,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
           ));
+
           children.add(Container(
             color: Colors.white,
             child: Row(
@@ -377,8 +404,10 @@ class _HomeScreenTabState extends State<HomeScreenTab>
                   blurRadius: 3.0)
             ],
             image: DecorationImage(
-              fit: BoxFit.fitWidth,
-                image: AssetImage('assets/images/airtime_btn_background.png',))),
+                fit: BoxFit.fitWidth,
+                image: AssetImage(
+                  'assets/images/airtime_btn_background.png',
+                ))),
       ),
     );
   }

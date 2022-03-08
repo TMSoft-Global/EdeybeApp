@@ -15,11 +15,18 @@ import 'package:edeybe/widgets/custom_dialog.dart';
 import 'package:edeybe/widgets/custom_web_view.dart';
 
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfileScreen extends StatelessWidget {
   ProfileScreen({Key key}) : super(key: key);
   final appController = Get.put(AppController());
   final userController = Get.find<UserController>();
+  final _url = "https://edeybe.com/vendor/become-a-vendor";
+
+  void _launchURL() async {
+    if (!await launch(_url)) throw 'Could not launch $_url';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -134,24 +141,29 @@ class ProfileScreen extends StatelessWidget {
         ),
         onTap: () => Get.to(WishlistScreen()),
       ),
-    userController.isLoggedIn()?  ListTile(
-        dense: true,
-        leading: Icon(
-          Icons.credit_card,
-          size: 20.w,
-          color: Constants.themeGreyDark,
-        ),
-        title: Text(
-          S.current.paymentMethod,
-          style: TextStyle(fontSize: 14.w),
-        ),
-        trailing: Icon(
-          Icons.arrow_forward_ios,
-          size: 16.w,
-          color: Constants.themeGreyDark,
-        ),
-        onTap: () => Get.to(PaymentMethodScreen()),
-      ): Container(height: 0,width: 0,),
+      userController.isLoggedIn()
+          ? ListTile(
+              dense: true,
+              leading: Icon(
+                Icons.credit_card,
+                size: 20.w,
+                color: Constants.themeGreyDark,
+              ),
+              title: Text(
+                S.current.paymentMethod,
+                style: TextStyle(fontSize: 14.w),
+              ),
+              trailing: Icon(
+                Icons.arrow_forward_ios,
+                size: 16.w,
+                color: Constants.themeGreyDark,
+              ),
+              onTap: () => Get.to(PaymentMethodScreen()),
+            )
+          : Container(
+              height: 0,
+              width: 0,
+            ),
       // ListTile(
       //   dense: true,
       //   leading: Icon(
@@ -211,24 +223,29 @@ class ProfileScreen extends StatelessWidget {
       //   ),
       //   onTap: () => _changeCountry(),
       // ),
-    userController.isLoggedIn()?  ListTile(
-        dense: true,
-        leading: Icon(
-          FontAwesomeIcons.mapMarkerAlt,
-          size: 20.w,
-          color: Constants.themeGreyDark,
-        ),
-        title: Text(
-          S.current.deliveryAddress,
-          style: TextStyle(fontSize: 14.w),
-        ),
-        trailing: Icon(
-          Icons.arrow_forward_ios,
-          size: 16.w,
-          color: Constants.themeGreyDark,
-        ),
-        onTap: () => Get.to(AddressScreen()),
-      ): Container(height: 0,width: 0,),
+      userController.isLoggedIn()
+          ? ListTile(
+              dense: true,
+              leading: Icon(
+                FontAwesomeIcons.mapMarkerAlt,
+                size: 20.w,
+                color: Constants.themeGreyDark,
+              ),
+              title: Text(
+                S.current.deliveryAddress,
+                style: TextStyle(fontSize: 14.w),
+              ),
+              trailing: Icon(
+                Icons.arrow_forward_ios,
+                size: 16.w,
+                color: Constants.themeGreyDark,
+              ),
+              onTap: () => Get.to(AddressScreen()),
+            )
+          : Container(
+              height: 0,
+              width: 0,
+            ),
     ];
   }
 
@@ -236,35 +253,73 @@ class ProfileScreen extends StatelessWidget {
   List<Widget> get _buildhelpCenterActions {
     return [
       _buildSectionHeader(S.current.hlepCenter),
-     userController.isLoggedIn()? ListTile(
-        dense: true,
-        leading: Icon(
-          FontAwesomeIcons.listAlt,
-          size: 20.w,
-          color: Constants.themeGreyDark,
-        ),
-        title: Text(
-          S.current.orderHistory,
-          style: TextStyle(fontSize: 14.w),
-        ),
-        trailing: Icon(
-          Icons.arrow_forward_ios,
-          size: 16.w,
-          color: Constants.themeGreyDark,
-        ),
-        onTap: () {
-          !userController.isLoggedIn()
-              ? Helper.signInRequired(
-                  "You must sign in to view your orders",
-                  () => Get.offAll(LoginScreen()),
-                )
-              : Get.to(OrderHistoryScreen());
-        },
-      ): Container(height: 0,width: 0,),
+      userController.isLoggedIn()
+          ? ListTile(
+              dense: true,
+              leading: Icon(
+                FontAwesomeIcons.listAlt,
+                size: 20.w,
+                color: Constants.themeGreyDark,
+              ),
+              title: Text(
+                S.current.orderHistory,
+                style: TextStyle(fontSize: 14.w),
+              ),
+              trailing: Icon(
+                Icons.arrow_forward_ios,
+                size: 16.w,
+                color: Constants.themeGreyDark,
+              ),
+              onTap: () {
+                !userController.isLoggedIn()
+                    ? Helper.signInRequired(
+                        "You must sign in to view your orders",
+                        () => Get.offAll(LoginScreen()),
+                      )
+                    : Get.to(OrderHistoryScreen());
+              },
+            )
+          : Container(
+              height: 0,
+              width: 0,
+            ),
+      userController.isLoggedIn()
+          ? ListTile(
+              dense: true,
+              leading: Icon(
+                FontAwesomeIcons.shoppingBasket,
+                size: 20.w,
+                color: Get.theme.primaryColorDark,
+              ),
+              title: Text(
+                "Sell on edeybe",
+                style: TextStyle(
+                    fontSize: 14.w, color: Get.theme.primaryColorDark),
+              ),
+              trailing: Icon(
+                Icons.arrow_forward_ios,
+                size: 16.w,
+                color: Get.theme.primaryColorDark,
+              ),
+              onTap: () {
+                _launchURL();
+
+                // !userController.isLoggedIn()
+                //     ? Helper.signInRequired(
+                //         "You must sign in to view your orders",
+                //         () => Get.offAll(LoginScreen()),
+                //       )
+                //     : Get.to(TrackOrderScreen());
+              },
+            )
+          : Container(
+              height: 0,
+              width: 0,
+            ),
       // ListTile(
       //   dense: true,
       //   leading: Icon(
-      //     FontAwesomeIcons.mapMarkedAlt,
+      // FontAwesomeIcons.mapMarkedAlt,
       //     size: 20.w,
       //     color: Constants.themeGreyDark,
       //   ),
@@ -278,12 +333,12 @@ class ProfileScreen extends StatelessWidget {
       //     color: Constants.themeGreyDark,
       //   ),
       //   onTap: () {
-      //     !userController.isLoggedIn()
-      //         ? Helper.signInRequired(
-      //             "You must sign in to view your orders",
-      //             () => Get.offAll(LoginScreen()),
-      //           )
-      //         : Get.to(TrackOrderScreen());
+      //     // !userController.isLoggedIn()
+      //     //     ? Helper.signInRequired(
+      //     //         "You must sign in to view your orders",
+      //     //         () => Get.offAll(LoginScreen()),
+      //     //       )
+      //     //     : Get.to(TrackOrderScreen());
       //   },
       // ),
       // ListTile(
@@ -388,7 +443,7 @@ class ProfileScreen extends StatelessWidget {
       //     url: 'https://edeybe.com/m/faqs',
       //   )),
       // ),
-     
+
       if (userController.isLoggedIn())
         ListTile(
           dense: true,
@@ -421,7 +476,7 @@ class ProfileScreen extends StatelessWidget {
     ];
   }
 
-  // change country dialog
+  // change country dialog 
   void _changeCountry() async {
     await actionSheetDialog(Material(
       color: Colors.transparent,

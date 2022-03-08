@@ -7,6 +7,8 @@ import 'package:edeybe/models/productModel.dart';
 import 'package:edeybe/models/user.dart';
 import 'package:edeybe/services/home_operation.dart';
 
+import '../models/bannerModel.dart';
+
 class HomeController extends GetxController implements HTTPErrorHandler {
   User user;
   var operations = HomeOperation();
@@ -14,10 +16,12 @@ class HomeController extends GetxController implements HTTPErrorHandler {
   var cats = <String>[].obs;
   var products = <ProductModel>[].obs;
   var loadingSlugs = false.obs;
+  var loadingBanner = false.obs;
   var loadingCategorySlugsProducts = false.obs;
   var loadingCollections = false.obs;
   var categoryProducts = <CatergoryCollection>[].obs;
   var productCollection = <SlugCollection>[].obs;
+  var banner = BannerModel().obs;
   var connectionError = false.obs;
   var serverError = false.obs;
   var canceled = false.obs;
@@ -32,6 +36,7 @@ class HomeController extends GetxController implements HTTPErrorHandler {
     // Future.delayed(Duration(seconds: 1), () {
     getAvailableSlugs();
     getAvailableCatsCollection();
+    getBanner();
     // });
   }
 
@@ -41,6 +46,7 @@ class HomeController extends GetxController implements HTTPErrorHandler {
     products = products;
     update();
   }
+
   void getPromotions() {
     resetErrorState();
     operations.getPromotions((response) {
@@ -51,6 +57,16 @@ class HomeController extends GetxController implements HTTPErrorHandler {
 
   void resetProducts() {
     products.value = <ProductModel>[];
+  }
+
+  void getBanner() {
+    resetErrorState();
+    loadingBanner.value = true;
+    operations.getHomeBanner((response) {
+      banner.value = response;
+      loadingBanner.value = false;
+      update();
+    }, handleError);
   }
 
   void getAvailableSlugs() {

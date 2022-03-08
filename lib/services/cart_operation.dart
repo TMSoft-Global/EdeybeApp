@@ -174,7 +174,7 @@ class CartOperation extends ServerOperations {
       onError: onError,
       showDialog: true,
       onResponse: (res) {
-        print(res);
+        // print(res);
         onResponse(DeliveryCost.fromJson(res));
       },
     );
@@ -189,7 +189,7 @@ class CartOperation extends ServerOperations {
       showDialog: true,
       onResponse: (res) {
         Map<String, dynamic> location = jsonDecode(res);
-        print(location);
+        // print(location);
         // onResponse(location["Table"][0]);
         if (location["Table"] == null) {
           Get.dialog(CustomDialog(
@@ -214,7 +214,7 @@ class CartOperation extends ServerOperations {
       showDialog: true,
       onResponse: (res) {
         Map<String, dynamic> location = jsonDecode(res);
-        print(location);
+        // print(location);
         if (location["Table"] == null) {
           Get.dialog(CustomDialog(
             title: 'Timeout error',

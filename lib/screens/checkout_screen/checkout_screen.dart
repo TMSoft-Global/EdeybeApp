@@ -84,7 +84,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     });
     if (_addressController.addresses != null &&
         _addressController.addresses.isNotEmpty) {
-      print(_addressController.addresses);
+      // print(_addressController.addresses);
       _mobileCtrl.text = _addressController.addresses[0].phone;
       _firstnameCtrl.text = _addressController.addresses[0].firstName;
       _lastnameCtrl.text = _addressController.addresses[0].lastName;
@@ -164,10 +164,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                     var err = data as DioError;
                                     String message =
                                         "${err.response.data['error'][0]}";
-                                    print(data);
                                     // String message =
                                     //     "${data.response.data['error'][0]}";
-                                    print(message);
+                                    // print(message);
                                     // if (data.containsKey("success")) {
                                     //   if (data.containsKey("code") &&
                                     //       data["code"] != null) {
@@ -213,7 +212,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                   "email": _emailCtrl.text.trim(),
                                 }
                               }, (data) {
-                                print("------------------------$data");
+                                // print("------------------------$data");
                                 if (data.containsKey("success")) {
                                   // if (data.containsKey("code") &&
                                   //     data["code"] != null) {
@@ -757,7 +756,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             onTap: () => Get.to(PaymentMethodScreen(
                               hasContinueButton: true,
                               onContinuePressed: (pan) {
-                                print(pan);
+                                // print(pan);
                                 _setPaymentMethod(pan);
                                 Get.back();
                               },

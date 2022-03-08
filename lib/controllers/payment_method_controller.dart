@@ -134,7 +134,7 @@ class PaymentMethodController extends GetxController {
               title: S.current.addCard,
               content: 'Card deleted successfully',
             ));
-            print(response);
+            // print(response);
             cards.removeWhere((element) {
               return element.id == card.id;
             });

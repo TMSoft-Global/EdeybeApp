@@ -29,7 +29,7 @@ class AssetFinancersList extends StatelessWidget {
                             width: 0.5, color: Get.theme.primaryColor))),
                 child: ListTile(
                   onTap: () {
-                        print(products);
+                        // print(products);
                     _assetFinancers.getAssetBreakDown(products, x.sId, (val) {
                       if (val.contains("success")) {
                         Get.back();

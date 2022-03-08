@@ -1139,7 +1139,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   }
 
   void _setPrice(value, int x) {
-    print(value);
+    // print(value);
     if (_productController.productDetail.value.hasVariants) {
       if (value == null || value == "null") {
         setState(() {
@@ -1153,7 +1153,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           variantID ==
               _productController.productDetail.value.variants[x].variantId;
         });
-        print("====$discountedVarianAmount");
+        // print("====$discountedVarianAmount");
       } else {
         setState(() {
           variantID =

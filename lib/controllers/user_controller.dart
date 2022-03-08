@@ -77,7 +77,7 @@ class UserController extends GetxController implements HTTPErrorHandler {
   loginFromBase() {
     _userOperations.loginFromBase(
       (user) {
-        print(user.addresses);
+        // print(user.addresses);
         this.user = user;
         Get.snackbar(
           S.current.welcome,

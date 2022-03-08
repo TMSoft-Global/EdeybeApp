@@ -60,7 +60,7 @@ class _KYCFormState extends State<KYCForm> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if (widget.products != null) {
         _cartController.getProductBreakdown(widget.products, (value) {
-          print(value);
+          // print(value);
           if (value != null) {
             setState(() {
               breakDown = value;
@@ -76,7 +76,7 @@ class _KYCFormState extends State<KYCForm> {
     final emailCTRL = TextEditingController(text: widget.email);
     final firstNameCTRL = TextEditingController(text: widget.firstName);
     final lastNameCTRL = TextEditingController(text: widget.lastName);
-    print(widget.products);
+    // print(widget.products);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.type == "asset" ? "Asset Finance" : "Hire Purchase"),
@@ -226,7 +226,7 @@ class _KYCFormState extends State<KYCForm> {
                                         .then((d) {
                                       _cartController.uploadImageCard(imageFile,
                                           (val) {
-                                        print(val);
+                                        // print(val);
                                         setState(() {
                                           imgeUrl = val;
                                         });

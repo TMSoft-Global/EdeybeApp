@@ -164,8 +164,8 @@ class _OtpVerificationState extends State<OtpVerification>
         hasError = true;
       });
     } else {
-      print(verificationCodeController.text);
-      print(widget.id);
+      // print(verificationCodeController.text);
+      // print(widget.id);
       // print(widget.password);
       _userController.verifyUser(
           otp: verificationCodeController.text,

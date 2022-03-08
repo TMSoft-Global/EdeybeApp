@@ -58,6 +58,7 @@ dependencies:
   image_cropper: ^1.4.1
   http: ^0.13.4
   animated_text_kit: ^4.2.1
+  url_launcher: ^6.0.20
   # animations: ^2.0.2
 
 dev_dependencies:

@@ -1,19 +1,21 @@
 import 'package:dio/dio.dart';
+import 'package:edeybe/models/bannerModel.dart';
 import 'package:edeybe/models/categoryCollection.dart';
 import 'package:edeybe/models/productCollection.dart';
 import 'package:edeybe/models/productModel.dart';
 import 'package:edeybe/services/server_operation.dart';
 
 class HomeOperation extends ServerOperations {
-  getPromotions(
-      void onResponse(List<ProductModel> response), void onError(DioError error)) {
+  getPromotions(void onResponse(List<ProductModel> response),
+      void onError(DioError error)) {
     dynamicRequest(
       path: "/products",
       schema: "",
       onError: onError,
       onResponse: (res) {
         var data = (res as List<dynamic>)
-            .map((dynamic i) => ProductModel.fromJson(i as Map<String, dynamic>))
+            .map(
+                (dynamic i) => ProductModel.fromJson(i as Map<String, dynamic>))
             // .sortedByNum((element) => element.id)
             .toList();
         onResponse(data);
@@ -32,6 +34,20 @@ class HomeOperation extends ServerOperations {
         var data =
             (res as List<dynamic>).map((dynamic i) => i as String).toList();
         onResponse(data);
+      },
+    );
+  }
+
+  getHomeBanner(
+      void onResponse(BannerModel response), void onError(DioError error)) {
+    dynamicRequest(
+      path: '/banners',
+      schema: "",
+      method: 'GET',
+      onResponse: (res) {
+        if (res != null) {
+          onResponse(BannerModel.fromJson(res));
+        }
       },
     );
   }

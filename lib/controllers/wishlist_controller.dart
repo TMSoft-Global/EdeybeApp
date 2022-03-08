@@ -40,7 +40,7 @@ class WishlistController extends GetxController implements HTTPErrorHandler {
   }
 
   addToWishlist(ProductModel item, Function callback) {
-    print(item.productName);
+    // print(item.productName);
     Map<String, dynamic> items = {"items": []};
     var inList =
         wishlistItems.firstWhere((p) => p.productId == item.productId, orElse: () => null);

@@ -74,7 +74,7 @@ class ProductModel {
   });
 
   ProductModel.fromJson(Map<String, dynamic> json) {
-    print(json['availableForHirePurchasing']);
+    // print(json['availableForHirePurchasing']);
     sId = json['_id'];
     categoryId = json['categoryId'];
     subCategoryId = json['subCategoryId'];
