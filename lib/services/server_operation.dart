@@ -11,16 +11,16 @@ import 'package:dio/dio.dart' as Response;
 import 'package:http_parser/http_parser.dart';
 
 // final String domain = "http://172.18.72.108:5002";
-final String domain = "http://172.18.72.60:5002";
+// final String domain = "http://172.18.72.60:5002";
 // http://172.18.72.108:5002/api
 
-// final String domain = "https://api.edeybe.com";
+final String domain = "https://api.edeybe.com";
 //
 abstract class ServerOperations {
-  final String _domain = "http://172.18.72.60:5002";
+  // final String _domain = "http://172.18.72.60:5002";
   // final String _domain = "http://172.18.72.108:5002";
 
-  // final String _domain = "https://api.edeybe.com";
+  final String _domain = "https://api.edeybe.com";
   final String accessToken =
       r"3KJALFDKLAkjksoem$jis0*j3ji49509u5tojifk95%#lk33#4kjjksfkjd@$$krjkrkkioaseif$2kjs@kj5l4#";
   // String _store
