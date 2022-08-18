@@ -18,6 +18,7 @@ import 'package:edeybe/utils/constant.dart';
 import 'package:edeybe/utils/helper.dart';
 import 'package:edeybe/widgets/ErrorBoundary.dart';
 import 'package:edeybe/widgets/Shimmer.dart';
+import 'package:edeybe/widgets/bottom_sheet_widget.dart';
 import 'package:edeybe/widgets/cart_dialog.dart';
 import 'package:edeybe/widgets/cart_item.dart';
 import 'package:edeybe/widgets/custom_dialog.dart';
@@ -573,191 +574,200 @@ class _CartScreenTabState extends State<CartScreenTab>
                             //     onContinuePressed: () =>
                             //         Get.off(CheckoutScreen()),
                             //   ));
-                            Get.dialog(Dialog(
-                              child: Container(
-                                constraints: BoxConstraints(
-                                  minHeight: 100.h,
-                                  minWidth: double.infinity,
-                                  maxHeight: 220.h,
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text("Proceed",
-                                        style: TextStyle(fontSize: 20)),
-                                    CustomDivider(),
-                                    SizedBox(
-                                      height: 4,
-                                    ),
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width -
-                                          100,
-                                      child: TextButton(
-                                          style: TextButton.styleFrom(
-                                              backgroundColor:
-                                                  Get.theme.primaryColor,
-                                              textStyle: TextStyle(
-                                                color: Colors.white,
-                                              )),
-                                          onPressed: () {
-                                            Get.back();
-                                            !_userController.isLoggedIn()
-                                                ? Helper.signInRequired(
-                                                    "You must sign in to checkout",
-                                                    () => Get.offAll(
-                                                        LoginScreen()),
-                                                  )
-                                                : Get.to(AddressScreen(
-                                                    hasContinueButton: true,
-                                                    onContinuePressed: () =>
-                                                        Get.off(
-                                                            CheckoutScreen()),
-                                                  ));
-                                          },
-                                          child: Text("To Pay Now",
-                                              style: TextStyle(
-                                                  color: Colors.white))),
-                                    ),
-                                    SizedBox(
-                                      height: 4,
-                                    ),
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width -
-                                          100,
-                                      child: TextButton(
-                                          style: TextButton.styleFrom(
-                                              backgroundColor:
-                                                  Get.theme.primaryColor,
-                                              textStyle: TextStyle(
-                                                color: Colors.white,
-                                              )),
-                                          onPressed: () {
-                                            Get.back();
-                                            !_userController.isLoggedIn()
-                                                ? Helper.signInRequired(
-                                                    "You must sign in to checkout",
-                                                    () => Get.offAll(
-                                                        LoginScreen()),
-                                                  )
-                                                : Get.to(
-                                                    AddressScreen(
-                                                        hasContinueButton: true,
-                                                        onContinuePressed: () {
-                                                          _cartController
-                                                              .addProductHirePurchase();
-                                                          _cartController
-                                                              .checkHirePurchaseProduct(
-                                                                  (dynamic) {
-                                                            //   print( _cartController
-                                                            // .productModel.value);
-                                                            Get.to(KYCForm(
-                                                                email: _userController
-                                                                    .user.email,
-                                                                firstName:
-                                                                    _userController
-                                                                        .user
-                                                                        .firstname,
-                                                                lastName:
-                                                                    _userController
-                                                                        .user
-                                                                        .lastname,
-                                                                type: "hire",
-                                                                isAssestFinance:
-                                                                    false,
-                                                                products:
-                                                                    _cartController
-                                                                        .productModel
-                                                                        .value));
-                                                            //     .whenComplete(
-                                                            //         () {
-                                                            // _cartController
-                                                            //     .productModel
-                                                            //       .clear();
-                                                            // });
-                                                          });
-                                                        }
-                                                        //   Get.to(
-                                                        // CheckoutWithAsset_HireP(
-                                                        //     false,
-                                                        //     "Asset Finance"),
-                                                        // ),
-                                                        ),
-                                                  );
-                                          },
-                                          child: Text("With Hire Purchase",
-                                              style: TextStyle(
-                                                  color: Colors.white))),
-                                    ),
-                                    SizedBox(
-                                      height: 4,
-                                    ),
-                                    SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width -
-                                                100,
-                                        child: TextButton(
-                                            style: TextButton.styleFrom(
-                                                backgroundColor:
-                                                    Get.theme.primaryColor,
-                                                textStyle: TextStyle(
-                                                  color: Colors.white,
-                                                )),
-                                            onPressed: () {
-                                              _cartController
-                                                  .addProductHirePurchase();
 
-                                              Get.back();
-                                              !_userController.isLoggedIn()
-                                                  ? Helper.signInRequired(
-                                                      "You must sign in to checkout",
-                                                      () => Get.offAll(
-                                                          LoginScreen()),
-                                                    )
-                                                  : showModalBottomSheet(
-                                                      context: context,
-                                                      isScrollControlled: true,
-                                                      isDismissible: false,
-                                                      builder: (context) {
-                                                        if (_cartController
-                                                            .productModel
-                                                            .value[0]
-                                                            .isEmpty) {
-                                                          _cartController
-                                                              .productModel
-                                                              .removeAt(0);
-                                                        }
-                                                        return FractionallySizedBox(
-                                                          heightFactor: 0.9,
-                                                          child:
-                                                              AssetFinancersList(
-                                                            email:
-                                                                _userController
-                                                                    .user.email,
-                                                            firstName:
-                                                                _userController
-                                                                    .user
-                                                                    .firstname,
-                                                            lastName:
-                                                                _userController
-                                                                    .user
-                                                                    .lastname,
-                                                            products:
-                                                                _cartController
-                                                                    .productModel
-                                                                    .value,
-                                                          ),
-                                                        );
-                                                      });
-                                            },
-                                            child: Text(
-                                              "With Asset Finance",
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            )))
-                                  ],
-                                ),
-                              ),
-                            ));
+                           
+                            // showModalBottomSheet(
+                            //     context: context,
+                            //     builder: (builder) {return Container(
+                            //     constraints: BoxConstraints(
+                            //       minHeight: 100.h,
+                            //       minWidth: double.infinity,
+                            //       maxHeight: 220.h,
+                            //     ),
+                            //     child: Column(
+                            //       mainAxisAlignment: MainAxisAlignment.center,
+                            //       children: [
+                            //         Text("Proceed",
+                            //             style: TextStyle(fontSize: 20)),
+                            //         CustomDivider(),
+                            //         SizedBox(
+                            //           height: 4,
+                            //         ),
+                            //         SizedBox(
+                            //           width: MediaQuery.of(context).size.width -
+                            //               100,
+                            //           child: TextButton(
+                            //               style: TextButton.styleFrom(
+                            //                   backgroundColor:
+                            //                       Get.theme.primaryColor,
+                            //                   textStyle: TextStyle(
+                            //                     color: Colors.white,
+                            //                   )),
+                            //               onPressed: () {
+                            //                 Get.back();
+                            //                 !_userController.isLoggedIn()
+                            //                     ? Helper.signInRequired(
+                            //                         "You must sign in to checkout",
+                            //                         () => Get.offAll(
+                            //                             LoginScreen()),
+                            //                       )
+                            //                     : Get.to(AddressScreen(
+                            //                         hasContinueButton: true,
+                            //                         onContinuePressed: () =>
+                            //                             Get.off(
+                            //                                 CheckoutScreen()),
+                            //                       ));
+                            //               },
+                            //               child: Text("To Pay Now",
+                            //                   style: TextStyle(
+                            //                       color: Colors.white))),
+                            //         ),
+                            //         SizedBox(
+                            //           height: 4,
+                            //         ),
+                            //         SizedBox(
+                            //           width: MediaQuery.of(context).size.width -
+                            //               100,
+                            //           child: TextButton(
+                            //               style: TextButton.styleFrom(
+                            //                   backgroundColor:
+                            //                       Get.theme.primaryColor,
+                            //                   textStyle: TextStyle(
+                            //                     color: Colors.white,
+                            //                   )),
+                            //               onPressed: () {
+                            //                 Get.back();
+                            //                 !_userController.isLoggedIn()
+                            //                     ? Helper.signInRequired(
+                            //                         "You must sign in to checkout",
+                            //                         () => Get.offAll(
+                            //                             LoginScreen()),
+                            //                       )
+                            //                     : Get.to(
+                            //                         AddressScreen(
+                            //                             hasContinueButton: true,
+                            //                             onContinuePressed: () {
+                                                          // _cartController
+                                                          //     .addProductHirePurchase();
+                            //                               _cartController
+                            //                                   .checkHirePurchaseProduct(
+                            //                                       (dynamic) {
+                            //                                 //   print( _cartController
+                            //                                 // .productModel.value);
+                            //                                 Get.to(KYCForm(
+                            //                                     email: _userController
+                            //                                         .user.email,
+                            //                                     firstName:
+                            //                                         _userController
+                            //                                             .user
+                            //                                             .firstname,
+                            //                                     lastName:
+                            //                                         _userController
+                            //                                             .user
+                            //                                             .lastname,
+                            //                                     type: "hire",
+                            //                                     isAssestFinance:
+                            //                                         false,
+                            //                                     products:
+                            //                                         _cartController
+                            //                                             .productModel
+                            //                                             .value));
+                            //                                 //     .whenComplete(
+                            //                                 //         () {
+                            //                                 // _cartController
+                            //                                 //     .productModel
+                            //                                 //       .clear();
+                            //                                 // });
+                            //                               });
+                            //                             }
+                            //                             //   Get.to(
+                            //                             // CheckoutWithAsset_HireP(
+                            //                             //     false,
+                            //                             //     "Asset Finance"),
+                            //                             // ),
+                            //                             ),
+                            //                       );
+                            //               },
+                            //               child: Text("With Hire Purchase",
+                            //                   style: TextStyle(
+                            //                       color: Colors.white))),
+                            //         ),
+                            //         SizedBox(
+                            //           height: 4,
+                            //         ),
+                            //         SizedBox(
+                            //             width:
+                            //                 MediaQuery.of(context).size.width -
+                            //                     100,
+                            //             child: TextButton(
+                            //                 style: TextButton.styleFrom(
+                            //                     backgroundColor:
+                            //                         Get.theme.primaryColor,
+                            //                     textStyle: TextStyle(
+                            //                       color: Colors.white,
+                            //                     )),
+                            //                 onPressed: () {
+                                              // _cartController
+                                              //     .addProductHirePurchase();
+
+                                              // Get.back();
+                                              // !_userController.isLoggedIn()
+                                              //     ? Helper.signInRequired(
+                                              //         "You must sign in to checkout",
+                                              //         () => Get.offAll(
+                                              //             LoginScreen()),
+                                              //       )
+                                              //     : showModalBottomSheet(
+                                              //         context: context,
+                                              //         isScrollControlled: true,
+                                              //         isDismissible: false,
+                                              //         builder: (context) {
+                                              //           if (_cartController
+                                              //               .productModel
+                                              //               .value[0]
+                                              //               .isEmpty) {
+                                              //             _cartController
+                                              //                 .productModel
+                                              //                 .removeAt(0);
+                                              //           }
+                                              //           return FractionallySizedBox(
+                                              //             heightFactor: 0.9,
+                                              //             child:
+                                              //                 AssetFinancersList(
+                                              //               email:
+                                              //                   _userController
+                                              //                       .user.email,
+                                              //               firstName:
+                                              //                   _userController
+                                              //                       .user
+                                              //                       .firstname,
+                                              //               lastName:
+                                              //                   _userController
+                                              //                       .user
+                                              //                       .lastname,
+                                              //               products:
+                                              //                   _cartController
+                                              //                       .productModel
+                                              //                       .value,
+                                              //             ),
+                                              //           );
+                                              //         });
+                            //                 },
+                            //                 child: Text(
+                            //                   "With Asset Finance",
+                            //                   style: TextStyle(
+                            //                       color: Colors.white),
+                            //                 )))
+                            //       ],
+                            //     ),
+                              
+                            // );});
+
+                            showModalBottomSheet(
+                                context: context,
+                                builder: (builder) {
+                                  return BottomSheetWidget();
+                                });
                           },
                         )
                       : null,

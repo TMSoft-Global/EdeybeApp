@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:edeybe/models/card.dart';
 import 'package:edeybe/screens/checkout_screen/index.dart';
 import 'package:edeybe/services/server_operation.dart';
 import 'package:edeybe/widgets/cart_dialog.dart';

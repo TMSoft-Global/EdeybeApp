@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:get_storage/get_storage.dart';
 import 'package:edeybe/index.dart';
 import 'package:edeybe/utils/helper.dart';
 import 'package:edeybe/widgets/custom_dialog.dart';
@@ -10,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart' as Response;
 import 'package:http_parser/http_parser.dart';
 
-// final String domain = "http://172.18.72.108:5002";
+// final String domain = "https://6632-197-251-220-74.eu.ngrok.io";
 // final String domain = "http://172.18.72.60:5002";
 // http://172.18.72.108:5002/api
 
@@ -18,7 +17,7 @@ final String domain = "https://api.edeybe.com";
 //
 abstract class ServerOperations {
   // final String _domain = "http://172.18.72.60:5002";
-  // final String _domain = "http://172.18.72.108:5002";
+  // final String _domain = "https://6632-197-251-220-74.eu.ngrok.io";
 
   final String _domain = "https://api.edeybe.com";
   final String accessToken =

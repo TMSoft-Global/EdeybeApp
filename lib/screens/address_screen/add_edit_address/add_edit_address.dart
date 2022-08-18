@@ -27,7 +27,6 @@ class _AddorEditScreenState extends State<AddorEditScreen> {
   TextEditingController _mobileCtrl = TextEditingController();
   TextEditingController _lastnameCtrl = TextEditingController();
   TextEditingController _emailCtrl = TextEditingController();
-  TextEditingController _addressCtrl = TextEditingController();
   TextEditingController _addressMoreCtrl = TextEditingController();
   Map<String, dynamic> _address;
   final _addressController = Get.put(AddressController());
@@ -451,7 +450,7 @@ class _AddorEditScreenState extends State<AddorEditScreen> {
                                             } else if (_addressMoreCtrl
                                                     .text.isNotEmpty &&
                                                 _addressMoreCtrl.text
-                                                    .startsWith("GA")) {
+                                                    .startsWith("G")) {
                                               _addressController
                                                   .getGhanaPostAddress(
                                                       _addressMoreCtrl.text,

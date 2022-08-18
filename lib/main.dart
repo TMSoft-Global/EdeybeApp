@@ -2,7 +2,6 @@ import 'package:edeybe/controllers/address_controller.dart';
 import 'package:edeybe/controllers/cart_controller.dart';
 import 'package:edeybe/controllers/user_controller.dart';
 import 'package:edeybe/index.dart';
-import 'package:edeybe/screens/promoBanner.dart';
 import 'package:edeybe/screens/splash_screen/splash_screen.dart';
 import 'package:edeybe/utils/AppTheme.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +24,6 @@ class _EdeybeAppState extends State<EdeybeApp> {
   final userController = Get.put(UserController());
 
   final cartControler = Get.put(CartController());
-  
 
   @override
   void initState() {
@@ -35,23 +33,28 @@ class _EdeybeAppState extends State<EdeybeApp> {
 
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
-        designSize: Size(375, 812),
-        // allowFontScaling: true,
-        builder: () => GetMaterialApp(
-            darkTheme: AppTheme.themeLight,
-            theme: AppTheme.themeLight,
-            localizationsDelegates: [
-              S.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-            ],
-            home: SplashScreen(),
-            // home: PromoBanner(),
-            supportedLocales: S.delegate.supportedLocales,
-            // locale: DevicePreview.of(context).locale, // <--- Add the locale
-            // builder: DevicePreview.appBuilder,
-            debugShowCheckedModeBanner: false));
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
+      child: ScreenUtilInit(
+          designSize: Size(375, 812),
+          // allowFontScaling: true,
+          builder: (context, widget) => GetMaterialApp(
+              darkTheme: AppTheme.themeLight,
+              theme: AppTheme.themeLight,
+              localizationsDelegates: [
+                S.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+              ],
+              home: SplashScreen(),
+              // home: PromoBanner(),
+              supportedLocales: S.delegate.supportedLocales,
+              // locale: DevicePreview.of(context).locale, // <--- Add the locale
+              // builder: DevicePreview.appBuilder,
+              debugShowCheckedModeBanner: false)),
+    );
   }
 }
 /**

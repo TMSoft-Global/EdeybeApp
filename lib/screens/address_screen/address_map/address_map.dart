@@ -28,7 +28,7 @@ class _AddressMapWidgetState extends State<AddressMapWidget> {
   final Completer<GoogleMapController> _controller = Completer();
   BitmapDescriptor markerIcon;
   var _addressController = Get.find<AddressController>();
-  static const LatLng _center = const LatLng(5.55602, -0.1969);
+  static const LatLng _center =  LatLng(5.55602, -0.1969);
   final MapType _currentMapType = MapType.normal;
   Set<Marker> _markers = {};
   LatLng _lastMapPosition = _center;

@@ -9,20 +9,8 @@ import 'package:edeybe/widgets/Shimmer.dart';
 import 'package:edeybe/widgets/alert.dart';
 import 'package:edeybe/widgets/custom_dialog.dart';
 import 'package:edeybe/widgets/custom_web_view.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'index.dart';
-import 'package:edeybe/index.dart';
-import 'package:edeybe/screens/address_screen/add_edit_address/add_edit_address.dart';
-import 'package:edeybe/screens/review_screen/write_review/write_review.dart';
-import 'package:edeybe/utils/cart_item_type.dart';
-import 'package:edeybe/utils/constant.dart';
-import 'package:edeybe/utils/dialog_enum.dart';
-import 'package:edeybe/widgets/cart_item.dart';
-import 'package:edeybe/widgets/custom_divider.dart';
-import 'package:edeybe/widgets/full_screen_dialog.dart';
-import 'package:edeybe/widgets/money_widget.dart';
-import 'package:edeybe/widgets/address_card.dart';
 import 'package:flutter/material.dart';
 
 class CheckoutScreen extends StatefulWidget {

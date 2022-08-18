@@ -25,10 +25,10 @@ class _RationgDialogState extends State<RationgDialog> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal:8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: Text(
             "${widget.productname}",
-            textAlign:TextAlign.center ,
+            textAlign: TextAlign.center,
             style: Get.theme.textTheme.subtitle1,
           ),
         ),
@@ -94,14 +94,16 @@ class _RationgDialogState extends State<RationgDialog> {
                 child: SizedBox(
                   width: double.infinity,
                   // ignore: deprecated_member_use
-                  child: OutlineButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text("Cancel",
-                        style: TextStyle(color: Get.theme.primaryColor)),
-                    borderSide: BorderSide(color: Get.theme.primaryColorDark),
-                  ),
+                  child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text("Cancel",
+                          style: TextStyle(color: Get.theme.primaryColor)),
+                      style: ElevatedButton.styleFrom(
+                        // shape: ,
+                        side: BorderSide(color: Get.theme.primaryColorDark),
+                      )),
                 ),
               ),
               Padding(
@@ -110,11 +112,8 @@ class _RationgDialogState extends State<RationgDialog> {
                   width: double.infinity,
                   child: CupertinoButton(
                     onPressed: () {
-                      _userController.postCommentAndRate(
-                        widget.productID,
-                        commentController.text,
-                        rateNumber,
-                        widget.transID);
+                      _userController.postCommentAndRate(widget.productID,
+                          commentController.text, rateNumber, widget.transID);
                     },
                     child: Text("Save", style: TextStyle(color: Colors.white)),
                     color: Get.theme.primaryColor,

@@ -1,6 +1,8 @@
+// ignore_for_file: avoid_classes_with_only_static_members
+
+import 'package:edeybe/controllers/cart_controller.dart';
 import 'package:edeybe/controllers/wishlist_controller.dart';
 import 'package:edeybe/index.dart';
-import 'package:edeybe/models/product.dart';
 import 'package:edeybe/models/productModel.dart';
 import 'package:edeybe/widgets/custom_dialog.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +18,12 @@ class Helper {
 
   static bool isFavourite(String id, WishlistController _wishlistController) {
     var inFav = _wishlistController.wishlistItems
+        .firstWhere((product) => product.productId == id, orElse: () => ProductModel());
+    return inFav.productId != null;
+  }
+
+   static bool isIncart(String id, CartController _cartController) {
+    var inFav = _cartController.cartItems
         .firstWhere((product) => product.productId == id, orElse: () => ProductModel());
     return inFav.productId != null;
   }

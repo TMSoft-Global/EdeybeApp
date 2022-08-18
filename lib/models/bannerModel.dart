@@ -53,16 +53,16 @@ class Successs {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
-    data['type'] = this.type;
-    if (this.firstSlider != null) {
-      data['firstSlider'] = this.firstSlider.map((v) => v.toJson()).toList();
+    data['_id'] = sId;
+    data['type'] = type;
+    if (firstSlider != null) {
+      data['firstSlider'] = firstSlider.map((v) => v.toJson()).toList();
     }
-    if (this.secondSlider != null) {
-      data['secondSlider'] = this.secondSlider.map((v) => v.toJson()).toList();
+    if (secondSlider != null) {
+      data['secondSlider'] = secondSlider.map((v) => v.toJson()).toList();
     }
-    if (this.rightColumn != null) {
-      data['rightColumn'] = this.rightColumn.toJson();
+    if (rightColumn != null) {
+      data['rightColumn'] = rightColumn.toJson();
     }
     return data;
   }
@@ -100,14 +100,14 @@ class FirstSlider {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['imageUrl'] = this.imageUrl;
-    data['productName'] = this.productName;
-    data['productId'] = this.productId;
-    data['type'] = this.type;
-    data['key'] = this.key;
-    data['aspect'] = this.aspect;
-    if (this.resolution != null) {
-      data['resolution'] = this.resolution.toJson();
+    data['imageUrl'] = imageUrl;
+    data['productName'] = productName;
+    data['productId'] = productId;
+    data['type'] = type;
+    data['key'] = key;
+    data['aspect'] = aspect;
+    if (resolution != null) {
+      data['resolution'] = resolution.toJson();
     }
     return data;
   }
@@ -126,8 +126,8 @@ class Resolution {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['width'] = this.width;
-    data['height'] = this.height;
+    data['width'] = width;
+    data['height'] = height;
     return data;
   }
 }
@@ -166,20 +166,20 @@ class RightColumn {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.topLeftCorner != null) {
-      data['topLeftCorner'] = this.topLeftCorner.toJson();
+    if (topLeftCorner != null) {
+      data['topLeftCorner'] = topLeftCorner.toJson();
     }
-    if (this.topRightCorner != null) {
-      data['topRightCorner'] = this.topRightCorner.toJson();
+    if (topRightCorner != null) {
+      data['topRightCorner'] = topRightCorner.toJson();
     }
-    if (this.middle != null) {
-      data['middle'] = this.middle.toJson();
+    if (middle != null) {
+      data['middle'] = middle.toJson();
     }
-    if (this.bottomLeftCorner != null) {
-      data['bottomLeftCorner'] = this.bottomLeftCorner.toJson();
+    if (bottomLeftCorner != null) {
+      data['bottomLeftCorner'] = bottomLeftCorner.toJson();
     }
-    if (this.bottomRightCorner != null) {
-      data['bottomRightCorner'] = this.bottomRightCorner.toJson();
+    if (bottomRightCorner != null) {
+      data['bottomRightCorner'] = bottomRightCorner.toJson();
     }
     return data;
   }
@@ -217,14 +217,14 @@ class TopLeftCorner {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['imageUrl'] = this.imageUrl;
-    data['productName'] = this.productName;
-    data['productId'] = this.productId;
-    data['type'] = this.type;
-    data['key'] = this.key;
-    data['aspect'] = this.aspect;
-    if (this.resolution != null) {
-      data['resolution'] = this.resolution.toJson();
+    data['imageUrl'] = imageUrl;
+    data['productName'] = productName;
+    data['productId'] = productId;
+    data['type'] = type;
+    data['key'] = key;
+    data['aspect'] = aspect;
+    if (resolution != null) {
+      data['resolution'] = resolution.toJson();
     }
     return data;
   }

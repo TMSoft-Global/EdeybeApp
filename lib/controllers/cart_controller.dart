@@ -3,7 +3,6 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:edeybe/controllers/address_controller.dart';
 import 'package:edeybe/controllers/user_controller.dart';
 import 'package:edeybe/controllers/wishlist_controller.dart';
 import 'package:edeybe/index.dart';
@@ -12,7 +11,6 @@ import 'package:edeybe/models/deliveryCost.dart';
 import 'package:edeybe/models/deliveryModel.dart';
 import 'package:edeybe/models/productModel.dart';
 import 'package:edeybe/models/user.dart';
-import 'package:edeybe/screens/finance_product_screen/kyc_form.dart';
 import 'package:edeybe/screens/home_screen/index.dart';
 import 'package:edeybe/services/cart_operation.dart';
 import 'package:edeybe/services/imageUpload.dart';
@@ -46,7 +44,7 @@ class CartController extends GetxController implements HTTPErrorHandler {
     var inList = cartItems.firstWhere((pp) => pp.productId == p.productId,
         orElse: () => null);
     // if (inList != null) {
-    //   // print("object");
+    // print(p);
     //   cartItems.removeWhere((pp) => pp.productId == p.productId);
     // } else
     {
@@ -68,7 +66,6 @@ class CartController extends GetxController implements HTTPErrorHandler {
       update();
       callback(title: inList != null ? "Item removed from cart" : inList);
     }, handleError);
-    // print(cartItems);
   }
 
   addProductHirePurchase() {
@@ -225,7 +222,7 @@ class CartController extends GetxController implements HTTPErrorHandler {
 
   getProductBreakdown(
       List<Map<String, dynamic>> data, Function(dynamic) onResponse) {
-        // print(data);
+    // print(data);
     operations.productBreakdown(
         data: data,
         onResponse: (val) {

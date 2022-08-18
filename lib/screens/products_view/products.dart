@@ -6,6 +6,7 @@ import 'package:edeybe/models/category.dart';
 import 'package:edeybe/models/product.dart';
 import 'package:edeybe/models/productModel.dart';
 import 'package:edeybe/models/subcategory.dart';
+import 'package:edeybe/screens/checkout_screen/checkout_screen.dart';
 import 'package:edeybe/screens/checkout_screen/index.dart';
 import 'package:edeybe/screens/product_details_screen/product_details_screen.dart';
 import 'package:edeybe/screens/filter/index.dart';
@@ -42,6 +43,7 @@ class _ProductsViewState extends State<ProductsView>
   final appController = Get.put(AppController());
   final searchController = Get.find<SearchController>();
   final _wishlistController = Get.find<WishlistController>();
+  final _cartController = Get.find<CartController>();
   final _searchFieldController = TextEditingController();
   final formatCurrency = new NumberFormat.simpleCurrency(name: "");
   bool showSearch = false;
@@ -329,6 +331,8 @@ class _ProductsViewState extends State<ProductsView>
                         discount: 0,
                         price: 0,
                         oldPrice: 0,
+                        isCart: false,
+                        onAddToCart: () => null,
                         onAddToWishList: () => null,
                         onViewDetails: () {},
                         hasDiscount: false,
@@ -365,6 +369,7 @@ class _ProductsViewState extends State<ProductsView>
                     title: p.productName,
                     image: p.photos[0],
                     discount: p.discountPrice,
+                    onAddToCart: () => _addToCart(p),
                     price: p.price,
                     oldPrice: p.price,
                     onAddToWishList: () => _addToWishlist(p),
@@ -376,6 +381,7 @@ class _ProductsViewState extends State<ProductsView>
                     hasDiscount: p.hasDiscount,
                     isFav: Helper.isFavourite(p.productId, _wishlistController),
                     rating: 5.0,
+                    isCart: Helper.isIncart(p.productId, _cartController),
                     raters: 23,
                   )
                 : ProductCardLandscape(
@@ -463,6 +469,22 @@ class _ProductsViewState extends State<ProductsView>
                     0,
                     (previousValue, element) =>
                         element.price + previousValue))),
+        barrierDismissible: true,
+      );
+    });
+  }
+
+  _addToCart(p) {
+    _cartController.addToCart(p, ({String title}) {
+      setState(() {});
+      Get.dialog(
+        CartDialog(
+            title: title,
+            type: CartItemType.Wishlist,
+            onGoForward: () => Get.to(CheckoutScreen()),
+            productTitle: p.name,
+            cartTotal: formatCurrency.format(_cartController.cartItems.fold(
+                0, (previousValue, element) => element.price + previousValue))),
         barrierDismissible: true,
       );
     });

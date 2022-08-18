@@ -1,6 +1,5 @@
 import 'package:edeybe/controllers/payment_method_controller.dart';
 import 'package:edeybe/screens/payment_method/payment_method.dart';
-import 'package:edeybe/screens/splash_screen/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -29,7 +28,10 @@ class _SimpleWebviewState extends State<SimpleWebview> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Payment", style: TextStyle(color: Colors.white),),
+        title: Text(
+          "Payment",
+          style: TextStyle(color: Colors.white),
+        ),
         centerTitle: true,
       ),
       body: _buildWebView(widget.url),
@@ -66,8 +68,8 @@ class _SimpleWebviewState extends State<SimpleWebview> {
           if (message.message == "close") {
             _paymentController.getAllPayment();
             Get.to(PaymentMethodScreen(
-                  hasContinueButton: false,
-                ));
+              hasContinueButton: false,
+            ));
           }
         });
   }

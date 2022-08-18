@@ -97,6 +97,10 @@ class _HomeIndexState extends State<HomeIndex> {
             ProfileScreen(),
           ],
         ),
+        // floatingActionButton: FloatingActionButton.extended(
+        //     onPressed: () {},
+        //     label: Text("Sell"),
+        //     backgroundColor: Theme.of(context).primaryColorDark),
         bottomNavigationBar: BottomNavigationBar(
           onTap: (i) {
             getCart();

@@ -19,12 +19,14 @@ class ProductCard extends StatelessWidget {
       @required this.title,
       @required this.image,
       @required this.isFav,
+      this.isCart = false,
       @required this.rating,
       @required this.price,
       @required this.oldPrice,
       @required this.raters,
       @required this.discount,
       @required this.onAddToWishList,
+      @required this.onAddToCart,
       @required this.onViewDetails})
       : super(key: key);
   final String title;
@@ -32,6 +34,7 @@ class ProductCard extends StatelessWidget {
   final num oldPrice;
   final Pro.Photos image;
   final bool isFav;
+  final bool isCart;
   final bool isLoading;
   final bool hasDiscount;
   final double rating;
@@ -41,13 +44,24 @@ class ProductCard extends StatelessWidget {
   var discount;
   final Function onViewDetails;
   final VoidCallback onAddToWishList;
+  final VoidCallback onAddToCart;
   final formatCurrency = new NumberFormat.simpleCurrency(name: "");
   @override
   Widget build(BuildContext context) {
     return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+        boxShadow: [
+          BoxShadow(
+              color: Colors.grey[400],
+              offset: Offset(0.2, 0.8),
+              blurRadius: 0.4,
+              spreadRadius: 0.2)
+        ],
+      ),
       width: width ?? (Get.width / 2.3),
-      color: Colors.white,
-      margin: EdgeInsets.only(right: padding ?? 10.w),
+      margin: EdgeInsets.only(right: padding ?? 5.w),
       child: InkWell(
         onTap: onViewDetails,
         child: Column(
@@ -71,7 +85,7 @@ class ProductCard extends StatelessWidget {
                           child: isLoading
                               ? Container(
                                   height: 150.w,
-                                  width: width ?? ((Get.width / 2.3 - 20)).w,
+                                  width: width ?? (Get.width / 2.3 - 20).w,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(12),
                                     color: Color(0XFFF6F6F6),
@@ -87,6 +101,7 @@ class ProductCard extends StatelessWidget {
                     ),
                     Positioned(
                       right: 6.w,
+                      // left: 6.w,
                       top: 6.w,
                       child: SizedBox(
                         width: 30.w,
@@ -103,6 +118,37 @@ class ProductCard extends StatelessWidget {
                                 isFav ? Icons.favorite : Icons.favorite_border,
                                 color: isFav
                                     ? Constants.ratingBG
+                                    : Constants.themeGreyDark,
+                                size: 18.w,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    //Add to Cart
+                    Positioned(
+                      right: 6.w,
+                      // left: 6.w,
+                      // top: 6.w,
+                      top: 43.w,
+                      child: SizedBox(
+                        width: 30.w,
+                        height: 30.w,
+                        child: RawMaterialButton(
+                          onPressed: onAddToCart,
+                          fillColor: Constants.themeGreyLight,
+                          shape: CircleBorder(),
+                          elevation: 2.0.w,
+                          child: Padding(
+                            padding: EdgeInsets.all(5.w),
+                            child: Center(
+                              child: Icon(
+                                isCart
+                                    ? Icons.shopping_cart
+                                    : Icons.shopping_cart_outlined,
+                                color: isCart
+                                    ? Constants.green
                                     : Constants.themeGreyDark,
                                 size: 18.w,
                               ),

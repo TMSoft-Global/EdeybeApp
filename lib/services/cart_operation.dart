@@ -36,7 +36,7 @@ class CartOperation extends ServerOperations {
       {List<Map<String, dynamic>> data,
       void onResponse(List<dynamic> response),
       void onError(DioError error)}) {
-        print({"products": data});
+    print({"products": data});
     dynamicRequest(
         path: "/break-down-hire-purchase",
         schema: jsonEncode({"products": data}),
@@ -135,17 +135,16 @@ class CartOperation extends ServerOperations {
 
   submitHirePurchase(
       Map<String, dynamic> data, void onResponses(String response)) {
-        print(data);
+    print(data);
     dynamicRequest(
-      showDialog: true,
+        showDialog: true,
         path: "/submit-kyc",
         schema: jsonEncode(data),
-        onResponse: (onResponse){
-          if(onResponse['data']['message']=="Successfull"){
+        onResponse: (onResponse) {
+          if (onResponse['data']['message'] == "Successfull") {
             onResponses("success");
-          }else{
+          } else {
             onResponses("failed");
-
           }
         });
   }
@@ -208,7 +207,7 @@ class CartOperation extends ServerOperations {
       void onResponse(Map<String, dynamic> response),
       void onError(DioError error)) {
     dynamicRequest(
-      path: "/closestLocation",
+      path: "/stLocation",
       schema: jsonEncode({"location": data}),
       onError: onError,
       showDialog: true,
