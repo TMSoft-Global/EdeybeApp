@@ -12,6 +12,7 @@ import 'package:edeybe/screens/home_screen/home_tab/home_tab_screen.dart';
 import 'package:edeybe/screens/home_screen/profile_screen_tab/profile_screen.dart';
 import 'package:edeybe/screens/promoBanner.dart';
 import 'package:edeybe/widgets/custom_dialog.dart';
+import 'package:edeybe/widgets/custom_web_view.dart';
 import 'package:flutter/material.dart';
 import 'package:edeybe/index.dart';
 
@@ -93,6 +94,10 @@ class _HomeIndexState extends State<HomeIndex> {
           children: <Widget>[
             HomeScreenTab(),
             CategoryTabScreen(),
+            CustomWebView(
+              title: "Sell on Edeybe",
+              url: 'https://edeybe.com/vendor/become-a-vendor',
+            ),
             CartScreenTab(),
             ProfileScreen(),
           ],
@@ -132,14 +137,19 @@ class _HomeIndexState extends State<HomeIndex> {
                 color: Colors.black,
               ),
             ),
-            // BottomNavigationBarItem(
-            //   icon: SvgPicture.asset('assets/icons/ic_offer.svg'),
-            //   label: Text(S.of(context).offer),
-            //   activeIcon: SvgPicture.asset(
-            //     'assets/icons/ic_offer.svg',
-            //     color: Get.theme.primaryColor,
-            //   ),
-            // ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                FontAwesomeIcons.shoppingBasket,
+                size: 25.w,
+                color: Get.theme.primaryColorDark,
+              ),
+              label: "Sell",
+              activeIcon: Icon(
+                FontAwesomeIcons.shoppingBasket,
+                size: 25.w,
+                color: Get.theme.primaryColor,
+              ),
+            ),
             BottomNavigationBarItem(
               icon: GetBuilder<CartController>(
                   builder: (_) => Stack(

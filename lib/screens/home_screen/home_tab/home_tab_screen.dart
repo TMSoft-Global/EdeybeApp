@@ -389,49 +389,26 @@ class _HomeScreenTabState extends State<HomeScreenTab>
   }
 
   Widget _buildBuyAirtimeComponent() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        GestureDetector(
-          onTap: _buyAirtime,
-          child: Container(
-            margin: EdgeInsets.only(bottom: 5.w),
-            width: MediaQuery.of(context).size.width / 2,
-            height: 50.w,
-            decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                      color: Constants.themeGreyDark,
-                      spreadRadius: 0.2,
-                      offset: Offset(2, 1),
-                      blurRadius: 3.0)
-                ],
-                image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: AssetImage(
-                      'assets/images/airtime_btn_background.png',
-                    ))),
-          ),
-        ),
-        GestureDetector(
-          onTap: _buyAirtime,
-          child: Container(
-            margin: EdgeInsets.only(bottom: 5.w),
-            width: MediaQuery.of(context).size.width / 2,
-            height: 50.w,
-            child: Text("Sell on edeybe"),
-            decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                    color: Constants.themeGreyDark,
-                    spreadRadius: 0.2,
-                    offset: Offset(2, 1),
-                    blurRadius: 3.0)
-              ],
-            ),
-          ),
-        ),
-      ],
+    return GestureDetector(
+      onTap: _buyAirtime,
+      child: Container(
+        margin: EdgeInsets.only(bottom: 5.w),
+        width: MediaQuery.of(context).size.width,
+        height: 50.w,
+        decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                  color: Constants.themeGreyDark,
+                  spreadRadius: 0.2,
+                  offset: Offset(2, 1),
+                  blurRadius: 3.0)
+            ],
+            image: DecorationImage(
+                fit: BoxFit.fitWidth,
+                image: AssetImage(
+                  'assets/images/airtime_btn_background.png',
+                ))),
+      ),
     );
   }
 
