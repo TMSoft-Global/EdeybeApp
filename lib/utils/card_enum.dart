@@ -1,3 +1,8 @@
+
+enum DeliveryType{
+  Pickup,Delivery
+}
+
 enum CardType {
   MasterCard,
   Visa,

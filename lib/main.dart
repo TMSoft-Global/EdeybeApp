@@ -49,10 +49,7 @@ class _EdeybeAppState extends State<EdeybeApp> {
                 GlobalWidgetsLocalizations.delegate,
               ],
               home: SplashScreen(),
-              // home: PromoBanner(),
               supportedLocales: S.delegate.supportedLocales,
-              // locale: DevicePreview.of(context).locale, // <--- Add the locale
-              // builder: DevicePreview.appBuilder,
               debugShowCheckedModeBanner: false)),
     );
   }

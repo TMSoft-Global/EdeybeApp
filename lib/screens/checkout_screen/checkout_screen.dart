@@ -9,6 +9,7 @@ import 'package:edeybe/widgets/Shimmer.dart';
 import 'package:edeybe/widgets/alert.dart';
 import 'package:edeybe/widgets/custom_dialog.dart';
 import 'package:edeybe/widgets/custom_web_view.dart';
+import 'package:edeybe/widgets/text_field_component.dart';
 import 'package:flutter/services.dart';
 import 'index.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,8 @@ class CheckoutScreen extends StatefulWidget {
 }
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
+  final ValueNotifier<DeliveryType> _deliveryType =
+      ValueNotifier(DeliveryType.Pickup);
   final formatCurrency = new NumberFormat.simpleCurrency(name: "");
   DeliveryAddress address;
   ShippingAddress ship;
@@ -42,6 +45,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   final FocusNode _lastname = FocusNode();
   final FocusNode _email = FocusNode();
   final FocusNode _mobile = FocusNode();
+  int _pickT = 1;
 
   bool autoValidate = false;
   bool acceptTnC = false;
@@ -242,112 +246,233 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             linearGradient: Constants.shimmerGradient,
             child: SingleChildScrollView(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   _buildCartSummary,
                   _shippingTo,
-                  GetBuilder<AddressController>(
-                      builder: (_) => _addressController.selectedAddress !=
-                                  null &&
-                              _addressController.selectedAddress.id != null
-                          ? AddressCard(
-                              onCardPressed: null,
-                              showChangeButton: true,
-                              onChangeButtonPressed: () => Get.to(AddressScreen(
-                                    hasContinueButton: true,
-                                    onContinuePressed: Get.back,
-                                  )),
-                              deliveryAddress:
-                                  _addressController.selectedAddress,
-                              onEditAddress: () => Get.to(AddorEditScreen(
-                                    address: _addressController.selectedAddress,
-                                  )),
-                              onRemoveAddress: null)
-                          : Container(
-                              // height: 30.w,
-                              margin: EdgeInsets.all(10.w),
-                              padding: EdgeInsets.all(10.0.w),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8.w),
-                                  color: Colors.white,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Constants.boxShadow,
-                                      blurRadius: 3.4.w,
-                                      offset: Offset(0, 3.4.w),
-                                    )
-                                  ]),
-                              child: Container(
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: <Widget>[
-                                    Expanded(
-                                      child: InkWell(
-                                        onTap: () => Get.to(AddressScreen(
-                                          hasContinueButton: true,
-                                          onContinuePressed: Get.back,
-                                        )),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: <Widget>[
-                                            Container(
-                                              margin: EdgeInsets.only(
-                                                  right: 10.w, bottom: 8.w),
-                                              width: 60.w,
-                                              height: 40.w,
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(8.w),
-                                                color: Colors.white,
-                                                border: Border.symmetric(
-                                                    vertical: BorderSide(
-                                                        color: Constants
-                                                            .themeGreyDark),
-                                                    horizontal: BorderSide(
-                                                        color: Constants
-                                                            .themeGreyDark)),
-                                              ),
-                                              child:
-                                                  Icon(Icons.add, size: 25.w),
-                                            ),
-                                            Container(
-                                              height: 40.w,
-                                              child: Text(
-                                                  S.of(context).addAddress,
-                                                  style: Get.textTheme.bodyText1
-                                                      .copyWith(
-                                                          fontSize: 16.w)),
-                                            ),
-                                          ],
-                                        ),
+                  Container(
+                    margin: EdgeInsets.all(10.w),
+                    padding: EdgeInsets.all(10.0.w),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8.w),
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Constants.boxShadow,
+                            blurRadius: 3.4.w,
+                            offset: Offset(0, 3.4.w),
+                          )
+                        ]),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Delivery Type",
+                            style: Get.textTheme.bodyText1.copyWith(
+                                fontWeight: FontWeight.bold, fontSize: 18.w)),
+                        RadioListTile(
+                            title: Text("Pickup"),
+                            groupValue: _pickT,
+                            onChanged: (value) {
+                              setState(() {
+                                _pickT = (value);
+                              });
+                            },
+                            value: 1),
+                        RadioListTile(
+                          title: Text("Delivery"),
+                          groupValue: _pickT,
+                          onChanged: (value) {
+                            setState(() {
+                              _pickT = (value);
+                            });
+                          },
+                          value: 2,
+                        )
+                      ],
+                    ),
+                  ),
+                  ValueListenableBuilder(
+                      valueListenable: _deliveryType,
+                      builder: (context, _, __) {
+                        return Column(
+                          children: [
+                            Visibility(
+                                visible: _pickT == 1,
+                                child: Container(
+                                  margin: EdgeInsets.all(10.w),
+                                  padding: EdgeInsets.all(10.0.w),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8.w),
+                                      color: Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Constants.boxShadow,
+                                          blurRadius: 3.4.w,
+                                          offset: Offset(0, 3.4.w),
+                                        )
+                                      ]),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text("Pick Up",
+                                          style: Get.textTheme.bodyText1
+                                              .copyWith(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 18.w)),
+                                      CustomTexfield(
+                                        hint: "Select Region",
+                                        icon: Icons.arrow_drop_down,
+                                        focusNode: FocusNode(),
+                                        validString: "Region required",
+                                        controller: null,
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ))),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      CustomTexfield(
+                                        hint: "Select Pickup",
+                                        icon: Icons.arrow_drop_down,
+                                        focusNode: FocusNode(),
+                                        validString: "Region required",
+                                        controller: null,
+                                      ),
+                                    ],
+                                  ),
+                                )),
+                            Visibility(
+                              visible: _pickT == 2,
+                              child: GetBuilder<AddressController>(
+                                  builder: (_) => _addressController
+                                                  .selectedAddress !=
+                                              null &&
+                                          _addressController
+                                                  .selectedAddress.id !=
+                                              null
+                                      ? AddressCard(
+                                          onCardPressed: null,
+                                          showChangeButton: true,
+                                          onChangeButtonPressed: () =>
+                                              Get.to(AddressScreen(
+                                                hasContinueButton: true,
+                                                onContinuePressed: Get.back,
+                                              )),
+                                          deliveryAddress: _addressController
+                                              .selectedAddress,
+                                          onEditAddress: () =>
+                                              Get.to(AddorEditScreen(
+                                                address: _addressController
+                                                    .selectedAddress,
+                                              )),
+                                          onRemoveAddress: null)
+                                      : Container(
+                                          // height: 30.w,
+                                          margin: EdgeInsets.all(10.w),
+                                          padding: EdgeInsets.all(10.0.w),
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(8.w),
+                                              color: Colors.white,
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Constants.boxShadow,
+                                                  blurRadius: 3.4.w,
+                                                  offset: Offset(0, 3.4.w),
+                                                )
+                                              ]),
+                                          child: Container(
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: <Widget>[
+                                                Expanded(
+                                                  child: InkWell(
+                                                    onTap: () =>
+                                                        Get.to(AddressScreen(
+                                                      hasContinueButton: true,
+                                                      onContinuePressed:
+                                                          Get.back,
+                                                    )),
+                                                    child: Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      children: <Widget>[
+                                                        Container(
+                                                          margin:
+                                                              EdgeInsets.only(
+                                                                  right: 10.w,
+                                                                  bottom: 8.w),
+                                                          width: 60.w,
+                                                          height: 40.w,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        8.w),
+                                                            color: Colors.white,
+                                                            border: Border.symmetric(
+                                                                vertical: BorderSide(
+                                                                    color: Constants
+                                                                        .themeGreyDark),
+                                                                horizontal: BorderSide(
+                                                                    color: Constants
+                                                                        .themeGreyDark)),
+                                                          ),
+                                                          child: Icon(Icons.add,
+                                                              size: 25.w),
+                                                        ),
+                                                        Container(
+                                                          height: 40.w,
+                                                          child: Text(
+                                                              S
+                                                                  .of(context)
+                                                                  .addAddress,
+                                                              style: Get
+                                                                  .textTheme
+                                                                  .bodyText1
+                                                                  .copyWith(
+                                                                      fontSize:
+                                                                          16.w)),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ))),
+                            ),
+                          ],
+                        );
+                      }),
                   _biuldPaymentMethod,
                   _buildCartItem,
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal:10.0),
-                    child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                      TextButton(
-                          onPressed: () => Get.to(CustomWebView(
-                                title: "Term and Conditions",
-                                url: 'https://edeybe.com/m/terms-conditions',
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextButton(
+                              onPressed: () => Get.to(CustomWebView(
+                                    title: "Term and Conditions",
+                                    url:
+                                        'https://edeybe.com/m/terms-conditions',
+                                  )),
+                              child: Text(
+                                "Terms and conditions applied",
+                                style: Get.theme.textTheme.bodyText2,
                               )),
-                          child: Text(
-                            "Terms and conditions applied",
-                            style: Get.theme.textTheme.bodyText2,
-                          )),
-                      Checkbox(
-                          activeColor: Get.theme.toggleableActiveColor,
-                          value: acceptTnC,
-                          onChanged: (va) {
-                            setState(() {
-                              acceptTnC = !acceptTnC;
-                            });
-                          })
-                    ]),
+                          Checkbox(
+                              activeColor: Get.theme.toggleableActiveColor,
+                              value: acceptTnC,
+                              onChanged: (va) {
+                                setState(() {
+                                  acceptTnC = !acceptTnC;
+                                });
+                              })
+                        ]),
                   )
                 ],
               ),
@@ -648,9 +773,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             // totalDiscount
                             TextSpan(
                                 text: formatCurrency.format(double.parse(
-                                        _cartController
-                                            .deliveryCost.overallCost ) 
-                                    ),
+                                    _cartController.deliveryCost.overallCost)),
                                 style: TextStyle(
                                     fontWeight: FontWeight.w800,
                                     color: Colors.black,

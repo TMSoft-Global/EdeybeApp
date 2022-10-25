@@ -363,29 +363,29 @@ class _AddorEditScreenState extends State<AddorEditScreen> {
                                   Get.to(
                                       AddressMapWidget(setAddress: (address) {
                                     print(address);
-                                    if (address["GPSName"].startsWith("G")) {
-                                      setState(() {
-                                        locationAddress = address['Area'];
-                                        locName = address['Street'];
-                                        long = address["WLong"].toString();
-                                        lat = address["NLat"].toString();
-                                        // gpsAddress = address['GPSName'];
-                                        // locID
-                                        // _address = {
-                                        //   "lat": address["NLat"],
-                                        //   "long": address["WLong"],
-                                        //   "displayText": address["Street"],
-                                        //   "type": _addressType == 1
-                                        //       ? "currentLocation"
-                                        //       : "digitalAddress"
-                                        // };
-                                        // _addressCtrl.text = address["Street"];
-                                      });
-                                    } else {
-                                      _address = null;
-                                      showSnack(
-                                          "Sorry, We only deliver with Greater Accra.");
-                                    }
+                                    // if (address["GPSName"].startsWith("G")) {
+                                    setState(() {
+                                      locationAddress = address['Area'];
+                                      locName = address['Street'];
+                                      long = address["WLong"].toString();
+                                      lat = address["NLat"].toString();
+                                      // gpsAddress = address['GPSName'];
+                                      // locID
+                                      // _address = {
+                                      //   "lat": address["NLat"],
+                                      //   "long": address["WLong"],
+                                      //   "displayText": address["Street"],
+                                      //   "type": _addressType == 1
+                                      //       ? "currentLocation"
+                                      //       : "digitalAddress"
+                                      // };
+                                      // _addressCtrl.text = address["Street"];
+                                    });
+                                    // } else {
+                                    //   _address = null;
+                                    //   showSnack(
+                                    //       "Sorry, We only deliver with Greater Accra.");
+                                    // }
                                   }));
                                 },
                                 child: Container(
@@ -448,9 +448,7 @@ class _AddorEditScreenState extends State<AddorEditScreen> {
                                               showSnack(
                                                   "Please enter a valid Ghana Post address");
                                             } else if (_addressMoreCtrl
-                                                    .text.isNotEmpty &&
-                                                _addressMoreCtrl.text
-                                                    .startsWith("G")) {
+                                                .text.isNotEmpty) {
                                               _addressController
                                                   .getGhanaPostAddress(
                                                       _addressMoreCtrl.text,
@@ -482,7 +480,7 @@ class _AddorEditScreenState extends State<AddorEditScreen> {
                                             } else {
                                               _address = null;
                                               showSnack(
-                                                  "Sorry, We only deliver with Greater Accra");
+                                                  "Please, Select a delivery address");
                                             }
                                           },
                                           child: Container(
